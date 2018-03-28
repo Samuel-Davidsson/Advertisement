@@ -6,24 +6,24 @@ namespace AnnonsonMVC.Models
 {
     public partial class annonsappenContext : DbContext
     {
-        public virtual DbSet<TArticle> TArticle { get; set; }
-        public virtual DbSet<TArticleCategory> TArticleCategory { get; set; }
-        public virtual DbSet<TCategory> TCategory { get; set; }
-        public virtual DbSet<TCompany> TCompany { get; set; }
-        public virtual DbSet<TCompanyContract> TCompanyContract { get; set; }
-        public virtual DbSet<TCompanyIndustry> TCompanyIndustry { get; set; }
-        public virtual DbSet<TIndustry> TIndustry { get; set; }
-        public virtual DbSet<TStore> TStore { get; set; }
-        public virtual DbSet<TStoreArticle> TStoreArticle { get; set; }
-        public virtual DbSet<TUser> TUser { get; set; }
-        public virtual DbSet<TUserCompany> TUserCompany { get; set; }
-        public virtual DbSet<TUserStore> TUserStore { get; set; }
+        public virtual DbSet<Article> Article { get; set; }
+        public virtual DbSet<ArticleCategory> ArticleCategory { get; set; }
+        public virtual DbSet<Category> Category { get; set; }
+        public virtual DbSet<Company> Company { get; set; }
+        public virtual DbSet<CompanyContract> CompanyContract { get; set; }
+        public virtual DbSet<CompanyIndustry> CompanyIndustry { get; set; }
+        public virtual DbSet<Industry> Industry { get; set; }
+        public virtual DbSet<Store> Store { get; set; }
+        public virtual DbSet<StoreArticle> StoreArticle { get; set; }
+        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<UserCompany> UserCompany { get; set; }
+        public virtual DbSet<UserStore> UserStore { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(@"Server = SAMUEL; Database = annonsappen; Trusted_Connection = True;");
             }
         }
 
@@ -34,7 +34,7 @@ namespace AnnonsonMVC.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<TArticle>(entity =>
+            modelBuilder.Entity<Article>(entity =>
             {
                 entity.HasKey(e => e.ArticleId);
 
@@ -115,20 +115,20 @@ namespace AnnonsonMVC.Models
                 entity.Property(e => e.UserId).HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.Company)
-                    .WithMany(p => p.TArticle)
+                    .WithMany(p => p.Article)
                     .HasForeignKey(d => d.CompanyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_T_Article_T_Company");
             });
 
-            modelBuilder.Entity<TArticleCategory>(entity =>
+            modelBuilder.Entity<ArticleCategory>(entity =>
             {
                 entity.HasKey(e => new { e.ArticleId, e.CategoryId });
 
                 entity.ToTable("T_ArticleCategory");
 
                 entity.HasOne(d => d.Article)
-                    .WithMany(p => p.TArticleCategory)
+                    .WithMany(p => p.ArticleCategory)
                     .HasForeignKey(d => d.ArticleId)
                     .HasConstraintName("FK_T_ArticleCategory_T_Article");
 
@@ -138,7 +138,7 @@ namespace AnnonsonMVC.Models
                     .HasConstraintName("FK_T_ArticleCategory_T_Category");
             });
 
-            modelBuilder.Entity<TCategory>(entity =>
+            modelBuilder.Entity<Category>(entity =>
             {
                 entity.HasKey(e => e.CategoryId);
 
@@ -204,7 +204,7 @@ namespace AnnonsonMVC.Models
                     .HasConstraintName("FK_T_Category_T_Category");
             });
 
-            modelBuilder.Entity<TCompany>(entity =>
+            modelBuilder.Entity<Company>(entity =>
             {
                 entity.HasKey(e => e.CompanyId);
 
@@ -316,7 +316,7 @@ namespace AnnonsonMVC.Models
                     .HasDefaultValueSql("('')");
             });
 
-            modelBuilder.Entity<TCompanyContract>(entity =>
+            modelBuilder.Entity<CompanyContract>(entity =>
             {
                 entity.HasKey(e => e.CompanyContractId);
 
@@ -327,24 +327,24 @@ namespace AnnonsonMVC.Models
                     .HasDefaultValueSql("('1900-01-01')");
 
                 entity.HasOne(d => d.Company)
-                    .WithMany(p => p.TCompanyContract)
+                    .WithMany(p => p.CompanyContract)
                     .HasForeignKey(d => d.CompanyId)
                     .HasConstraintName("FK_T_ContractCompany_T_Company");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.TCompanyContract)
+                    .WithMany(p => p.CompanyContract)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_T_ContractCompany_T_User");
             });
 
-            modelBuilder.Entity<TCompanyIndustry>(entity =>
+            modelBuilder.Entity<CompanyIndustry>(entity =>
             {
                 entity.HasKey(e => new { e.CompanyId, e.IndustryId });
 
                 entity.ToTable("T_CompanyIndustry");
 
                 entity.HasOne(d => d.Company)
-                    .WithMany(p => p.TCompanyIndustry)
+                    .WithMany(p => p.CompanyIndustry)
                     .HasForeignKey(d => d.CompanyId)
                     .HasConstraintName("FK_T_CompanyIndustry_T_Company");
 
@@ -354,7 +354,7 @@ namespace AnnonsonMVC.Models
                     .HasConstraintName("FK_T_CompanyIndustry_T_Industry");
             });
 
-            modelBuilder.Entity<TIndustry>(entity =>
+            modelBuilder.Entity<Industry>(entity =>
             {
                 entity.HasKey(e => e.IndustryId);
 
@@ -390,7 +390,7 @@ namespace AnnonsonMVC.Models
             });
 
 
-            modelBuilder.Entity<TStore>(entity =>
+            modelBuilder.Entity<Store>(entity =>
             {
                 entity.HasKey(e => e.StoreId);
 
@@ -571,21 +571,21 @@ namespace AnnonsonMVC.Models
                     .HasDefaultValueSql("('')");
 
                 entity.HasOne(d => d.Company)
-                    .WithMany(p => p.TStore)
+                    .WithMany(p => p.Store)
                     .HasForeignKey(d => d.CompanyId)
                     .HasConstraintName("FK_T_Store_T_Company");
 
 
             });
 
-            modelBuilder.Entity<TStoreArticle>(entity =>
+            modelBuilder.Entity<StoreArticle>(entity =>
             {
                 entity.HasKey(e => new { e.StoreId, e.ArticleId });
 
                 entity.ToTable("T_StoreArticle");
 
                 entity.HasOne(d => d.Article)
-                    .WithMany(p => p.TStoreArticle)
+                    .WithMany(p => p.StoreArticle)
                     .HasForeignKey(d => d.ArticleId)
                     .HasConstraintName("FK_T_StoreArticle_T_Article");
 
@@ -596,7 +596,7 @@ namespace AnnonsonMVC.Models
             });
 
            
-            modelBuilder.Entity<TUser>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.UserId);
 
@@ -651,7 +651,7 @@ namespace AnnonsonMVC.Models
                     .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<TUserCompany>(entity =>
+            modelBuilder.Entity<UserCompany>(entity =>
             {
                 entity.HasKey(e => e.UserCompanyId);
 
@@ -670,17 +670,17 @@ namespace AnnonsonMVC.Models
                     .HasDefaultValueSql("(getutcdate())");
 
                 entity.HasOne(d => d.Company)
-                    .WithMany(p => p.TUserCompany)
+                    .WithMany(p => p.UserCompany)
                     .HasForeignKey(d => d.CompanyId)
                     .HasConstraintName("FK_T_UserCompany_T_Company");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.TUserCompany)
+                    .WithMany(p => p.UserCompany)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_T_UserCompany_T_User");
             });
 
-            modelBuilder.Entity<TUserStore>(entity =>
+            modelBuilder.Entity<UserStore>(entity =>
             {
                 entity.HasKey(e => e.UserStoreId);
 
@@ -704,7 +704,7 @@ namespace AnnonsonMVC.Models
                     .HasConstraintName("FK_T_UserStore_T_Store");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.TUserStore)
+                    .WithMany(p => p.UserStore)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_T_UserStore_T_User");
             });

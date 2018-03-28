@@ -1,0 +1,126 @@
+﻿@model AnnonsonMVC.Models.Article
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>TArticle</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ArticleId" />
+            <div class="form-group">
+                <label asp-for="CompanyId" class="control-label"></label>
+                <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
+                <span asp-validation-for="CompanyId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" class="form-control" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Slug" class="control-label"></label>
+                <input asp-for="Slug" class="form-control" />
+                <span asp-validation-for="Slug" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImagePath" class="control-label"></label>
+                <input asp-for="ImagePath" class="form-control" />
+                <span asp-validation-for="ImagePath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageFileName" class="control-label"></label>
+                <input asp-for="ImageFileName" class="form-control" />
+                <span asp-validation-for="ImageFileName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageFileFormat" class="control-label"></label>
+                <input asp-for="ImageFileFormat" class="form-control" />
+                <span asp-validation-for="ImageFileFormat" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageWidths" class="control-label"></label>
+                <input asp-for="ImageWidths" class="form-control" />
+                <span asp-validation-for="ImageWidths" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceText" class="control-label"></label>
+                <input asp-for="PriceText" class="form-control" />
+                <span asp-validation-for="PriceText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceUnit" class="control-label"></label>
+                <input asp-for="PriceUnit" class="form-control" />
+                <span asp-validation-for="PriceUnit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublishBegin" class="control-label"></label>
+                <input asp-for="PublishBegin" class="form-control" />
+                <span asp-validation-for="PublishBegin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublishEnd" class="control-label"></label>
+                <input asp-for="PublishEnd" class="form-control" />
+                <span asp-validation-for="PublishEnd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Modified" class="control-label"></label>
+                <input asp-for="Modified" class="form-control" />
+                <span asp-validation-for="Modified" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Created" class="control-label"></label>
+                <input asp-for="Created" class="form-control" />
+                <span asp-validation-for="Created" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Deleted" class="control-label"></label>
+                <input asp-for="Deleted" class="form-control" />
+                <span asp-validation-for="Deleted" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <input asp-for="ImageUrl" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
