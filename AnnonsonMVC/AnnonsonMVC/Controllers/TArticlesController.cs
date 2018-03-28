@@ -18,29 +18,29 @@ namespace AnnonsonMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var annonsappenContext = _context.TArticle.Where(t => t.UserId == 1).Include(t => t.Company);
+            var annonsappenContext = _context.Article.Where(t => t.UserId == 1).Include(t => t.Company);
             return View(await annonsappenContext.ToListAsync());
         }
 
         public IActionResult Create()
         {
-            ViewData["CompanyId"] = new SelectList(_context.TCompany, "CompanyId", "Name");
-            ViewData["CategoryId"] = new SelectList(_context.TCategory, "CategoryId", "Name");
+            ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
             return View();
         }
       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArticleId,CompanyId,UserId,Name,Slug,Description,ImagePath,ImageFileName,ImageFileFormat,ImageWidths,Price,PriceText,PriceUnit,PublishBegin,PublishEnd,IsDeleted,Modified,Created,Deleted,ImageUrl")] TArticle tArticle)
+        public async Task<IActionResult> Create([Bind("ArticleId,CompanyId,UserId,Name,Slug,Description,ImagePath,ImageFileName,ImageFileFormat,ImageWidths,Price,PriceText,PriceUnit,PublishBegin,PublishEnd,IsDeleted,Modified,Created,Deleted,ImageUrl")] Article article)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tArticle);
+                _context.Add(article);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompanyId"] = new SelectList(_context.TCompany, "CompanyId", "Address", tArticle.CompanyId);
-            return View(tArticle);
+            ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Address", article.CompanyId);
+            return View(article);
         }
       }
     }
