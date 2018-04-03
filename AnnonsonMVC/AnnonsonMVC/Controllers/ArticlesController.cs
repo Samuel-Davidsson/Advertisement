@@ -19,7 +19,7 @@ namespace AnnonsonMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var annonsappenContext = _context.Article.Where(t => t.UserId == 2).OrderBy(o =>o.Name).Include(t => t.Company);
+            var annonsappenContext = _context.Article.Where(t => t.UserId == 2).Include(t => t.Company);
             return View(await annonsappenContext.ToListAsync());
         }
 
@@ -27,6 +27,7 @@ namespace AnnonsonMVC.Controllers
         {
             ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
+            ViewData["StoreId"] = new SelectList(_context.Store, "StoreId", "Name");
             return View();
         }
 
@@ -54,8 +55,8 @@ namespace AnnonsonMVC.Controllers
                
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompanyId"] = new SelectList(_context.Company.OrderBy(c =>c.Name), "CompanyId", "Company");
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId");
+            ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Company");
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Category");
             return View();
         }
       }

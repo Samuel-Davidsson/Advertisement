@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AnnonsonMVC.Models
 {
-    public partial class Company : ICompany
+    public partial class Company
     {
         public Company()
         {
