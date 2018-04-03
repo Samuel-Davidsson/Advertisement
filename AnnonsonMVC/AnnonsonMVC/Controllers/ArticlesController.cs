@@ -33,7 +33,7 @@ namespace AnnonsonMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArticleId,CompanyId,UserId,Name,Slug,Description,ImagePath,ImageFileName,ImageFileFormat,ImageWidths,Price,PriceText,PriceUnit,PublishBegin,PublishEnd,IsDeleted,Modified,Created,Deleted,ImageUrl")] Article article, IFormFile file)
+        public async Task<IActionResult> Create([Bind("ArticleId,CompanyId,UserId,Name,Slug,Description,ImagePath,ImageFileName,ImageFileFormat,ImageWidths,Price,PriceText,PriceUnit,PublishBegin,PublishEnd,IsDeleted,Modified,Created,Deleted,ImageUrl")] Article article)
         {
             if (ModelState.IsValid)
             {
@@ -42,7 +42,6 @@ namespace AnnonsonMVC.Controllers
                 
                 var slug = article.Name.Replace(" ", "-").ToLower();
                 article.Slug = slug;
-
 
                 article.UserId = 2;
 

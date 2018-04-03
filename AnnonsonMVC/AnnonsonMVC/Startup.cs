@@ -20,7 +20,8 @@ namespace AnnonsonMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
+            var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
+            //var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
             services.AddDbContext<annonsappenContext>(options => options.UseSqlServer(connection));
         }
 
