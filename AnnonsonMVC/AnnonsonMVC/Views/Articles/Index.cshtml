@@ -67,7 +67,7 @@
                     @Html.DisplayNameFor(model => model.ImageUrl)
                 </th>
             <th>
-                @Html.DisplayNameFor(model => model.Company)
+                @Html.DisplayNameFor(model => model.Company.Name)
             </th>
             <th></th>
         </tr>
@@ -130,7 +130,7 @@
                 @Html.DisplayFor(modelItem => item.ImageUrl)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Company.Address)
+                @Html.DisplayFor(modelItem => item.Company.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ArticleId">Edit</a> |

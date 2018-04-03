@@ -19,7 +19,7 @@ namespace AnnonsonMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var annonsappenContext = _context.Article.Where(t => t.UserId == 2).Include(t => t.Company);
+            var annonsappenContext = _context.Article.Where(t => t.UserId == 2).OrderBy(o =>o.Name).Include(t => t.Company);
             return View(await annonsappenContext.ToListAsync());
         }
 
@@ -32,24 +32,31 @@ namespace AnnonsonMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArticleId,CompanyId,UserId,Name,Slug,Description,ImagePath,ImageFileName,ImageFileFormat,ImageWidths,Price,PriceText,PriceUnit,PublishBegin,PublishEnd,IsDeleted,Modified,Created,Deleted,ImageUrl")] Article article)
+        public async Task<IActionResult> Create(Article article)
         {
             if (ModelState.IsValid)
-            {                                
-                article.ImageFileName = Convert.ToString(Guid.NewGuid());
-                
+            {
+                         
                 var slug = article.Name.Replace(" ", "-").ToLower();
                 article.Slug = slug;
 
                 article.UserId = 2;
-
+                
                 _context.Add(article);
                 await _context.SaveChangesAsync();
+
+                var imageName = "aid" + article.ArticleId + "-" + Guid.NewGuid();
+                article.ImageFileName = imageName;
+
+                _context.Update(article);
+                await _context.SaveChangesAsync();
+
+               
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CompanyId"] = new SelectList(_context.Company.OrderBy(c =>c.Name), "CompanyId", "Company");
             ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId");
-            return View(article);
+            return View();
         }
       }
     }

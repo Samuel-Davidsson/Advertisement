@@ -1,9 +1,10 @@
-﻿using System;
+﻿using AnnonsonMVC.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace AnnonsonMVC.Models
 {
-    public partial class Company
+    public partial class Company : ICompany
     {
         public Company()
         {
