@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AnnonsonMVC.Models;
-using Microsoft.AspNetCore.Http;
 using System;
 
 namespace AnnonsonMVC.Controllers
@@ -36,8 +35,7 @@ namespace AnnonsonMVC.Controllers
         public async Task<IActionResult> Create([Bind("ArticleId,CompanyId,UserId,Name,Slug,Description,ImagePath,ImageFileName,ImageFileFormat,ImageWidths,Price,PriceText,PriceUnit,PublishBegin,PublishEnd,IsDeleted,Modified,Created,Deleted,ImageUrl")] Article article)
         {
             if (ModelState.IsValid)
-            {
-                                
+            {                                
                 article.ImageFileName = Convert.ToString(Guid.NewGuid());
                 
                 var slug = article.Name.Replace(" ", "-").ToLower();
