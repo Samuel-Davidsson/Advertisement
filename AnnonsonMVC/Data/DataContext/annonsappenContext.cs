@@ -33,6 +33,10 @@ namespace Data.DataContext
         : base(options)
         {  }
 
+        public annonsappenContext()
+        {
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
