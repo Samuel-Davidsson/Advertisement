@@ -4,6 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Data.DataContext;
+using Domain.Services;
+using Domain.Interfaces;
+using Domain.Entites;
+using Data.Repositories;
 
 namespace AnnonsonMVC
 {
@@ -20,6 +24,8 @@ namespace AnnonsonMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddScoped<ArticleService>();
+            services.AddScoped<IRepository<Article>, Repository<Article>>();
             //var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
             var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
             services.AddDbContext<annonsappenContext>(options => options.UseSqlServer(connection));
