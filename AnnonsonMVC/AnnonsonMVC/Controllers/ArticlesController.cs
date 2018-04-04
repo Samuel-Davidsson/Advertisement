@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AnnonsonMVC.Models;
 using System;
+using AnnonsonMVC.ViewModels;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -33,7 +34,7 @@ namespace AnnonsonMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Article article)
+        public async Task<IActionResult> Create(ArticelViewModel article)
         {
             if (ModelState.IsValid)
             {

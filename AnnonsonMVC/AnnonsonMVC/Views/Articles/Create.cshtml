@@ -1,4 +1,4 @@
-﻿@model AnnonsonMVC.Models.Article
+﻿@model AnnonsonMVC.ViewModels.ArticelViewModel
 @{
     ViewData["Title"] = "Create";
 }
@@ -34,8 +34,8 @@
                 <input asp-for="PriceText" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="CompanyId" class="control-label">Företag</label>
-                <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
+                <label asp-for="Company" class="control-label">Företag</label>
+                <select asp-for="Company" class="form-control" asp-items="ViewBag.CompanyId"></select>
             </div>
 
             <div class="form-group">
