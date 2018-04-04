@@ -1,8 +1,7 @@
-﻿using AnnonsonMVC.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace AnnonsonMVC.Models
+namespace Domain.Entites
 {
     public partial class Company
     {

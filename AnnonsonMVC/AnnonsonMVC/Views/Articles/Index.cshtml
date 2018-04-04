@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AnnonsonMVC.Models.Article>
+﻿@model IEnumerable<Domain.Entites.Article>
 
 @{
     ViewData["Title"] = "Index";
@@ -51,21 +51,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.PublishEnd)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IsDeleted)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Modified)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Created)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Deleted)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ImageUrl)
-                </th>
             <th>
                 @Html.DisplayNameFor(model => model.Company.Name)
             </th>
@@ -113,21 +98,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PublishEnd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDeleted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Modified)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Deleted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Company.Name)

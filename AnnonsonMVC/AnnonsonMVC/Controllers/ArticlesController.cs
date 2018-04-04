@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AnnonsonMVC.Models;
 using System;
 using AnnonsonMVC.ViewModels;
+using Data.DataContext;
 
 namespace AnnonsonMVC.Controllers
 {

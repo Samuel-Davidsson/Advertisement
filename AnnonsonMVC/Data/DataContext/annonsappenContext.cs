@@ -1,8 +1,9 @@
 ﻿using System;
+using Domain.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace AnnonsonMVC.Models
+namespace Data.DataContext
 {
     public partial class annonsappenContext : DbContext
     {
