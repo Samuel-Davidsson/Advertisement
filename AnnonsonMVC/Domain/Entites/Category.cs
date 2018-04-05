@@ -31,6 +31,6 @@ namespace Domain.Entites
 
         public Category Parent { get; set; }
         public ICollection<Category> InverseParent { get; set; }
-        public ICollection<ArticleCategory> TArticleCategory { get; set; }
+        public ICollection<ArticleCategory> ArticleCategory { get; set; }
     }
 }

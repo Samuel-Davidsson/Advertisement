@@ -1,6 +1,7 @@
 ﻿using System;
 using AnnonsonMVC.ViewModels;
 using Domain.Entites;
+using System.Linq;
 
 namespace AnnonsonMVC.Utilitys
 {
@@ -23,6 +24,7 @@ namespace AnnonsonMVC.Utilitys
             articleToEdit.PublishEnd = model.PublishEnd;
             articleToEdit.CompanyId = model.Company.CompanyId;
             articleToEdit.UserId = model.UserId;
+            articleToEdit.ArticleCategory = model.ArticleCategory;
             return articleToEdit;
 
     }
@@ -44,8 +46,8 @@ namespace AnnonsonMVC.Utilitys
                 PublishBegin = model.PublishBegin,
                 PublishEnd = model.PublishEnd,
                 CompanyId = model.Company.CompanyId,
-                UserId = model.UserId
-
+                UserId = model.UserId,
+                ArticleCategory = model.Category.CategoryId.Where
             };
         }
     }
