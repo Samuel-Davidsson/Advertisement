@@ -8,6 +8,7 @@ using Domain.Services;
 using Domain.Interfaces;
 using Domain.Entites;
 using Data.Repositories;
+using AnnonsonMVC.Automapper;
 
 namespace AnnonsonMVC
 {
@@ -23,7 +24,7 @@ namespace AnnonsonMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IStoreService, StoreService>();
@@ -33,11 +34,18 @@ namespace AnnonsonMVC
             services.AddScoped<IRepository<Category>, Repository<Category>>();
             services.AddScoped<IRepository<Store>, Repository<Store>>();
             services.AddScoped<IRepository<Company>, Repository<Company>>();
-            
+
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutomapperProfile());
+            });
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
 
             var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
             //var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
             services.AddDbContext<annonsappenContext>(options => options.UseSqlServer(connection));
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

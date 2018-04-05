@@ -16,13 +16,15 @@ namespace AnnonsonMVC.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IStoreService _storeService;
         private readonly ICompanyService _companyService;
+        private readonly IMapper _mapper;
 
-        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService)
+        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService, IMapper mapper)
         {
             _articelService = articleService;
             _categoryService = categoryService;
             _storeService = storeService;
             _companyService = companyService;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -52,16 +54,17 @@ namespace AnnonsonMVC.Controllers
                 article.UserId = 2;
 
 
-                var newArticle = Mapper.Map<Article>(article);
+                var newArticle = _mapper.Map<Article>(article);
                 _articelService.Add(newArticle);
+                
 
                 //_articelService.Add(article);
                 //await _context.SaveChangesAsync();
 
-                var imageName = "aid" + article.ArticleId + "-" + Guid.NewGuid();
-                article.ImageFileName = imageName;
+                //var imageName = "aid" + article.ArticleId + "-" + Guid.NewGuid();
+                //article.ImageFileName = imageName;
 
-                _articelService.Update(newArticle);
+                //_articelService.Update(newArticle);
                 //await _context.SaveChangesAsync();
 
 
