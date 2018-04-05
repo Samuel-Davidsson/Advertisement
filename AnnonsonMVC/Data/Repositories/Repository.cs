@@ -44,6 +44,13 @@ namespace Data.Repositories
             return includeProperties.Aggregate
                 (queryable, (current, includeProperty) => current.Include(includeProperty));
         }
+
+        public void Update(TEntity entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+            _set.Update(entity);
+            _context.SaveChanges();
+        }
     }
 
  

@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AnnonsonMVC.ViewModels;
 using Domain.Interfaces;
+using System;
+using Domain.Entites;
+using AutoMapper;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -43,18 +46,22 @@ namespace AnnonsonMVC.Controllers
             if (ModelState.IsValid)
             {
 
-                //var slug = article.Name.Replace(" ", "-").ToLower();
-                //article.Slug = slug;
+                var slug = article.Name.Replace(" ", "-").ToLower();
+                article.Slug = slug;
 
-                //article.UserId = 2;
+                article.UserId = 2;
 
-                //_context.Add(article);
+
+                var newArticle = Mapper.Map<Article>(article);
+                _articelService.Add(newArticle);
+
+                //_articelService.Add(article);
                 //await _context.SaveChangesAsync();
 
-                //var imageName = "aid" + article.ArticleId + "-" + Guid.NewGuid();
-                //article.ImageFileName = imageName;
+                var imageName = "aid" + article.ArticleId + "-" + Guid.NewGuid();
+                article.ImageFileName = imageName;
 
-                //_context.Update(article);
+                _articelService.Update(newArticle);
                 //await _context.SaveChangesAsync();
 
 
