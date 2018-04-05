@@ -12,12 +12,14 @@ namespace AnnonsonMVC.Controllers
         private readonly IArticleService _articelService;
         private readonly ICategoryService _categoryService;
         private readonly IStoreService _storeService;
+        private readonly ICompanyService _companyService;
 
-        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService)
+        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService)
         {
             _articelService = articleService;
             _categoryService = categoryService;
             _storeService = storeService;
+            _companyService = companyService;
         }
 
         public IActionResult Index()
@@ -28,7 +30,7 @@ namespace AnnonsonMVC.Controllers
 
         public IActionResult Create()
         {
-            //ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Name");
+            ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
             ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name");
             return View();
@@ -38,26 +40,26 @@ namespace AnnonsonMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ArticelViewModel article)
         {
-            //if (ModelState.IsValid)
-            //{
-                         
-            //    var slug = article.Name.Replace(" ", "-").ToLower();
-            //    article.Slug = slug;
+            if (ModelState.IsValid)
+            {
 
-            //    article.UserId = 2;
-                
-            //    _context.Add(article);
-            //    await _context.SaveChangesAsync();
+                //var slug = article.Name.Replace(" ", "-").ToLower();
+                //article.Slug = slug;
 
-            //    var imageName = "aid" + article.ArticleId + "-" + Guid.NewGuid();
-            //    article.ImageFileName = imageName;
+                //article.UserId = 2;
 
-            //    _context.Update(article);
-            //    await _context.SaveChangesAsync();
+                //_context.Add(article);
+                //await _context.SaveChangesAsync();
 
-               
-            //    return RedirectToAction(nameof(Index));
-            //}
+                //var imageName = "aid" + article.ArticleId + "-" + Guid.NewGuid();
+                //article.ImageFileName = imageName;
+
+                //_context.Update(article);
+                //await _context.SaveChangesAsync();
+
+
+                return RedirectToAction(nameof(Index));
+            }
             //ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Company");
             //ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Category");
             return View();

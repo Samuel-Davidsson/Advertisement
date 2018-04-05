@@ -27,6 +27,9 @@ namespace AnnonsonMVC.ViewModels
         public IFormFile Image { get; set; }
 
         public Company Company { get; set; }
+        public Store Store { get; set; }
+        public Category Category { get; set; }
+
         public ICollection<ArticleCategory> ArticleCategory { get; set; }
         public ICollection<StoreArticle> StoreArticle { get; set; }
     }

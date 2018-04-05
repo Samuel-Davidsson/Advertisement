@@ -27,9 +27,12 @@ namespace AnnonsonMVC
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IStoreService, StoreService>();
+            services.AddScoped<ICompanyService, CompanyService>();
+
             services.AddScoped<IRepository<Article>, Repository<Article>>();
             services.AddScoped<IRepository<Category>, Repository<Category>>();
             services.AddScoped<IRepository<Store>, Repository<Store>>();
+            services.AddScoped<IRepository<Company>, Repository<Company>>();
             
 
             var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
