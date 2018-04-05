@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Domain.Services
 {
-    public class CategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly IRepository<Category> _repository;
 

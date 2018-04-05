@@ -2,21 +2,22 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System;
 using AnnonsonMVC.ViewModels;
-using Data.DataContext;
-using Domain.Services;
+using Domain.Interfaces;
 
 namespace AnnonsonMVC.Controllers
 {
     public class ArticlesController : Controller
     {
-        private readonly ArticleService _articelService;
+        private readonly IArticleService _articelService;
+        private readonly ICategoryService _categoryService;
+        private readonly IStoreService _storeService;
 
-        public ArticlesController(ArticleService articleService)
+        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService)
         {
             _articelService = articleService;
+            _categoryService = categoryService;
+            _storeService = storeService;
         }
 
         public IActionResult Index()
@@ -28,8 +29,8 @@ namespace AnnonsonMVC.Controllers
         public IActionResult Create()
         {
             //ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Name");
-            //ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
-            //ViewData["StoreId"] = new SelectList(_context.Store, "StoreId", "Name");
+            ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
+            ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name");
             return View();
         }
 

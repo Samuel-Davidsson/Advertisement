@@ -24,10 +24,16 @@ namespace AnnonsonMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddScoped<ArticleService>();
+            services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IStoreService, StoreService>();
             services.AddScoped<IRepository<Article>, Repository<Article>>();
-            //var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
-            var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
+            services.AddScoped<IRepository<Category>, Repository<Category>>();
+            services.AddScoped<IRepository<Store>, Repository<Store>>();
+            
+
+            var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
+            //var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
             services.AddDbContext<annonsappenContext>(options => options.UseSqlServer(connection));
         }
 
