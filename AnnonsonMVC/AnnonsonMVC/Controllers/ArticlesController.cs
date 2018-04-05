@@ -7,6 +7,7 @@ using Domain.Interfaces;
 using System;
 using Domain.Entites;
 using AutoMapper;
+//using AnnonsonMVC.Utilitys;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -16,15 +17,13 @@ namespace AnnonsonMVC.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IStoreService _storeService;
         private readonly ICompanyService _companyService;
-        private readonly IMapper _mapper;
 
-        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService, IMapper mapper)
+        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService)
         {
             _articelService = articleService;
             _categoryService = categoryService;
             _storeService = storeService;
             _companyService = companyService;
-            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -43,7 +42,7 @@ namespace AnnonsonMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ArticelViewModel article)
+        public IActionResult Create(ArticelViewModel article)
         {
             if (ModelState.IsValid)
             {
@@ -54,7 +53,7 @@ namespace AnnonsonMVC.Controllers
                 article.UserId = 2;
 
 
-                var newArticle = _mapper.Map<Article>(article);
+                var newArticle = Mapper.Map<Article>(article);
                 _articelService.Add(newArticle);
                 
 
@@ -68,7 +67,7 @@ namespace AnnonsonMVC.Controllers
                 //await _context.SaveChangesAsync();
 
 
-                return RedirectToAction(nameof(Index));
+                return View("Index");
             }
             //ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Company");
             //ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Category");
