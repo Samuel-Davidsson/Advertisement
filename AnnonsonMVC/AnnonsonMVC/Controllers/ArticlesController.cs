@@ -6,8 +6,7 @@ using AnnonsonMVC.ViewModels;
 using Domain.Interfaces;
 using System;
 using Domain.Entites;
-using AutoMapper;
-//using AnnonsonMVC.Utilitys;
+using AnnonsonMVC.Utilitys;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -42,32 +41,26 @@ namespace AnnonsonMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ArticelViewModel article)
+        public IActionResult Create(ArticelViewModel model)
         {
             if (ModelState.IsValid)
             {
 
-                var slug = article.Name.Replace(" ", "-").ToLower();
-                article.Slug = slug;
+                var slug = model.Name.Replace(" ", "-").ToLower();
+                model.Slug = slug;
 
-                article.UserId = 2;
+                model.UserId = 2;
 
 
-                var newArticle = Mapper.Map<Article>(article);
+                var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
                 _articelService.Add(newArticle);
                 
+                var imageName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
+                newArticle.ImageFileName = imageName;
 
-                //_articelService.Add(article);
-                //await _context.SaveChangesAsync();
+                _articelService.Update(newArticle);
 
-                //var imageName = "aid" + article.ArticleId + "-" + Guid.NewGuid();
-                //article.ImageFileName = imageName;
-
-                //_articelService.Update(newArticle);
-                //await _context.SaveChangesAsync();
-
-
-                return View("Index");
+                return View();
             }
             //ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Company");
             //ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Category");

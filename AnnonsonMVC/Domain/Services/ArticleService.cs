@@ -28,9 +28,9 @@ namespace Domain.Services
             return _repository.GetAll();
         }
 
-        //public void Update(Article article)
-        //{
-        //    _repository.Update(article);
-        //}
+        public void Update(Article article)
+        {
+            _repository.Update(article);
+        }
     }
 }

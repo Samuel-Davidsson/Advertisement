@@ -22,7 +22,7 @@ namespace Data.Repositories
         public void Add(TEntity entity)
         {
             _set.Add(entity);
-            _context.Update(entity);
+            //_context.Update(entity);
             _context.SaveChanges();
         }
 
@@ -45,12 +45,12 @@ namespace Data.Repositories
                 (queryable, (current, includeProperty) => current.Include(includeProperty));
         }
 
-        //public void Update(TEntity entity)
-        //{
-        //    _context.Entry(entity).State = EntityState.Modified;
-        //    _set.Update(entity);
-        //    _context.SaveChanges();
-        //}
+        public void Update(TEntity entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+            _set.Update(entity);
+            _context.SaveChanges();
+        }
     }
 
  

@@ -1,4 +1,5 @@
-﻿using AnnonsonMVC.ViewModels;
+﻿using System;
+using AnnonsonMVC.ViewModels;
 using Domain.Entites;
 
 namespace AnnonsonMVC.Utilitys
@@ -20,8 +21,32 @@ namespace AnnonsonMVC.Utilitys
             articleToEdit.ImageWidths = model.ImageWidths;
             articleToEdit.PublishBegin = model.PublishBegin;
             articleToEdit.PublishEnd = model.PublishEnd;
+            articleToEdit.CompanyId = model.Company.CompanyId;
+            articleToEdit.UserId = model.UserId;
             return articleToEdit;
 
     }
+
+        public Article EditActicleViewModelToArticle(ArticelViewModel model)
+        {
+            return new Article
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Price = model.Price,
+                PriceText = model.PriceText,
+                PriceUnit = model.PriceUnit,
+                Slug = model.Slug,
+                ImagePath = model.ImagePath,
+                ImageFileFormat = model.ImageFileFormat,
+                ImageFileName = model.ImageFileName,
+                ImageWidths = model.ImageWidths,
+                PublishBegin = model.PublishBegin,
+                PublishEnd = model.PublishEnd,
+                CompanyId = model.Company.CompanyId,
+                UserId = model.UserId
+
+            };
+        }
     }
 }
