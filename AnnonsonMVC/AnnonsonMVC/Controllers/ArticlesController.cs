@@ -1,12 +1,11 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AnnonsonMVC.ViewModels;
 using Domain.Interfaces;
 using System;
-using Domain.Entites;
 using AnnonsonMVC.Utilitys;
+using Domain.Entites;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -51,6 +50,7 @@ namespace AnnonsonMVC.Controllers
 
                 model.UserId = 2;
 
+                var store = model.Store.StoreId;
 
                 var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
                 _articelService.Add(newArticle);
@@ -58,12 +58,20 @@ namespace AnnonsonMVC.Controllers
                 var imageName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
                 newArticle.ImageFileName = imageName;
 
+               var test = newArticle.StoreArticle.First(x => x.StoreId == store);
+
+                newArticle.StoreArticle = new StoreArticle
+                {
+                    ArticleId = newArticle.ArticleId,
+                    StoreId = test
+                };
+
                 _articelService.Update(newArticle);
 
                 return View();
             }
-            //ViewData["CompanyId"] = new SelectList(_context.Company, "CompanyId", "Company");
-            //ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Category");
+            ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Company");
+            ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Category");
             return View();
         }
       }

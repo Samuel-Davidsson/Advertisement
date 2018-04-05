@@ -8,7 +8,7 @@ namespace Domain.Entites
         public Category()
         {
             InverseParent = new HashSet<Category>();
-            TArticleCategory = new HashSet<ArticleCategory>();
+            ArticleCategory = new HashSet<ArticleCategory>();
         }
 
         public int CategoryId { get; set; }

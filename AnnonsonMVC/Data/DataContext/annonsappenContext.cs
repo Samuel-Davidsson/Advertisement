@@ -140,7 +140,7 @@ namespace Data.DataContext
                     .HasConstraintName("FK_T_ArticleCategory_T_Article");
 
                 entity.HasOne(d => d.Category)
-                    .WithMany(p => p.TArticleCategory)
+                    .WithMany(p => p.ArticleCategory)
                     .HasForeignKey(d => d.CategoryId)
                     .HasConstraintName("FK_T_ArticleCategory_T_Category");
             });
