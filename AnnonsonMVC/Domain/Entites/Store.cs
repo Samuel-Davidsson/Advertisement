@@ -7,8 +7,8 @@ namespace Domain.Entites
     {
         public Store()
         {
-            TStoreArticle = new HashSet<StoreArticle>();
-            TUserStore = new HashSet<UserStore>();
+            StoreArticle = new HashSet<StoreArticle>();
+            UserStore = new HashSet<UserStore>();
         }
 
         public int StoreId { get; set; }
@@ -62,7 +62,7 @@ namespace Domain.Entites
         public string StoreImageUrl { get; set; }
 
         public Company Company { get; set; }
-        public ICollection<StoreArticle> TStoreArticle { get; set; }
-        public ICollection<UserStore> TUserStore { get; set; }
+        public ICollection<StoreArticle> StoreArticle { get; set; }
+        public ICollection<UserStore> UserStore { get; set; }
     }
 }

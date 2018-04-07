@@ -597,7 +597,7 @@ namespace Data.DataContext
                     .HasConstraintName("FK_T_StoreArticle_T_Article");
 
                 entity.HasOne(d => d.Store)
-                    .WithMany(p => p.TStoreArticle)
+                    .WithMany(p => p.StoreArticle)
                     .HasForeignKey(d => d.StoreId)
                     .HasConstraintName("FK_T_StoreArticle_T_Store");
             });
@@ -706,7 +706,7 @@ namespace Data.DataContext
                     .HasDefaultValueSql("(getutcdate())");
 
                 entity.HasOne(d => d.Store)
-                    .WithMany(p => p.TUserStore)
+                    .WithMany(p => p.UserStore)
                     .HasForeignKey(d => d.StoreId)
                     .HasConstraintName("FK_T_UserStore_T_Store");
 
