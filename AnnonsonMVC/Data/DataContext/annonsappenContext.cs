@@ -24,8 +24,8 @@ namespace Data.DataContext
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;");
-                //optionsBuilder.UseSqlServer(@"Server = SAMUEL; Database = annonsappen; Trusted_Connection = True;");
+                //optionsBuilder.UseSqlServer(@"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(@"Server = SAMUEL; Database = annonsappen; Trusted_Connection = True;");
             }
         }
 
@@ -602,7 +602,7 @@ namespace Data.DataContext
                     .HasConstraintName("FK_T_StoreArticle_T_Store");
             });
 
-           
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.UserId);

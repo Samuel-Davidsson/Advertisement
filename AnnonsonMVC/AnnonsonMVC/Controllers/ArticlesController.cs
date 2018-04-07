@@ -48,23 +48,29 @@ namespace AnnonsonMVC.Controllers
                 var slug = model.Name.Replace(" ", "-").ToLower();
                 model.Slug = slug;
 
-                model.UserId = 2;
+                model.UserId = 2; //No login yet.
 
-                var store = model.Store.StoreId;
+                var storeId = model.Store.StoreId;          //Placeholders since we dont have ArticleID until it´s saved.
+                var categoryId = model.Category.CategoryId; //
 
                 var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
                 _articelService.Add(newArticle);
-                
+                                
+                newArticle.StoreArticle.Add(new StoreArticle
+                {
+                    ArticleId = newArticle.ArticleId,
+                    StoreId = storeId
+                });
+
+                newArticle.ArticleCategory.Add(new ArticleCategory
+                {
+                    ArticleId = newArticle.ArticleId,
+                    CategoryId = categoryId
+                });
+
                 var imageName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
                 newArticle.ImageFileName = imageName;
 
-               var test = newArticle.StoreArticle.First(x => x.StoreId == store);
-
-                newArticle.StoreArticle = new StoreArticle
-                {
-                    ArticleId = newArticle.ArticleId,
-                    StoreId = test
-                };
 
                 _articelService.Update(newArticle);
 
