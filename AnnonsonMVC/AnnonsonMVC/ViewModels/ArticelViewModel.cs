@@ -25,7 +25,7 @@ namespace AnnonsonMVC.ViewModels
         public DateTime PublishBegin { get; set; }
         public DateTime PublishEnd { get; set; }
 
-        public IFormFile Image { get; set; }
+        public IFormFile ArticleImage { get; set; }
 
         public Company Company { get; set; }
         public Store Store { get; set; }

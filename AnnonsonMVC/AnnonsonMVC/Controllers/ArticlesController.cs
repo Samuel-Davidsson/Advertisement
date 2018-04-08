@@ -6,9 +6,7 @@ using Domain.Interfaces;
 using System;
 using AnnonsonMVC.Utilitys;
 using Domain.Entites;
-using Data.DataContext;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -33,6 +31,11 @@ namespace AnnonsonMVC.Controllers
             return View( articles.ToList());
         }
 
+        public IActionResult Delete()
+        {
+            return View();
+        }
+
         public IActionResult Create()
         {
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
@@ -43,11 +46,11 @@ namespace AnnonsonMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ArticelViewModel model)
+        public IActionResult Create(ArticelViewModel model, IFormFile ArticleImage)
         {
             if (ModelState.IsValid)
             {
-
+                //var test = model.ArticleImage; 
                 var slug = model.Name.Replace(" ", "-").ToLower();
                 model.Slug = slug;
 
