@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Domain.Entites
+﻿namespace Domain.Entites
 {
     public partial class StoreArticle
     {

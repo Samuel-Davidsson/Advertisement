@@ -7,5 +7,6 @@ namespace Domain.Interfaces
     {
         void Add(Category category);
         IEnumerable<Category> GetAll();
+        Category Find(int id, params string[] includeProperties);
     }
 }
