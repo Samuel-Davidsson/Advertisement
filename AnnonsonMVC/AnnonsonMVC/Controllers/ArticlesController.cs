@@ -7,6 +7,7 @@ using System;
 using AnnonsonMVC.Utilitys;
 using Domain.Entites;
 using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -46,11 +47,11 @@ namespace AnnonsonMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ArticelViewModel model, IFormFile ArticleImage)
+        public IActionResult Create(ArticelViewModel model, IFormFile File)
         {
+            var path = Path.GetTempFileName();
             if (ModelState.IsValid)
             {
-                //var test = model.ArticleImage; 
                 var slug = model.Name.Replace(" ", "-").ToLower();
                 model.Slug = slug;
 

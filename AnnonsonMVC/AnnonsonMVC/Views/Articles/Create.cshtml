@@ -6,7 +6,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -56,10 +56,10 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="ArticleImage" class="control-label">Annonsbild</label>
-                <div class="col-md-3">
-                    <input asp-for="ArticleImage" class="form-control" />
-                    <span asp-validation-for="ArticleImage" class="text-danger">Ladda upp bild</span>
+                <label asp-for="File" class="control-label">Annonsbild</label>
+                <div class="col-md-10">
+                    <input asp-for="File" id="File" name="File"/>
+                    <span asp-validation-for="File" class="text-danger">Ladda upp bild</span>
                 </div>
             </div>
 
