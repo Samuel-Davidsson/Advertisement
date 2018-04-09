@@ -49,15 +49,21 @@ namespace AnnonsonMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ArticelViewModel model, IFormFile File)
         {
-            var path = Path.GetTempFileName();
+
             if (ModelState.IsValid)
             {
+                //model.ImagePath nån special path.
+                //model.ImageFileFormat fixa till filformatet inte så svårt.
+                //model.ImageWidths fixa till filformatet inte så svårt heller
+                //model.ImageFileName redan klar
+
                 var slug = model.Name.Replace(" ", "-").ToLower();
                 model.Slug = slug;
 
                 model.UserId = 2; //No login yet.
 
-                //Placeholders since we dont have ArticleID until it´s saved
+                //Placeholders since we dont have ArticleID until it´s saved.
+                //Also needed to make articleCategory cause I didnt stick onto the model.
                 var storeId = model.Store.StoreId;
                 var categoryId = model.Category.CategoryId;
                 var articleCategory = model.Category.ArticleCategory;
@@ -65,8 +71,9 @@ namespace AnnonsonMVC.Controllers
 
                 var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
                 _articelService.Add(newArticle);
-                newArticle.ArticleCategory = articleCategory;
 
+                newArticle.ArticleCategory = articleCategory;
+                newArticle.StoreArticle = articleStore;
 
                 newArticle.StoreArticle.Add(new StoreArticle
                 {

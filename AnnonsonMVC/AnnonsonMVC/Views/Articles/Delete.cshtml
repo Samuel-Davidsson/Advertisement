@@ -8,7 +8,6 @@
 
 <div class="row">
     <div class="col-md-6">
-        <!-- Adjust this to be sm/md/lg, whatever fits best for you -->
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -26,7 +25,6 @@
         <!-- Continue your first column of form groups here -->
     </div>
     <div class="col-md-6">
-        <!-- Adjust this to be sm/md/lg, whatever fits best for you-->
         <div class="form-group">
             @Html.LabelFor(model => model.PriceText, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -41,7 +39,7 @@
                 @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
             </div>
         </div>
-         Continue your second column of form groups here 
+        <!--Continue your second column of form groups here-->
     </div>
 
     
