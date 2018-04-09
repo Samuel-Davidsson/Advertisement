@@ -60,10 +60,13 @@ namespace AnnonsonMVC.Controllers
                 var storeId = model.Store.StoreId;
                 var categoryId = model.Category.CategoryId;
                 var articleCategory = model.Category.ArticleCategory;
+                var articleStore = model.Store.StoreArticle;
 
                 var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
                 _articelService.Add(newArticle);
                 newArticle.ArticleCategory = articleCategory;
+
+
                 newArticle.StoreArticle.Add(new StoreArticle
                 {
                     ArticleId = newArticle.ArticleId,

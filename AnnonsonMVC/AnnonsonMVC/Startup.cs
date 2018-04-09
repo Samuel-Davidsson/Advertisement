@@ -35,8 +35,8 @@ namespace AnnonsonMVC
             services.AddScoped<IRepository<Store>, Repository<Store>>();
             services.AddScoped<IRepository<Company>, Repository<Company>>();
 
-            //var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
-            var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
+            var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
+            //var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
             services.AddDbContext<annonsappenContext>(options => options.UseSqlServer(connection));
             services.AddMvc();
         }
