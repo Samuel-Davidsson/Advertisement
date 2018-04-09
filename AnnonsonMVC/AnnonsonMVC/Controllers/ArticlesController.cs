@@ -45,6 +45,11 @@ namespace AnnonsonMVC.Controllers
             return View();
         }
 
+        public IActionResult Details(int id)
+        {          
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(ArticelViewModel model, IFormFile File)
@@ -60,10 +65,11 @@ namespace AnnonsonMVC.Controllers
                 var slug = model.Name.Replace(" ", "-").ToLower();
                 model.Slug = slug;
 
-                model.UserId = 2; //No login yet.
+                //No login yet.
+                model.UserId = 2;
 
                 //Placeholders since we dont have ArticleID until it´s saved.
-                //Also needed to make articleCategory cause I didnt stick onto the model.
+                //Also needed to make articleCategory cause it didnt stick onto the model.
                 var storeId = model.Store.StoreId;
                 var categoryId = model.Category.CategoryId;
                 var articleCategory = model.Category.ArticleCategory;

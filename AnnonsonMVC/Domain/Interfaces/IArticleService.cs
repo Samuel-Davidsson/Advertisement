@@ -8,5 +8,6 @@ namespace Domain.Interfaces
         void Add(Article article);
         void Update(Article article);
         IEnumerable<Article> GetAll();
+        Article Find(int id, params string[] includeProperties);
     }
 }
