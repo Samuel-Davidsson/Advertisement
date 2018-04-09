@@ -7,6 +7,7 @@ using System;
 using AnnonsonMVC.Utilitys;
 using Domain.Entites;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using System.IO;
 
 namespace AnnonsonMVC.Controllers
@@ -17,13 +18,15 @@ namespace AnnonsonMVC.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IStoreService _storeService;
         private readonly ICompanyService _companyService;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService)
+        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService, IHostingEnvironment hostingEnvironment  )
         {
             _articelService = articleService;
             _categoryService = categoryService;
             _storeService = storeService;
             _companyService = companyService;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
@@ -37,6 +40,10 @@ namespace AnnonsonMVC.Controllers
             return View();
         }
 
+        public IActionResult Details(int id)
+        {
+            return View();
+        }
         public IActionResult Create()
         {
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
@@ -45,42 +52,46 @@ namespace AnnonsonMVC.Controllers
             return View();
         }
 
-        public IActionResult Details(int id)
-        {          
-            return View();
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ArticelViewModel model, IFormFile File)
+        public IActionResult Create(ArticelViewModel model, IFormFile ImageFile)
         {
 
             if (ModelState.IsValid)
             {
-                //model.ImagePath nån special path.
-                //model.ImageFileFormat fixa till filformatet inte så svårt.
-                //model.ImageWidths fixa till filformatet inte så svårt heller
-                //model.ImageFileName redan klar
+                if (ImageFile == null || ImageFile.Length == 0)
+                    return Content("file not selected");
+
+                //Tar sig bara till wwwroot.
+                var upload = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads");
+                var filepath = Path.Combine(upload, ImageFile.FileName);
+                using (var filestream = new FileStream(filepath, FileMode.Create))
+                {
+                    ImageFile.CopyTo(filestream);
+                }
+
+                //model.ImageFileFormat fixa till filformatet svårare än jag trodde får googla detta.
+                //model.ImageWidths fixa till filformatet samma hät svårare än jag trodde.
+                //Pathen går bara in i projektet måste få den att gå utanför på något sätt.
 
                 var slug = model.Name.Replace(" ", "-").ToLower();
                 model.Slug = slug;
 
                 //No login yet.
-                model.UserId = 2;
+                model.UserId = 3;
 
                 //Placeholders since we dont have ArticleID until it´s saved.
                 //Also needed to make articleCategory cause it didnt stick onto the model.
                 var storeId = model.Store.StoreId;
                 var categoryId = model.Category.CategoryId;
                 var articleCategory = model.Category.ArticleCategory;
-                var articleStore = model.Store.StoreArticle;
 
                 var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
                 _articelService.Add(newArticle);
 
                 newArticle.ArticleCategory = articleCategory;
-                newArticle.StoreArticle = articleStore;
 
+                //Måste göra en lista av detta man skall kunna välja flera.
                 newArticle.StoreArticle.Add(new StoreArticle
                 {
                     ArticleId = newArticle.ArticleId,
