@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using ImageMagick;
+using System.Drawing;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -55,21 +56,15 @@ namespace AnnonsonMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ArticelViewModel model, IFormFile ImageFile)
+        public IActionResult Create(ArticelViewModel model)
         {
 
             if (ModelState.IsValid)
             {
 
-                //model.ImageFileFormat fixa till filformatet svårare än jag trodde får googla detta.
-                //model.ImageWidths fixa till filformatet samma hät svårare än jag trodde.
-                //MAGICK.NET
-                //Pathen går bara in i projektet måste få den att gå utanför på något sätt.
-
-                var slug = model.Name.Replace(" ", "-").ToLower();
+              var slug = model.Name.Replace(" ", "-").ToLower();
                 model.Slug = slug;
 
-                //No login yet.
                 model.UserId = 3;
 
                 //Placeholders since we dont have ArticleID until it´s saved.
@@ -83,28 +78,27 @@ namespace AnnonsonMVC.Controllers
 
                 newArticle.ArticleCategory = articleCategory;
 
-
-                if(ImageFile == null || ImageFile.Length == 0)
+                if (model.ImageFile == null || model.ImageFile.Length == 0)
                     return Content("file not selected");
 
+                newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
+
                 var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads");
-                var filepath = Path.Combine(uploadpath, ImageFile.FileName);
+                var filepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg");
                 
                 using (var filestream = new FileStream(filepath, FileMode.Create))
                 {
-                    ImageFile.CopyTo(filestream);
+                    model.ImageFile.CopyTo(filestream);
                 }
 
                 using (var image = new MagickImage(filepath))
                 {
                     image.Resize(600, 600);
-                    image.Format = MagickFormat.Jpg;
                     image.Strip();
                     image.Settings.FillColor = MagickColors.Green;
                     image.Write(filepath);
                 }
 
-                
                 //Måste göra en lista av detta man skall kunna välja flera.
                 newArticle.StoreArticle.Add(new StoreArticle
                 {
@@ -117,10 +111,7 @@ namespace AnnonsonMVC.Controllers
                     ArticleId = newArticle.ArticleId,
                     CategoryId = categoryId,
                 });
-
-                var imageName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
-                newArticle.ImageFileName = imageName;
-
+               
                 _articelService.Update(newArticle);
                 
                 return View("Index");
