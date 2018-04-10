@@ -6,11 +6,9 @@ using Domain.Interfaces;
 using System;
 using AnnonsonMVC.Utilitys;
 using Domain.Entites;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using ImageMagick;
-using System.Drawing;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -51,6 +49,8 @@ namespace AnnonsonMVC.Controllers
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
             ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name");
+            //StoreArticle service istället för att hämta flera stores?
+            //Byta typ av lista också.
             return View();
         }
 
@@ -69,14 +69,16 @@ namespace AnnonsonMVC.Controllers
 
                 //Placeholders since we dont have ArticleID until it´s saved.
                 //Also needed to make articleCategory cause it didnt stick onto the model.
-                var storeId = model.Store.StoreId;
+                var storeId = model.Store.StoreArticle;
                 var categoryId = model.Category.CategoryId;
                 var articleCategory = model.Category.ArticleCategory;
+                var storeart = model.Store.StoreArticle;
 
                 var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
                 _articelService.Add(newArticle);
 
                 newArticle.ArticleCategory = articleCategory;
+                newArticle.StoreArticle = storeart;
 
                 if (model.ImageFile == null || model.ImageFile.Length == 0)
                     return Content("file not selected");
@@ -84,7 +86,7 @@ namespace AnnonsonMVC.Controllers
                 newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
 
                 var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads");
-                var filepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg");
+                var filepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg").Trim('"');
                 
                 using (var filestream = new FileStream(filepath, FileMode.Create))
                 {
@@ -99,26 +101,41 @@ namespace AnnonsonMVC.Controllers
                     image.Write(filepath);
                 }
 
-                //Måste göra en lista av detta man skall kunna välja flera.
-                newArticle.StoreArticle.Add(new StoreArticle
+                foreach (var storearticle in newArticle.StoreArticle)
                 {
-                    ArticleId = newArticle.ArticleId,
-                    StoreId = storeId
-                });
-
+                    newArticle.StoreArticle.Add(new StoreArticle
+                    {
+                        ArticleId = newArticle.ArticleId,
+                        StoreId = storearticle.StoreId
+                    });
+                }
+               
                 newArticle.ArticleCategory.Add(new ArticleCategory
                 {
                     ArticleId = newArticle.ArticleId,
                     CategoryId = categoryId,
                 });
-               
+
                 _articelService.Update(newArticle);
                 
-                return View("Index");
+                return View();
             }
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Company");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Category");
             return View();
+
+
+            //Vad är kvar?
+
+            // Directory skapa ny mapp med hjälp av datum och en check om det redan finns en mapp
+            // Lista för storeartikel så man kan selecta massa.
+            // Image Preview
+            // Image format width height
+            // Fylla ut image om den är för liten
+            // User delen inlogg och annat? Fråga till Fredrik här
+            // Använda rät path för image <appsettings>
+            // Snygga till knappar istället för länkar
+
         }
       }
     }

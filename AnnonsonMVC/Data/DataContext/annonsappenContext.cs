@@ -1,7 +1,5 @@
-﻿using System;
-using Domain.Entites;
+﻿using Domain.Entites;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Data.DataContext
 {
