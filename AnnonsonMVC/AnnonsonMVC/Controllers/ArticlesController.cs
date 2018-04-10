@@ -9,6 +9,7 @@ using Domain.Entites;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using ImageMagick;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -59,19 +60,10 @@ namespace AnnonsonMVC.Controllers
 
             if (ModelState.IsValid)
             {
-                if (ImageFile == null || ImageFile.Length == 0)
-                    return Content("file not selected");
-
-                //Tar sig bara till wwwroot.
-                var upload = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads");
-                var filepath = Path.Combine(upload, ImageFile.FileName);
-                using (var filestream = new FileStream(filepath, FileMode.Create))
-                {
-                    ImageFile.CopyTo(filestream);
-                }
 
                 //model.ImageFileFormat fixa till filformatet svårare än jag trodde får googla detta.
                 //model.ImageWidths fixa till filformatet samma hät svårare än jag trodde.
+                //MAGICK.NET
                 //Pathen går bara in i projektet måste få den att gå utanför på något sätt.
 
                 var slug = model.Name.Replace(" ", "-").ToLower();
@@ -91,6 +83,28 @@ namespace AnnonsonMVC.Controllers
 
                 newArticle.ArticleCategory = articleCategory;
 
+
+                if(ImageFile == null || ImageFile.Length == 0)
+                    return Content("file not selected");
+
+                var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads");
+                var filepath = Path.Combine(uploadpath, ImageFile.FileName);
+                
+                using (var filestream = new FileStream(filepath, FileMode.Create))
+                {
+                    ImageFile.CopyTo(filestream);
+                }
+
+                using (var image = new MagickImage(filepath))
+                {
+                    image.Resize(600, 600);
+                    image.Format = MagickFormat.Jpg;
+                    image.Strip();
+                    image.Settings.FillColor = MagickColors.Green;
+                    image.Write(filepath);
+                }
+
+                
                 //Måste göra en lista av detta man skall kunna välja flera.
                 newArticle.StoreArticle.Add(new StoreArticle
                 {
