@@ -1,5 +1,6 @@
 ﻿using Domain.Entites;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,6 +14,7 @@ namespace AnnonsonMVC.ViewModels
             ArticleCategory = new HashSet<ArticleCategory>();
             StoreArticle = new HashSet<StoreArticle>();
         }
+
         public int ArticleId { get; set; }
         [Required]
         public int UserId { get; set; }
@@ -46,11 +48,11 @@ namespace AnnonsonMVC.ViewModels
         [Required]
         public IFormFile ImageFile { get; set; }
 
-        public Store Store { get; set; }
+        public SelectListItem StoreList { get; set; }
         public Company Company { get; set; }
         public Category Category { get; set; }
 
-        //public ICollection<Store> Store { get; set; }
+        public ICollection<Store> Stores { get; set; }
         public ICollection<ArticleCategory> ArticleCategory { get; set; }
         public ICollection<StoreArticle> StoreArticle { get; set; }
     }

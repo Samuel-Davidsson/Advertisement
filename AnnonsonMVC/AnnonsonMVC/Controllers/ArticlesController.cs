@@ -52,7 +52,8 @@ namespace AnnonsonMVC.Controllers
         {
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
-            ViewData["StoreId"] = new MultiSelectList(_storeService.GetAll(), "StoreId", "Name");
+            var model = new ArticelViewModel();
+            ViewData["StoreId"] = new MultiSelectList(_storeService.GetAll(), "StoreId", "Name", model.StoreList = new SelectListItem("StoreId", "Name"));
             //StoreArticle service istället för att hämta flera stores?
 
             return View();
@@ -70,8 +71,6 @@ namespace AnnonsonMVC.Controllers
                 model.Slug = slug;
 
                 model.UserId = 2;
-
-                var store = model.Store.ToString();
 
                 var categoryId = model.Category.CategoryId;                
                 var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
