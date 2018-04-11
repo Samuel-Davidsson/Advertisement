@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using ImageMagick;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -50,10 +51,13 @@ namespace AnnonsonMVC.Controllers
         }
         public IActionResult Create()
         {
+            ArrayList selectedCategories = new ArrayList();
+            var stores = _storeService.GetAll();
+            MultiSelectList store = new MultiSelectList(stores, "StoreId", "Name", selectedCategories);
+            ViewData["StoreId"] = store;
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
-            var model = new ArticelViewModel();
-            ViewData["StoreId"] = new MultiSelectList(_storeService.GetAll(), "StoreId", "Name", model.StoreList = new SelectListItem("StoreId", "Name"));
+            //ViewData["StoreId"] = new MultiSelectList(_storeService.GetAll(), "StoreId", "Name");
             //StoreArticle service istället för att hämta flera stores?
 
             return View();
@@ -69,8 +73,13 @@ namespace AnnonsonMVC.Controllers
 
               var slug = model.Name.Replace(" ", "-").ToLower();
                 model.Slug = slug;
-
+                
                 model.UserId = 2;
+
+                //foreach (var store in )
+                //{
+
+                //}
 
                 var categoryId = model.Category.CategoryId;                
                 var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);

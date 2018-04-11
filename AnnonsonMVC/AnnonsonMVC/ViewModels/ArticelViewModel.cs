@@ -48,11 +48,10 @@ namespace AnnonsonMVC.ViewModels
         [Required]
         public IFormFile ImageFile { get; set; }
 
-        public SelectListItem StoreList { get; set; }
         public Company Company { get; set; }
         public Category Category { get; set; }
+        public ICollection<Store> Store { get; set; }
 
-        public ICollection<Store> Stores { get; set; }
         public ICollection<ArticleCategory> ArticleCategory { get; set; }
         public ICollection<StoreArticle> StoreArticle { get; set; }
     }
