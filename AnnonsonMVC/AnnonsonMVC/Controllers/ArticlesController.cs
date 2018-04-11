@@ -9,6 +9,7 @@ using Domain.Entites;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using ImageMagick;
+using System.Collections.Generic;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -18,14 +19,17 @@ namespace AnnonsonMVC.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IStoreService _storeService;
         private readonly ICompanyService _companyService;
+        private readonly IStoreArticleService _storeArticleService;
         private readonly IHostingEnvironment _hostingEnvironment;
 
-        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService, IHostingEnvironment hostingEnvironment  )
+        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService, 
+            IHostingEnvironment hostingEnvironment,  IStoreArticleService storeArticleService)
         {
             _articelService = articleService;
             _categoryService = categoryService;
             _storeService = storeService;
             _companyService = companyService;
+            _storeArticleService = storeArticleService;
             _hostingEnvironment = hostingEnvironment;
         }
 
@@ -48,9 +52,9 @@ namespace AnnonsonMVC.Controllers
         {
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
-            ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name");
+            ViewData["StoreId"] = new MultiSelectList(_storeService.GetAll(), "StoreId", "Name");
             //StoreArticle service istället för att hämta flera stores?
-            //Byta typ av lista också.
+
             return View();
         }
 
@@ -65,20 +69,37 @@ namespace AnnonsonMVC.Controllers
               var slug = model.Name.Replace(" ", "-").ToLower();
                 model.Slug = slug;
 
-                model.UserId = 3;
+                model.UserId = 2;
 
-                //Placeholders since we dont have ArticleID until it´s saved.
-                //Also needed to make articleCategory cause it didnt stick onto the model.
-                var storeId = model.Store.StoreArticle;
-                var categoryId = model.Category.CategoryId;
-                var articleCategory = model.Category.ArticleCategory;
-                var storeart = model.Store.StoreArticle;
+                var store = model.Store.ToString();
 
+                var categoryId = model.Category.CategoryId;                
                 var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
                 _articelService.Add(newArticle);
 
-                newArticle.ArticleCategory = articleCategory;
-                newArticle.StoreArticle = storeart;
+
+                foreach (var storearticles in newArticle.StoreArticle)
+                {
+                    newArticle.StoreArticle.Add(new StoreArticle
+                    {
+                        ArticleId = newArticle.ArticleId,
+                        StoreId = storearticles.StoreId
+                    });
+                }
+
+                newArticle.ArticleCategory.Add(new ArticleCategory
+                {
+                    ArticleId = newArticle.ArticleId,
+                    CategoryId = categoryId,
+                });
+
+
+
+
+
+
+
+
 
                 if (model.ImageFile == null || model.ImageFile.Length == 0)
                     return Content("file not selected");
@@ -100,21 +121,6 @@ namespace AnnonsonMVC.Controllers
                     image.Settings.FillColor = MagickColors.Green;
                     image.Write(filepath);
                 }
-
-                foreach (var storearticle in newArticle.StoreArticle)
-                {
-                    newArticle.StoreArticle.Add(new StoreArticle
-                    {
-                        ArticleId = newArticle.ArticleId,
-                        StoreId = storearticle.StoreId
-                    });
-                }
-               
-                newArticle.ArticleCategory.Add(new ArticleCategory
-                {
-                    ArticleId = newArticle.ArticleId,
-                    CategoryId = categoryId,
-                });
 
                 _articelService.Update(newArticle);
                 

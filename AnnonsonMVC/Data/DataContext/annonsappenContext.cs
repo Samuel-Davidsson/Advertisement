@@ -16,14 +16,13 @@ namespace Data.DataContext
         public virtual DbSet<StoreArticle> StoreArticle { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserCompany> UserCompany { get; set; }
-        public virtual DbSet<UserStore> UserStore { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;");
-                //optionsBuilder.UseSqlServer(@"Server = SAMUEL; Database = annonsappen; Trusted_Connection = True;");
+                //optionsBuilder.UseSqlServer(@"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(@"Server = SAMUEL; Database = annonsappen; Trusted_Connection = True;");
             }
         }
 
