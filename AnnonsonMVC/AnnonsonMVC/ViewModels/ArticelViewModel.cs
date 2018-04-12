@@ -50,7 +50,10 @@ namespace AnnonsonMVC.ViewModels
 
         public Company Company { get; set; }
         public Category Category { get; set; }
-        public ICollection<Store> Store { get; set; }
+        public Store Store { get; set; }
+        [Key]
+        public IEnumerable<int> SelectedStores { get; set; }
+        public List<Store> StoreList { get; set; }
 
         public ICollection<ArticleCategory> ArticleCategory { get; set; }
         public ICollection<StoreArticle> StoreArticle { get; set; }

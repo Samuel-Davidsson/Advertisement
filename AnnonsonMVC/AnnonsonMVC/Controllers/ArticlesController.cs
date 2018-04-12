@@ -38,6 +38,7 @@ namespace AnnonsonMVC.Controllers
         {
             var articles = _articelService.GetAll().Where(t => t.UserId == 3);
             return View( articles.ToList());
+
         }
 
         public IActionResult Delete()
@@ -51,14 +52,13 @@ namespace AnnonsonMVC.Controllers
         }
         public IActionResult Create()
         {
-            ArrayList selectedCategories = new ArrayList();
+
             var stores = _storeService.GetAll();
-            MultiSelectList store = new MultiSelectList(stores, "StoreId", "Name", selectedCategories);
+
+            MultiSelectList store = new MultiSelectList(stores, "StoreId", "Name");
             ViewData["StoreId"] = store;
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
-            //ViewData["StoreId"] = new MultiSelectList(_storeService.GetAll(), "StoreId", "Name");
-            //StoreArticle service istället för att hämta flera stores?
 
             return View();
         }
@@ -67,33 +67,33 @@ namespace AnnonsonMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ArticelViewModel model)
         {
-
+            
             if (ModelState.IsValid)
             {
-
+              
               var slug = model.Name.Replace(" ", "-").ToLower();
                 model.Slug = slug;
                 
                 model.UserId = 2;
+                var selected = model.SelectedStores;
+                
 
-                //foreach (var store in )
-                //{
-
-                //}
-
+                foreach (var item in selected)
+                {
+                    var newlist = item.StoreId;
+                }
                 var categoryId = model.Category.CategoryId;                
                 var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
                 _articelService.Add(newArticle);
 
-
-                foreach (var storearticles in newArticle.StoreArticle)
-                {
-                    newArticle.StoreArticle.Add(new StoreArticle
-                    {
-                        ArticleId = newArticle.ArticleId,
-                        StoreId = storearticles.StoreId
-                    });
-                }
+                //foreach (var storearticles in model.Store)
+                //{
+                //    newArticle.StoreArticle.Add(new StoreArticle
+                //    {
+                //        ArticleId = newArticle.ArticleId,
+                //        StoreId = storearticles.StoreId
+                //    });
+                //}
 
                 newArticle.ArticleCategory.Add(new ArticleCategory
                 {
@@ -106,7 +106,7 @@ namespace AnnonsonMVC.Controllers
 
 
 
-
+                                                                                                                    
 
 
                 if (model.ImageFile == null || model.ImageFile.Length == 0)
@@ -136,6 +136,7 @@ namespace AnnonsonMVC.Controllers
             }
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Company");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Category");
+            ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Store");
             return View();
 
 
@@ -145,9 +146,10 @@ namespace AnnonsonMVC.Controllers
             // Lista för storeartikel så man kan selecta massa.
             // Image Preview
             // Image format width height
+            // 4 Olika format skall bilden sparas i.
             // Fylla ut image om den är för liten
             // User delen inlogg och annat? Fråga till Fredrik här
-            // Använda rät path för image <appsettings>
+            // Använda rätt path för image <appsettings>
             // Snygga till knappar istället för länkar
 
         }
