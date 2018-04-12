@@ -78,10 +78,10 @@ namespace AnnonsonMVC.Controllers
                 var selected = model.SelectedStores;
                 
 
-                foreach (var item in selected)
-                {
-                    var newlist = item.StoreId;
-                }
+                //foreach (var item in selected)
+                //{
+                //    var newlist = item;
+                //}
                 var categoryId = model.Category.CategoryId;                
                 var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
                 _articelService.Add(newArticle);
