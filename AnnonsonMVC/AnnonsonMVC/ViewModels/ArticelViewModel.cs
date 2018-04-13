@@ -13,9 +13,8 @@ namespace AnnonsonMVC.ViewModels
         {
             ArticleCategory = new HashSet<ArticleCategory>();
             StoreArticle = new HashSet<StoreArticle>();
-            SelectedStores = new HashSet<Store>();
     }
-
+        public int StoreId { get; set; }
         public int ArticleId { get; set; }
         [Required]
         public int UserId { get; set; }
@@ -53,8 +52,9 @@ namespace AnnonsonMVC.ViewModels
         public Category Category { get; set; }
         public Store Store { get; set; }
 
-        public IEnumerable<Store> SelectedStores { get; set; }
-        public List<Store> StoreList { get; set; }
+        public List<SelectListItem> Stores { get; set; }
+        public int[] StoreIds { get; set; }
+
 
         public ICollection<ArticleCategory> ArticleCategory { get; set; }
         public ICollection<StoreArticle> StoreArticle { get; set; }

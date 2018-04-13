@@ -36,30 +36,46 @@ namespace AnnonsonMVC.Controllers
 
         public IActionResult Index()
         {
+            
             var articles = _articelService.GetAll().Where(t => t.UserId == 3);
             return View( articles.ToList());
 
         }
-
-        public IActionResult Delete()
-        {
-            return View();
-        }
-
-        public IActionResult Details(int id)
-        {
-            return View();
-        }
+    //    { Value = x.StoreId.ToString(), Text = x.Name
+    //}).ToList();
         public IActionResult Create()
         {
-
+            List<SelectListItem> items = new List<SelectListItem>();
+            ArticelViewModel model = new ArticelViewModel();
             var stores = _storeService.GetAll();
 
-            MultiSelectList store = new MultiSelectList(stores, "StoreId", "Name");
-            ViewData["StoreId"] = store;
+            stores.Select(x => x.UserStore.Where(y => y.UserId == 3));
+            var selectedItems = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
+            //model.Stores = selectedItems;
+            foreach (var storeId in stores)
+            {
+                var modelStoreId = model.Stores.Select(x => x.Value);
+                var dbStoreId = stores.Select(x => x.StoreId);
+                if (modelStoreId == dbStoreId)
+                {
+                    model.StoreIds[storeId];
+                }
+            }
+
+            if (model.StoreIds != null)
+            {
+                List<SelectListItem> selectlistitems = model.Stores.Where(x => model.StoreIds.Contains(int.Parse(x.Value))).ToList();
+                ViewBag.message("selcted stores");
+
+                foreach (var selecteditem in selectlistitems)
+                {
+                    selecteditem.Selected = true;
+                    ViewBag.message += "\\n" + selecteditem.Text;
+                }
+            }
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
-
+                  
             return View();
         }
 
@@ -75,25 +91,15 @@ namespace AnnonsonMVC.Controllers
                 model.Slug = slug;
                 
                 model.UserId = 2;
-                var selected = model.SelectedStores;
-                
 
-                //foreach (var item in selected)
-                //{
-                //    var newlist = item;
-                //}
+               
+
+
+
+
                 var categoryId = model.Category.CategoryId;                
                 var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
                 _articelService.Add(newArticle);
-
-                //foreach (var storearticles in model.Store)
-                //{
-                //    newArticle.StoreArticle.Add(new StoreArticle
-                //    {
-                //        ArticleId = newArticle.ArticleId,
-                //        StoreId = storearticles.StoreId
-                //    });
-                //}
 
                 newArticle.ArticleCategory.Add(new ArticleCategory
                 {
