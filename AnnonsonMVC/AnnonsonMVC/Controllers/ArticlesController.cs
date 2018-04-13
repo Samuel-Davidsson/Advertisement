@@ -41,41 +41,24 @@ namespace AnnonsonMVC.Controllers
             return View( articles.ToList());
 
         }
-    //    { Value = x.StoreId.ToString(), Text = x.Name
-    //}).ToList();
+
         public IActionResult Create()
         {
-            List<SelectListItem> items = new List<SelectListItem>();
-            ArticelViewModel model = new ArticelViewModel();
-            var stores = _storeService.GetAll();
+            //ArticelViewModel model = new ArticelViewModel();
+            //var stores = _storeService.GetAll();
 
-            stores.Select(x => x.UserStore.Where(y => y.UserId == 3));
-            var selectedItems = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
+            //foreach (var storeId in stores)
+            //{
+            //    var storeIds = stores.Select(x => x.StoreId);
+            //    model.StoreIds = storeIds.ToArray();
+            //}
+
+            //var selectedItems = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
             //model.Stores = selectedItems;
-            foreach (var storeId in stores)
-            {
-                var modelStoreId = model.Stores.Select(x => x.Value);
-                var dbStoreId = stores.Select(x => x.StoreId);
-                if (modelStoreId == dbStoreId)
-                {
-                    model.StoreIds[storeId];
-                }
-            }
 
-            if (model.StoreIds != null)
-            {
-                List<SelectListItem> selectlistitems = model.Stores.Where(x => model.StoreIds.Contains(int.Parse(x.Value))).ToList();
-                ViewBag.message("selcted stores");
-
-                foreach (var selecteditem in selectlistitems)
-                {
-                    selecteditem.Selected = true;
-                    ViewBag.message += "\\n" + selecteditem.Text;
-                }
-            }
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
-                  
+            ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name");
             return View();
         }
 
@@ -83,23 +66,32 @@ namespace AnnonsonMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ArticelViewModel model)
         {
-            
+
             if (ModelState.IsValid)
             {
-              
-              var slug = model.Name.Replace(" ", "-").ToLower();
-                model.Slug = slug;
-                
-                model.UserId = 2;
+                var stores = _storeService.GetAll();
+                if (model.StoreIds != null)
+                {
+                    var selectedItems = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
+                    model.Stores = selectedItems;
+                    List<SelectListItem> selectlistitems = model.Stores.Where(x => model.StoreIds.Contains(int.Parse(x.Value))).ToList();
 
-               
+                    foreach (var selecteditem in selectlistitems)
+                    {
+                        selecteditem.Selected = true;
+                        ViewBag.message += "\\n" + selecteditem.Text;
+                    }
+
+                    var test = selectlistitems.Select(x => x.Value);
+                    var intlist = test.Select(s => int.Parse(s)).ToList();
 
 
-
-
-                var categoryId = model.Category.CategoryId;                
-                var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
-                _articelService.Add(newArticle);
+                    var slug = model.Name.Replace(" ", "-").ToLower();
+                    model.Slug = slug;
+                    model.UserId = 2;
+                    var categoryId = model.Category.CategoryId;
+                    var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
+                    _articelService.Add(newArticle);
 
                 newArticle.ArticleCategory.Add(new ArticleCategory
                 {
@@ -107,12 +99,21 @@ namespace AnnonsonMVC.Controllers
                     CategoryId = categoryId,
                 });
 
+                    foreach (var item in intlist)
+                    {
+                        newArticle.StoreArticle.Add(new StoreArticle
+                        {
+                            ArticleId = newArticle.ArticleId,
+                            StoreId = item
+                        });
+                    }
 
 
 
 
 
-                                                                                                                    
+
+
 
 
                 if (model.ImageFile == null || model.ImageFile.Length == 0)
@@ -122,7 +123,7 @@ namespace AnnonsonMVC.Controllers
 
                 var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads");
                 var filepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg").Trim('"');
-                
+
                 using (var filestream = new FileStream(filepath, FileMode.Create))
                 {
                     model.ImageFile.CopyTo(filestream);
@@ -137,9 +138,11 @@ namespace AnnonsonMVC.Controllers
                 }
 
                 _articelService.Update(newArticle);
-                
+
                 return View();
             }
+            }
+
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Company");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Category");
             ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Store");
@@ -151,9 +154,7 @@ namespace AnnonsonMVC.Controllers
             // Directory skapa ny mapp med hjälp av datum och en check om det redan finns en mapp
             // Lista för storeartikel så man kan selecta massa.
             // Image Preview
-            // Image format width height
             // 4 Olika format skall bilden sparas i.
-            // Fylla ut image om den är för liten
             // User delen inlogg och annat? Fråga till Fredrik här
             // Använda rätt path för image <appsettings>
             // Snygga till knappar istället för länkar
