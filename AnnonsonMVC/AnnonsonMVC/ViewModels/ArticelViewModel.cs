@@ -14,7 +14,6 @@ namespace AnnonsonMVC.ViewModels
             ArticleCategory = new HashSet<ArticleCategory>();
             StoreArticle = new HashSet<StoreArticle>();
     }
-        public int StoreId { get; set; }
         public int ArticleId { get; set; }
         [Required]
         public int UserId { get; set; }

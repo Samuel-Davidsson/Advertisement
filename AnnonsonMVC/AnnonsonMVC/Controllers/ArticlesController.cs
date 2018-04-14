@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using ImageMagick;
 using System.Collections.Generic;
-using System.Collections;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -44,18 +43,6 @@ namespace AnnonsonMVC.Controllers
 
         public IActionResult Create()
         {
-            //ArticelViewModel model = new ArticelViewModel();
-            //var stores = _storeService.GetAll();
-
-            //foreach (var storeId in stores)
-            //{
-            //    var storeIds = stores.Select(x => x.StoreId);
-            //    model.StoreIds = storeIds.ToArray();
-            //}
-
-            //var selectedItems = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
-            //model.Stores = selectedItems;
-
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
             ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name");
@@ -72,18 +59,18 @@ namespace AnnonsonMVC.Controllers
                 var stores = _storeService.GetAll();
                 if (model.StoreIds != null)
                 {
-                    var selectedItems = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
-                    model.Stores = selectedItems;
-                    List<SelectListItem> selectlistitems = model.Stores.Where(x => model.StoreIds.Contains(int.Parse(x.Value))).ToList();
+                    var selectedStores = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
+                    model.Stores = selectedStores;
+                    List<SelectListItem> selectedStoreList = model.Stores.Where(x => model.StoreIds.Contains(int.Parse(x.Value))).ToList();
 
-                    foreach (var selecteditem in selectlistitems)
+                    foreach (var selecteditem in selectedStoreList)
                     {
                         selecteditem.Selected = true;
                         ViewBag.message += "\\n" + selecteditem.Text;
                     }
 
-                    var test = selectlistitems.Select(x => x.Value);
-                    var intlist = test.Select(s => int.Parse(s)).ToList();
+                    var selectedStoreListIds = selectedStoreList.Select(x => x.Value);
+                    var selectedStoreListIdsToInt = selectedStoreListIds.Select(s => int.Parse(s)).ToList();
 
 
                     var slug = model.Name.Replace(" ", "-").ToLower();
@@ -91,6 +78,7 @@ namespace AnnonsonMVC.Controllers
                     model.UserId = 2;
                     var categoryId = model.Category.CategoryId;
                     var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
+
                     _articelService.Add(newArticle);
 
                 newArticle.ArticleCategory.Add(new ArticleCategory
@@ -99,22 +87,14 @@ namespace AnnonsonMVC.Controllers
                     CategoryId = categoryId,
                 });
 
-                    foreach (var item in intlist)
+                    foreach (var storeId in selectedStoreListIdsToInt)
                     {
                         newArticle.StoreArticle.Add(new StoreArticle
                         {
                             ArticleId = newArticle.ArticleId,
-                            StoreId = item
+                            StoreId = storeId
                         });
                     }
-
-
-
-
-
-
-
-
 
                 if (model.ImageFile == null || model.ImageFile.Length == 0)
                     return Content("file not selected");
@@ -152,14 +132,13 @@ namespace AnnonsonMVC.Controllers
             //Vad är kvar?
 
             // Directory skapa ny mapp med hjälp av datum och en check om det redan finns en mapp
-            // Lista för storeartikel så man kan selecta massa.
             // Image Preview
-            // 4 Olika format skall bilden sparas i.
-            // User delen inlogg och annat? Fråga till Fredrik här
+            // 4 Olika format skall bilden sparas i.            
             // Använda rätt path för image <appsettings>
             // Snygga till knappar istället för länkar
+            // User delen inlogg och annat? Fråga Fredrik här
 
         }
-      }
     }
+  }
 
