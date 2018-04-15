@@ -45,7 +45,6 @@ namespace AnnonsonMVC.ViewModels
         public DateTime PublishEnd { get; set; }
 
         [Required]
-        [DataType(DataType.ImageUrl)]
         public IFormFile ImageFile { get; set; }
 
         public Company Company { get; set; }

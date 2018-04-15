@@ -97,12 +97,19 @@ namespace AnnonsonMVC.Controllers
                     }
 
                 if (model.ImageFile == null || model.ImageFile.Length == 0)
-                    return Content("file not selected");
+                    return Content("Ingen bild är uppladdad");
 
                 newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
+                    string Date = DateTime.Now.ToString("yyyy-MM-dd");
+                    var TodaysDate = Date.Replace("-", @"\");
+                    var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads\\" + TodaysDate);
 
-                var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads");
-                var filepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg").Trim('"');
+                    if (!Directory.Exists("C:\\Users\\Samuel\\Desktop\\Calculator\\AnnonsonMVC\\AnnonsonMVC\\wwwroot\\Uploads\\" +TodaysDate))
+                    {
+                        Directory.CreateDirectory("C:\\Users\\Samuel\\Desktop\\Calculator\\AnnonsonMVC\\AnnonsonMVC\\wwwroot\\Uploads\\" + TodaysDate);
+                    }
+                    
+                    var filepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg").Replace(@"\\", @"\");
 
                 using (var filestream = new FileStream(filepath, FileMode.Create))
                 {
@@ -116,7 +123,7 @@ namespace AnnonsonMVC.Controllers
                     image.Settings.FillColor = MagickColors.Green;
                     image.Write(filepath);
                 }
-
+                    newArticle.ImagePath = TodaysDate;
                 _articelService.Update(newArticle);
 
                 return View();
@@ -131,8 +138,7 @@ namespace AnnonsonMVC.Controllers
 
             //Vad är kvar?
 
-            // Directory skapa ny mapp med hjälp av datum och en check om det redan finns en mapp. Läsa på om
-            // Image Preview. Lätt. 
+            // Directory skapa ny mapp med hjälp av datum och en check(Fråga Fredrik eventuellt nån på kontoret hur det ser ut).
             //Image format(Width, Height). Roger har gjort denna.
             // 4 Olika format skall bilden sparas i.(Fråga/ läsa på i appen hur det ser ut).            
             // Använda rätt path för image <appsettings> Lätt tror jag.
