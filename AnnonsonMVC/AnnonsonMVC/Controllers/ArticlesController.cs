@@ -131,13 +131,16 @@ namespace AnnonsonMVC.Controllers
 
             //Vad är kvar?
 
-            // Directory skapa ny mapp med hjälp av datum och en check om det redan finns en mapp
-            // Image Preview
-            // 4 Olika format skall bilden sparas i.            
-            // Använda rätt path för image <appsettings>
-            // Snygga till knappar istället för länkar
-            // User delen inlogg och annat? Fråga Fredrik här
+            // Directory skapa ny mapp med hjälp av datum och en check om det redan finns en mapp. Läsa på om
+            // Image Preview. Lätt. 
+            //Image format(Width, Height). Roger har gjort denna.
+            // 4 Olika format skall bilden sparas i.(Fråga/ läsa på i appen hur det ser ut).            
+            // Använda rätt path för image <appsettings> Lätt tror jag.
+            // User delen inlogg och annat? Fråga Fredrik här.
 
+            //------Styling---------
+            // Fixa till multiple selectlistan
+            // Snygga till knappar istället för länkar
         }
     }
   }

@@ -55,7 +55,7 @@
 
                 <div class="form-group">
                     <label asp-for="Stores" class="control-label">Butiker</label>
-                    <select multiple="multiple" asp-for="StoreIds" class="form-control" asp-items="@ViewBag.StoreId"></select>
+                    <select asp-for="StoreIds" multiple="multiple" class="form-control" asp-items="@ViewBag.StoreId"></select>
                 </div>
 
                 <div class="form-group">
@@ -63,12 +63,11 @@
                     <select asp-for="Category.CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                 </div>
 
-
-
                 <div class="form-group">
                     <label asp-for="ImageFile" class="control-label">Annonsbild</label>
                     <div class="col-md-10">
-                        <input asp-for="ImageFile" id="ImageFile" name="ImageFile" />
+                        <input asp-for="ImageFile" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
+                        <img id="output" width="300" height="300"/>
                         <span asp-validation-for="ImageFile" class="text-danger">Ladda upp bild</span>
                     </div>
                 </div>
@@ -87,27 +86,12 @@
     <button asp-controller="Index" class="btn-btn-defualt">Tillbaka</button>
 </div>
 @section Scripts {
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css"
-          rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
-    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
-    <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        $(function () {
-            $('.listbox').multiselect({
-                includeSelectAllOption: true
-            });
-        });
-    </script>
-    @if (ViewBag.Message != null)
-    {
-        <script type="text/javascript">
-            window.onload = function () {
-                alert("@ViewBag.Message");
-            };
-        </script>
-    }
 
+    <script>
+        var loadFile = function (event) {
+            var output = document.getElementById('output');
+            output.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
