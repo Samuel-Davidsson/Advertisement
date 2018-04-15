@@ -8,7 +8,6 @@ using AnnonsonMVC.Utilitys;
 using Domain.Entites;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
-using ImageMagick;
 using System.Collections.Generic;
 
 namespace AnnonsonMVC.Controllers
@@ -100,13 +99,13 @@ namespace AnnonsonMVC.Controllers
                     return Content("Ingen bild är uppladdad");
 
                 newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
-                    string Date = DateTime.Now.ToString("yyyy-MM-dd");
-                    var TodaysDate = Date.Replace("-", @"\");
-                    var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads\\" + TodaysDate);
+                    string date = DateTime.Now.ToString("yyyy-MM-dd");
+                    var todaysDate = date.Replace("-", @"\");
+                    var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads\\" + todaysDate);
 
-                    if (!Directory.Exists("C:\\Users\\Samuel\\Desktop\\Calculator\\AnnonsonMVC\\AnnonsonMVC\\wwwroot\\Uploads\\" +TodaysDate))
+                    if (!Directory.Exists("C:\\Users\\Samuel\\Desktop\\Calculator\\AnnonsonMVC\\AnnonsonMVC\\wwwroot\\Uploads\\" +todaysDate))
                     {
-                        Directory.CreateDirectory("C:\\Users\\Samuel\\Desktop\\Calculator\\AnnonsonMVC\\AnnonsonMVC\\wwwroot\\Uploads\\" + TodaysDate);
+                        Directory.CreateDirectory("C:\\Users\\Samuel\\Desktop\\Calculator\\AnnonsonMVC\\AnnonsonMVC\\wwwroot\\Uploads\\" + todaysDate);
                     }
                     
                     var filepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg").Replace(@"\\", @"\");
@@ -116,14 +115,7 @@ namespace AnnonsonMVC.Controllers
                     model.ImageFile.CopyTo(filestream);
                 }
 
-                using (var image = new MagickImage(filepath))
-                {
-                    image.Resize(600, 600);
-                    image.Strip();
-                    image.Settings.FillColor = MagickColors.Green;
-                    image.Write(filepath);
-                }
-                    newArticle.ImagePath = TodaysDate;
+                    newArticle.ImagePath = todaysDate;//Detta är inte okej.. måste ändra detta.
                 _articelService.Update(newArticle);
 
                 return View();
@@ -138,15 +130,18 @@ namespace AnnonsonMVC.Controllers
 
             //Vad är kvar?
 
-            // Directory skapa ny mapp med hjälp av datum och en check(Fråga Fredrik eventuellt nån på kontoret hur det ser ut).
-            //Image format(Width, Height). Roger har gjort denna.
-            // 4 Olika format skall bilden sparas i.(Fråga/ läsa på i appen hur det ser ut).            
-            // Använda rätt path för image <appsettings> Lätt tror jag.
+            // Directory skapa ny mapp med hjälp av datum och en check(Fråga Fredrik eventuellt nån på kontoret hur det ser ut)Finns att se på appen.TYP KLAR.
+            // Använda rätt path för image <appsettings> Lätt tror jag.(imorgon).
+            // Image format(Width, Height). Roger har gjort denna(imorgon).
+            // 4 Olika format skall bilden sparas i 4 olika format i olika mappar(imorgon tror jag).
+            
             // User delen inlogg och annat? Fråga Fredrik här.
 
-            //------Styling---------
+            //      -------Styling--------
             // Fixa till multiple selectlistan
             // Snygga till knappar istället för länkar
+            // Annotations meddelanden när man missat att fylla i någonting.
+
         }
     }
   }

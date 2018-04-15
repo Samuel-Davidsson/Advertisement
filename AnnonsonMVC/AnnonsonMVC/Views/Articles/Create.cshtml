@@ -12,7 +12,7 @@
             <div class="col-md-5">
                 <div class="form-group">
                     <label asp-for="Name" class="control-label">Namn</label>
-                    <input asp-for="Name" class="form-control" asp-items="ViewBag.Name" />
+                    <input asp-for="Name" class="form-control"/>
                 </div>
 
                 <div class="form-group">
@@ -45,9 +45,28 @@
                     <input asp-for="PublishEnd" class="form-control" />
                 </div>
 
+                <div class="form-group">
+                    <label asp-for="Category.CategoryId" class="control-label">Kategori</label>
+                    <select asp-for="Category.CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                </div>
+
+                <div>
+                    <a asp-action="Index">Tillbaka</a>
+                </div>
+
             </div>
 
             <div class="col-md-5">
+
+                <div class="form-group">
+                    <label asp-for="ImageFile" class="control-label">Annonsbild</label>
+                    <div>
+                        <span asp-validation-for="ImageFile" class="text-danger">Ladda upp bild</span>
+                        <input asp-for="ImageFile" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
+                        <img id="output" width="300" height="300" />
+                    </div>  
+                </div>
+
                 <div class="form-group">
                     <label asp-for="Company.CompanyId" class="control-label">Företag</label>
                     <select asp-for="Company.CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
@@ -58,33 +77,19 @@
                     <select asp-for="StoreIds" multiple="multiple" class="form-control" asp-items="@ViewBag.StoreId"></select>
                 </div>
 
+             
                 <div class="form-group">
-                    <label asp-for="Category.CategoryId" class="control-label">Kategori</label>
-                    <select asp-for="Category.CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="ImageFile" class="control-label">Annonsbild</label>
-                    <div class="col-md-10">
-                        <input asp-for="ImageFile" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
-                        <img id="output" width="300" height="300"/>
-                        <span asp-validation-for="ImageFile" class="text-danger">Ladda upp bild</span>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="form-group">
-                        <input type="submit" value="Create" style="float: right" class="btn btn-default" />
-                    </div>
-                </div>
+                    <input type="submit" value="Create" style="float: right" class="btn btn-primary" />
+                </div>           
             </div>
+            
         </form>
     </div>
 </div>
-
 <div>
-    <button asp-controller="Index" class="btn-btn-defualt">Tillbaka</button>
+  
 </div>
+
 @section Scripts {
 
     <script>

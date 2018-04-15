@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace AnnonsonMVC.ViewModels
@@ -48,8 +49,8 @@ namespace AnnonsonMVC.ViewModels
         public IFormFile ImageFile { get; set; }
 
         public Company Company { get; set; }
+
         public Category Category { get; set; }
-        public Store Store { get; set; }
 
         public List<SelectListItem> Stores { get; set; }
         public int[] StoreIds { get; set; }
