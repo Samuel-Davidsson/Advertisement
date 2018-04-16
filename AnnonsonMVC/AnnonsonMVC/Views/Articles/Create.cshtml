@@ -63,7 +63,7 @@
                     <div>
                         <span asp-validation-for="ImageFile" class="text-danger">Ladda upp bild</span>
                         <input asp-for="ImageFile" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
-                        <img id="output" width="300" height="300" />
+                        <img id="output" class="ImagePreview"/>
                     </div>  
                 </div>
 
@@ -77,18 +77,24 @@
                     <select asp-for="StoreIds" multiple="multiple" class="form-control" asp-items="@ViewBag.StoreId"></select>
                 </div>
 
-             
                 <div class="form-group">
                     <input type="submit" value="Create" style="float: right" class="btn btn-primary" />
                 </div>           
             </div>
-            
+            <style>
+                .ImagePreview {
+                    max-height: 300px;
+                    max-width: 300px;
+                }
+            </style>
         </form>
     </div>
 </div>
 <div>
-  
+
+
 </div>
+
 
 @section Scripts {
 

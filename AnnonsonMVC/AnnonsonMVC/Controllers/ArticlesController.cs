@@ -103,11 +103,11 @@ namespace AnnonsonMVC.Controllers
                     var todaysDate = date.Replace("-", @"\");
                     var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads\\" + todaysDate);
 
-                    if (!Directory.Exists("C:\\Users\\Samuel\\Desktop\\Calculator\\AnnonsonMVC\\AnnonsonMVC\\wwwroot\\Uploads\\" +todaysDate))
+                    if (!Directory.Exists("\\wwwroot\\Uploads\\" +todaysDate))
                     {
-                        Directory.CreateDirectory("C:\\Users\\Samuel\\Desktop\\Calculator\\AnnonsonMVC\\AnnonsonMVC\\wwwroot\\Uploads\\" + todaysDate);
+                        Directory.CreateDirectory("\\wwwroot\\Uploads\\" + todaysDate);
                     }
-                    
+                    //Här skall vi resiza.
                     var filepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg").Replace(@"\\", @"\");
 
                 using (var filestream = new FileStream(filepath, FileMode.Create))
@@ -115,7 +115,8 @@ namespace AnnonsonMVC.Controllers
                     model.ImageFile.CopyTo(filestream);
                 }
 
-                    newArticle.ImagePath = todaysDate;//Detta är inte okej.. måste ändra detta.
+
+                    newArticle.ImagePath = todaysDate;//Detta är kanske okej.
                 _articelService.Update(newArticle);
 
                 return View();
@@ -128,13 +129,12 @@ namespace AnnonsonMVC.Controllers
             return View();
 
 
-            //Vad är kvar?
+            // Vad är kvar?
 
-            // Directory skapa ny mapp med hjälp av datum och en check(Fråga Fredrik eventuellt nån på kontoret hur det ser ut)Finns att se på appen.TYP KLAR.
-            // Använda rätt path för image <appsettings> Lätt tror jag.(imorgon).
-            // Image format(Width, Height). Roger har gjort denna(imorgon).
+            // Image format(Width, Height)
             // 4 Olika format skall bilden sparas i 4 olika format i olika mappar(imorgon tror jag).
-            
+
+            // Använda rätt path för image <appsettings> Lätt tror jag.
             // User delen inlogg och annat? Fråga Fredrik här.
 
             //      -------Styling--------
