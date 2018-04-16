@@ -1,4 +1,4 @@
-﻿namespace AnnonsonMVC.Utilitys
+﻿namespace AnnonsonMVC.Utilities
 {
     internal static class Mapper
     {

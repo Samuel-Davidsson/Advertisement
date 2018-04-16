@@ -1,9 +1,7 @@
-﻿using System;
-using AnnonsonMVC.ViewModels;
+﻿using AnnonsonMVC.ViewModels;
 using Domain.Entites;
-using System.Linq;
 
-namespace AnnonsonMVC.Utilitys
+namespace AnnonsonMVC.Utilities
 {
     internal class ViewModelToModelMapper
     {

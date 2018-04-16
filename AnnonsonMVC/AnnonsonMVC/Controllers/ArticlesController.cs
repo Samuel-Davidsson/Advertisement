@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using AnnonsonMVC.ViewModels;
 using Domain.Interfaces;
 using System;
-using AnnonsonMVC.Utilitys;
 using Domain.Entites;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Collections.Generic;
+using AnnonsonMVC.Utilities;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -61,18 +61,19 @@ namespace AnnonsonMVC.Controllers
                     var selectedStores = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
                     model.Stores = selectedStores;
                     List<SelectListItem> selectedStoreList = model.Stores.Where(x => model.StoreIds.Contains(int.Parse(x.Value))).ToList();
-
+                    
                     foreach (var selecteditem in selectedStoreList)
                     {
                         selecteditem.Selected = true;
-                        ViewBag.message += "\\n" + selecteditem.Text;
+                        //ViewBag.message += "\\n" + selecteditem.Text;
                     }
 
                     var selectedStoreListIds = selectedStoreList.Select(x => x.Value);
                     var selectedStoreListIdsToInt = selectedStoreListIds.Select(s => int.Parse(s)).ToList();
 
-
-                    var slug = model.Name.Replace(@"\s+", " ").Replace(@"[^a-z0-9\s-]", "").Replace(@"\s", "-").ToLower();
+                    //Dela upp och göra metod här.
+                    //Fungerar inte atm
+                    var slug = model.Name.Replace(@"\s+", " ").Replace(@"[^a-z0-9\s-]", "").Trim().Replace(@"\s", "-").ToLower();
                     model.Slug = slug;
                     model.UserId = 2;
                     var categoryId = model.Category.CategoryId;
@@ -118,7 +119,6 @@ namespace AnnonsonMVC.Controllers
                     model.ImageFile.CopyTo(filestream);
                 }
 
-
                     newArticle.ImagePath = todaysDate;
                 _articelService.Update(newArticle);
 
@@ -133,18 +133,18 @@ namespace AnnonsonMVC.Controllers
 
 
             // Vad är kvar?
-            // Fixa till sluggen.
             // Tänka om lite när det gäller pathen
             // Image format(Width, Height)
             // 4 Olika format skall bilden sparas i 4 olika format i olika mappar(imorgon tror jag).
 
             // Använda rätt path för image <appsettings> Lätt tror jag.
-            // User delen inlogg och annat? Fråga Fredrik här.
+            // User delen inlogg? Fråga Fredrik här.
 
             //      -------Styling--------
             // Fixa till multiple selectlistan
             // Snygga till knappar istället för länkar
             // Annotations meddelanden när man missat att fylla i någonting.
+            // Refactor Controllern.
 
         }
     }
