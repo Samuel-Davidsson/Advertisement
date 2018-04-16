@@ -72,7 +72,7 @@ namespace AnnonsonMVC.Controllers
                     var selectedStoreListIdsToInt = selectedStoreListIds.Select(s => int.Parse(s)).ToList();
 
 
-                    var slug = model.Name.Replace(" ", "-").ToLower();
+                    var slug = model.Name.Replace(@"\s+", " ").Replace(@"[^a-z0-9\s-]", "").Replace(@"\s", "-").ToLower();
                     model.Slug = slug;
                     model.UserId = 2;
                     var categoryId = model.Category.CategoryId;
@@ -107,7 +107,10 @@ namespace AnnonsonMVC.Controllers
                     {
                         Directory.CreateDirectory("\\wwwroot\\Uploads\\" + todaysDate);
                     }
+
                     //Här skall vi resiza.
+
+                    /// Den använder ResizeImage när han skapar får titta på den och orignalet.
                     var filepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg").Replace(@"\\", @"\");
 
                 using (var filestream = new FileStream(filepath, FileMode.Create))
@@ -116,7 +119,7 @@ namespace AnnonsonMVC.Controllers
                 }
 
 
-                    newArticle.ImagePath = todaysDate;//Detta är kanske okej.
+                    newArticle.ImagePath = todaysDate;
                 _articelService.Update(newArticle);
 
                 return View();
@@ -130,7 +133,8 @@ namespace AnnonsonMVC.Controllers
 
 
             // Vad är kvar?
-
+            // Fixa till sluggen.
+            // Tänka om lite när det gäller pathen
             // Image format(Width, Height)
             // 4 Olika format skall bilden sparas i 4 olika format i olika mappar(imorgon tror jag).
 
