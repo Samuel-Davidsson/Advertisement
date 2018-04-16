@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Collections.Generic;
 using AnnonsonMVC.Utilities;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -109,15 +112,13 @@ namespace AnnonsonMVC.Controllers
                         Directory.CreateDirectory("\\wwwroot\\Uploads\\" + todaysDate);
                     }
 
-                    //Här skall vi resiza.
+                    var imagepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg").Replace(@"\\", @"\");
 
-                    /// Den använder ResizeImage när han skapar får titta på den och orignalet.
-                    var filepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg").Replace(@"\\", @"\");
-
-                using (var filestream = new FileStream(filepath, FileMode.Create))
+                using (var imagestream = new FileStream(imagepath, FileMode.Create))
                 {
-                    model.ImageFile.CopyTo(filestream);
+                    model.ImageFile.CopyTo(imagestream);
                 }
+
 
                     newArticle.ImagePath = todaysDate;
                 _articelService.Update(newArticle);
