@@ -1,10 +1,11 @@
 ﻿using Domain.Entites;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
     public interface IStoreArticleService
     {
-        IEnumerable<StoreArticle> GetAll();
+        Task<IEnumerable<StoreArticle>> GetAll();
     }
 }

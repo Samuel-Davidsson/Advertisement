@@ -1,6 +1,7 @@
 ﻿using Domain.Entites;
 using Domain.Interfaces;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Domain.Services
 {
@@ -23,9 +24,9 @@ namespace Domain.Services
             return _repository.Find(x => x.ArticleId == id, includeProperties);
         }
 
-        public IEnumerable<Article> GetAll()
+        public async Task<IEnumerable<Article>> GetAll()
         {
-            return _repository.GetAll();
+            return await _repository.GetAll();
         }
 
         public void Update(Article article)

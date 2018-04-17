@@ -49,7 +49,7 @@ namespace AnnonsonMVC.ViewModels
         public IFormFile ImageFile { get; set; }
 
         public Company Company { get; set; }
-
+        public IEnumerable<Article> Article { get; set; }
         public Category Category { get; set; }
 
         public List<SelectListItem> Stores { get; set; }

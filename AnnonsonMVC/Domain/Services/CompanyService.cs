@@ -1,6 +1,7 @@
 ﻿using Domain.Entites;
 using Domain.Interfaces;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Domain.Services
 {
@@ -23,7 +24,7 @@ namespace Domain.Services
         return _repository.Find(x => x.CompanyId == id, includeProperties);
     }
 
-    public IEnumerable<Company> GetAll()
+    public Task<IEnumerable<Company>> GetAll()
     {
         return _repository.GetAll();
     }

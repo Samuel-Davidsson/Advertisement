@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
@@ -26,9 +27,14 @@ namespace Data.Repositories
             _context.SaveChanges();
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
-            return _set.ToList();
+            return await _set.ToListAsync();
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
 
         public TEntity Find(Expression<Func<TEntity, bool>> predicate, params string[] includeProperties)

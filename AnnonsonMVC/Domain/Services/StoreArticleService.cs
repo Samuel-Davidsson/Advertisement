@@ -1,6 +1,7 @@
 ﻿using Domain.Entites;
 using Domain.Interfaces;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Domain.Services
 {
@@ -12,9 +13,9 @@ namespace Domain.Services
         {
             _repository = repository;
         }
-        public IEnumerable<StoreArticle> GetAll()
+        public async Task<IEnumerable<StoreArticle>> GetAll()
         {
-            return _repository.GetAll();
+            return await _repository.GetAll();
         }
     }
 }

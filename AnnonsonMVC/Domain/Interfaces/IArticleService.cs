@@ -1,5 +1,6 @@
 ﻿using Domain.Entites;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
@@ -7,7 +8,7 @@ namespace Domain.Interfaces
     {
         void Add(Article article);
         void Update(Article article);
-        IEnumerable<Article> GetAll();
+        Task<IEnumerable<Article>> GetAll();
         Article Find(int id, params string[] includeProperties);
     }
 }

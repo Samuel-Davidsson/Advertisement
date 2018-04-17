@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
@@ -9,7 +10,7 @@ namespace Domain.Interfaces
     {
         void Add(TEntity entity);
         void Update(TEntity entity);
-        IEnumerable<TEntity> GetAll();
+        Task<IEnumerable<TEntity>> GetAll();
         TEntity Find(Expression<Func<TEntity, bool>> predicate, params string[] includeProperties);
     }
 }
