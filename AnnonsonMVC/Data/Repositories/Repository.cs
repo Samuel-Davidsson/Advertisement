@@ -11,12 +11,12 @@ namespace Data.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private readonly annonsappenContext _context;
+        private readonly AnnonsappenContext _context;
         private readonly DbSet<TEntity> _set;
 
         public Repository()
         {
-            _context = new annonsappenContext();
+            _context = new AnnonsappenContext();
             _set = _context.Set<TEntity>();
         }
 

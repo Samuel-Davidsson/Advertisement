@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.DataContext
 {
-    public partial class annonsappenContext : DbContext
+    public partial class AnnonsappenContext : DbContext
     {
         public virtual DbSet<Article> Article { get; set; }
         public virtual DbSet<ArticleCategory> ArticleCategory { get; set; }
@@ -26,12 +26,12 @@ namespace Data.DataContext
             }
         }
 
-        public annonsappenContext(DbContextOptions<annonsappenContext> options)
+        public AnnonsappenContext(DbContextOptions<AnnonsappenContext> options)
         : base(options)
         {
         }
 
-        public annonsappenContext()
+        public AnnonsappenContext()
         {
         }
 
