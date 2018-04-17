@@ -163,7 +163,7 @@ namespace AnnonsonMVC.Controllers
                         resizeImage.Save(imagepath.Replace(".jpg", "") + "-256.jpg");
                     }
                     if (resizeImage.Width >= 128)
-                    {   //Tror det skall se ut så här istället.
+                    {   //Tror det skall se ut så här istället flytta ner koden till metoden istället.
                         var newImage = MakeImageSquareAndFillBlancs(128, 128, imgFileBitmapSize, resizeImage, imagepath);
                         ImageCodecInfo[] info = ImageCodecInfo.GetImageEncoders();
                         EncoderParameters encoderParameters;
@@ -185,6 +185,7 @@ namespace AnnonsonMVC.Controllers
             // Vad är kvar?
 
             // Använda rätt path för image <appsettings> Lätt tror jag.
+            // Sluggen nåt som är konstigt här.
             // User delen inlogg? Fråga Fredrik här.
 
             //      -------Styling--------
@@ -204,7 +205,6 @@ namespace AnnonsonMVC.Controllers
             int originalWidth = imgFileBitmapSize.Width;
             int originalHeight = imgFileBitmapSize.Height;
 
-            //Define new picture size
             Image newPicSize = new Bitmap(canvasWidth, canvasHeight);
             Graphics graphic = Graphics.FromImage(newPicSize);
 
