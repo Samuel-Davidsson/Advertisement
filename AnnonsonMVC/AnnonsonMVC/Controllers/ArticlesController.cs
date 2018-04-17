@@ -77,7 +77,7 @@ namespace AnnonsonMVC.Controllers
                     var slug = model.Name.Replace(@"\s+", " ").Replace(@"[^a-z0-9\s-]", "").Trim().Replace(@"\s", "-").ToLower();
                     model.Slug = slug;
                     model.UserId = 2;
-                    var categoryId = model.CategoryId;
+                    var categoryId = model.Category.CategoryId;
                     var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
 
                     _articelService.Add(newArticle);
@@ -85,7 +85,7 @@ namespace AnnonsonMVC.Controllers
                     newArticle.ArticleCategory.Add(new ArticleCategory
                     {
                         ArticleId = newArticle.ArticleId,
-                        CategoryId = categoryId,
+                        CategoryId = categoryId,                        
                     });
 
                     foreach (var storeId in selectedStoreListIdsToInt)
@@ -111,7 +111,7 @@ namespace AnnonsonMVC.Controllers
                         Directory.CreateDirectory(uploadpath);
                     }
 
-                    var imagepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid()).Replace(@"\\", @"\");
+                    var imagepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg").Replace(@"\\", @"\");
 
                     using (var imagestream = new FileStream(imagepath, FileMode.Create))
                     {
@@ -122,49 +122,51 @@ namespace AnnonsonMVC.Controllers
                     Stream stream = model.ImageFile.OpenReadStream();
                     Image resizeImage = Image.FromStream(stream);
 
+                    var imgFileBitmapSize = resizeImage.Size;
                     if (resizeImage.Width >= 2048)
                     {
-                        resizeImage = new Bitmap(2048, 2048);
-                        resizeImage.Save(imagepath + "-2048.jpg");
+                        resizeImage = MakeImageSquareAndFillBlancs(2048, 2048, imgFileBitmapSize, resizeImage, imagepath);
+                        System.Drawing.Imaging.ImageCodecInfo[] info = System.Drawing.Imaging.ImageCodecInfo.GetImageEncoders();
+                        System.Drawing.Imaging.EncoderParameters encoderParameters;
+                        encoderParameters = new System.Drawing.Imaging.EncoderParameters(1);
+                        encoderParameters.Param[0] = new System.Drawing.Imaging.EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+
+                        resizeImage.Save(imagepath.Replace(".jpg", "") + "-2048.jpg");
                     }
                     if (resizeImage.Width >= 1024)
                     {
                         resizeImage = new Bitmap(1024, 1024);
-                        resizeImage.Save(imagepath + "-1024.jpg");
+                        resizeImage.Save(imagepath.Replace(".jpg", "") + "-1024.jpg");
                     }
                     if (resizeImage.Width >= 512)
                     {
                         resizeImage = new Bitmap(512, 512);
-                        resizeImage.Save(imagepath + "-512.jpg");
+                        resizeImage.Save(imagepath.Replace(".jpg", "") + "-512.jpg");
+                    }
+                    if (resizeImage.Width >= 256)
+                    {
+                        resizeImage = new Bitmap(256, 256);
+                        resizeImage.Save(imagepath.Replace(".jpg", "") + "-256.jpg");
                     }
                     if (resizeImage.Width >= 128)
                     {
                         resizeImage = new Bitmap(128, 128);
-                        resizeImage.Save(imagepath + "-128.jpg");
-                    }
-                    if (resizeImage.Width == 0)
-                    {
-
+                        resizeImage.Save(imagepath.Replace("jpg", "") + "128.jpg");
                     }
 
                     newArticle.ImagePath = todaysDate;
                     _articelService.Update(newArticle);
                 }
             }
-            
-            //ViewData["CompanyId"] = new SelectList(_companyService.GetAll().ToString(), "CompanyId", "Company");
-            //ViewData["CategoryId"] = new SelectList(_categoryService.GetAll().ToString(), "CategoryId", "Category");
-            //ViewData["StoreId"] = new SelectList(_storeService.GetAll().ToString(), "StoreId", "Store");
-            return View();
-            //return View(model);
-            //Vad fan skall jag returna här.
 
+            ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Company");
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Category");
+            ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Store");
+            return View();
 
             // Vad är kvar?
-            // Tänka om lite när det gäller pathen
             // Image format(Width, Height)
             // 4 Olika format skall bilden sparas i 4 olika format i olika mappar(imorgon tror jag).
-            // Måste göra om till async
 
             // Använda rätt path för image <appsettings> Lätt tror jag.
             // User delen inlogg? Fråga Fredrik här.
@@ -175,6 +177,58 @@ namespace AnnonsonMVC.Controllers
             // Annotations meddelanden när man missat att fylla i någonting.
             // Refactor Controllern.
 
+        }
+
+        public Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string imagepath)
+        {
+
+            var image = new Bitmap(imagepath);
+
+            int originalWidth = imgFileBitmapSize.Width;
+            int originalHeight = imgFileBitmapSize.Height;
+
+            //Define new picture size
+            System.Drawing.Image newPicSize = new System.Drawing.Bitmap(canvasWidth, canvasHeight);
+            System.Drawing.Graphics graphic = System.Drawing.Graphics.FromImage(newPicSize);
+
+            graphic.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            graphic.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+
+            // Figure out the ratio
+            double ratioX = (double)canvasWidth / (double)resizeImage.Width;
+            double ratioY = (double)canvasHeight / (double)resizeImage.Height;
+            // use whichever multiplier is smaller
+            double ratio = ratioX < ratioY ? ratioX : ratioY;
+
+            // now we can get the new height and width
+            int newHeight = Convert.ToInt32(resizeImage.Height * ratio);
+            int newWidth = Convert.ToInt32(resizeImage.Width * ratio);
+
+            // Now calculate the X,Y position of the upper-left corner
+            // (one of these will always be zero)
+            int posX = Convert.ToInt32((canvasWidth - (resizeImage.Width * ratio)) / 2);
+            int posY = Convert.ToInt32((canvasHeight - (resizeImage.Height * ratio)) / 2);
+
+            graphic.Clear(System.Drawing.Color.White); // white padding
+            graphic.DrawImage(image, posX, posY, newWidth, newHeight);
+
+            //System.Drawing.Imaging.ImageCodecInfo[] info = System.Drawing.Imaging.ImageCodecInfo.GetImageEncoders();
+            //System.Drawing.Imaging.EncoderParameters encoderParameters;
+            //encoderParameters = new System.Drawing.Imaging.EncoderParameters(1);
+            //encoderParameters.Param[0] = new System.Drawing.Imaging.EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+
+            //var savedImagePathAndName = System.IO.Path.Combine("images", loadedFileName);
+
+
+            //using (var fileStream = new FileStream(savedImagePathAndName, FileMode.Create))
+            //{
+            //    newPicSize.Save(fileStream, info[1], encoderParameters);
+            //}
+
+            return (newPicSize);
         }
     }
   }
