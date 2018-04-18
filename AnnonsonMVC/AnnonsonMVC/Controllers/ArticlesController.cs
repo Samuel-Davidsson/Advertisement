@@ -74,8 +74,9 @@ namespace AnnonsonMVC.Controllers
                     var selectedStoreListIds = selectedStoreList.Select(x => x.Value);
                     var selectedStoreListIdsToInt = selectedStoreListIds.Select(s => int.Parse(s)).ToList();
 
-                    GenerateSlug(model.Slug, model.Name);
-                    model.UserId = 3;
+                    GenerateSlug(model);
+                    
+                    model.UserId = 3;//Detta är bara bas.
                     var categoryId = model.Category.CategoryId;
                     var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
 
@@ -161,7 +162,6 @@ namespace AnnonsonMVC.Controllers
             // Vad är kvar?
 
             // Använda rätt path för image <appsettings> Lätt tror jag.
-            // Sluggen nåt som är konstigt här.
             // User delen inlogg? Fråga Fredrik här.
 
             //      -------Styling--------
@@ -173,18 +173,18 @@ namespace AnnonsonMVC.Controllers
 
         }
 
-        public string GenerateSlug(string slug, string name)
+        private string GenerateSlug(ArticelViewModel model)
         {
-            slug = name.ToLower();
-            slug = Regex.Replace(name, @"\s+", " ").ToLower();
-            slug = Regex.Replace(name, @"åäö", "aao");
-            slug = Regex.Replace(name, @"[^a-z0-9\s-]", "").Trim();
-            slug = Regex.Replace(name, @"\s", "-");
+            model.Slug = model.Name;
+            model.Slug = model.Name.Replace('Ö', 'O').Replace('Ä', 'A').Replace('Å', 'A').Replace('ö', 'o').Replace('ä', 'a').Replace('å', 'a').ToLower();
+            model.Slug = Regex.Replace(model.Slug, @"[^a-z0-9\s-]", "");
+            model.Slug = Regex.Replace(model.Slug, @"\s+", " ").Trim();
+            model.Slug = Regex.Replace(model.Slug, @"\s", "-");
             
-            return (slug);
+            return model.Slug;
         }
-
-        public Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string imagepath)
+       
+        private Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string imagepath)
         {
 
             var image = new Bitmap(imagepath);
