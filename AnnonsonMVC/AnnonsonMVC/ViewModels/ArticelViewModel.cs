@@ -17,6 +17,7 @@ namespace AnnonsonMVC.ViewModels
         }
 
         public int ArticleId { get; set; }
+
         [Required]
         public int UserId { get; set; }
         [Required]

@@ -67,7 +67,7 @@ namespace AnnonsonMVC.Controllers
                     var tempSlug = model.Name;
                     model.Slug = GenerateSlug(tempSlug);
 
-                    model.UserId = 3;//Detta är bara bas kan inte göra nåt åt denna atm.
+                    model.UserId = 3;
 
                     var categoryId = model.CategoryId;
                     var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
@@ -90,8 +90,6 @@ namespace AnnonsonMVC.Controllers
                     }
 
                     //Refactor ImagePath
-                    if (model.ImageFile == null || model.ImageFile.Length == 0)
-
                     newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
                     string year = DateTime.Now.ToString("yyyy");
                     string month = DateTime.Now.ToString("MM");
@@ -104,7 +102,7 @@ namespace AnnonsonMVC.Controllers
                         Directory.CreateDirectory(uploadpath);
                     }
 
-                    var imagepath = Path.Combine(uploadpath, "aid" + newArticle.ArticleId + "-" + Guid.NewGuid() + ".jpg").Replace(@"\\", @"\");
+                    var imagepath = Path.Combine(uploadpath, newArticle.ImageFileName + ".jpg").Replace(@"\\", @"\");
 
                     using (var imagestream = new FileStream(imagepath, FileMode.Create))
                     {
@@ -112,36 +110,7 @@ namespace AnnonsonMVC.Controllers
 
                     }
 
-                    //Nästa Refactor
-                    Stream stream = model.ImageFile.OpenReadStream();
-                    Image resizeImage = Image.FromStream(stream);
-
-                    var imgFileBitmapSize = resizeImage.Size;
-                    if (resizeImage.Width >= 2048)
-                    {
-                        resizeImage = MakeImageSquareAndFillBlancs(2048, 2048, imgFileBitmapSize, resizeImage, imagepath);
-                        resizeImage.Save(imagepath.Replace(".jpg", "") + "-2048.jpg");
-                    }
-                    if (resizeImage.Width >= 1024)
-                    {
-                        resizeImage = MakeImageSquareAndFillBlancs(1024, 1024, imgFileBitmapSize, resizeImage, imagepath);
-                        resizeImage.Save(imagepath.Replace(".jpg", "") + "-1024.jpg");
-                    }
-                    if (resizeImage.Width >= 512)
-                    {
-                        resizeImage = MakeImageSquareAndFillBlancs(512, 512, imgFileBitmapSize, resizeImage, imagepath);
-                        resizeImage.Save(imagepath.Replace(".jpg", "") + "-512.jpg");
-                    }
-                    if (resizeImage.Width >= 256)
-                    {
-                        resizeImage = MakeImageSquareAndFillBlancs(256, 256, imgFileBitmapSize, resizeImage, imagepath);
-                        resizeImage.Save(imagepath.Replace(".jpg", "") + "-256.jpg");
-                    }
-                    if (resizeImage.Width >= 128)
-                    {
-                        var newImage = MakeImageSquareAndFillBlancs(128, 128, imgFileBitmapSize, resizeImage, imagepath);
-                        newImage.Save(imagepath.Replace("jpg", "") + "128.jpg");
-                    }
+                    ImageResize(model, imagepath);
 
                     newArticle.ImagePath = todaysDate;
                     _articelService.Update(newArticle);
@@ -152,6 +121,40 @@ namespace AnnonsonMVC.Controllers
             ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Category");
             ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Store");
             return RedirectToAction("Index");
+        }
+
+        private void ImageResize(ArticelViewModel model, string imagepath)
+        {
+            Stream stream = model.ImageFile.OpenReadStream();
+            Image resizeImage = Image.FromStream(stream);
+
+            var imgFileBitmapSize = resizeImage.Size;
+            if (resizeImage.Width >= 2048)
+            {
+                resizeImage = MakeImageSquareAndFillBlancs(2048, 2048, imgFileBitmapSize, resizeImage, imagepath);
+                resizeImage.Save(imagepath.Replace(".jpg", "") + "-2048.jpg");
+            }
+            if (resizeImage.Width >= 1024)
+            {
+                resizeImage = MakeImageSquareAndFillBlancs(1024, 1024, imgFileBitmapSize, resizeImage, imagepath);
+                resizeImage.Save(imagepath.Replace(".jpg", "") + "-1024.jpg");
+            }
+            if (resizeImage.Width >= 512)
+            {
+                resizeImage = MakeImageSquareAndFillBlancs(512, 512, imgFileBitmapSize, resizeImage, imagepath);
+                resizeImage.Save(imagepath.Replace(".jpg", "") + "-512.jpg");
+            }
+            if (resizeImage.Width >= 256)
+            {
+                resizeImage = MakeImageSquareAndFillBlancs(256, 256, imgFileBitmapSize, resizeImage, imagepath);
+                resizeImage.Save(imagepath.Replace(".jpg", "") + "-256.jpg");
+            }
+            if (resizeImage.Width >= 128)
+            {
+                var newImage = MakeImageSquareAndFillBlancs(128, 128, imgFileBitmapSize, resizeImage, imagepath);
+                newImage.Save(imagepath.Replace("jpg", "") + "128.jpg");
+            }
+
         }
 
         private string GenerateSlug(string tempSlug)
@@ -230,11 +233,12 @@ namespace AnnonsonMVC.Controllers
 
 // Använda rätt path för image <appsettings> Lätt tror jag.
 // User delen inlogg? Fråga Fredrik här.
+// Refactorisera
 
 
 // ------Errors--------
 // Crashar ibland för att Category är null(listan).
-// Kan inte ta mig till andra sidor samma sak där articles är null på index när jag skall tillbaka.
+
 
 //      -------Styling--------
 // Fixa till multiple selectlistan
