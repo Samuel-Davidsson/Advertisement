@@ -113,7 +113,7 @@ namespace AnnonsonMVC.Controllers
                 model.ImageFile.CopyTo(imagestream);
 
             }
-            newArticle.ImagePath = DateTime.Now.ToString("yyy-MM-DD");//Tveksam här.
+            newArticle.ImagePath = DateTime.Now.ToString("yyy-MM-dd");//Tveksam här...
             newArticle.ImagePath.Replace("-", @"\");
             return imagepath;
         }
@@ -243,8 +243,9 @@ namespace AnnonsonMVC.Controllers
 
 // Vad är kvar?
 
-// Använda rätt path för image <appsettings> Lätt tror jag.
-// User delen inlogg? Fråga Fredrik här.
+// Använda rätt path för image <appsettings> Lätt tror jag.(imorgon)
+// User delen inlogg? Fråga Fredrik här.(Imorgon)
+// Knyta ihop imagepath filformat och widths i db.
 
 
 // ------Errors--------
