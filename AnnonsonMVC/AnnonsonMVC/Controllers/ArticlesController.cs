@@ -62,20 +62,17 @@ namespace AnnonsonMVC.Controllers
                 var stores = await _storeService.GetAll();
                 if (model.StoreIds != null)
                 {
+                    var selectedStoreListIdsToInt = GenerateSelectedStoresList(model, stores);
 
-                    var selectedStoreListIdsToInt = GenerateSelectedStoreList(model, stores);
-                    GenerateSlug(model);//Refactor igen räcker nog att skicka in en sträng här.
-                    
+                    var tempSlug = model.Name;
+                    model.Slug = GenerateSlug(tempSlug);
+
                     model.UserId = 3;//Detta är bara bas kan inte göra nåt åt denna atm.
 
                     var categoryId = model.CategoryId;
                     var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
 
                     _articelService.Add(newArticle);
-
-
-
-
 
                     newArticle.ArticleCategory.Add(new ArticleCategory
                     {
@@ -92,6 +89,7 @@ namespace AnnonsonMVC.Controllers
                         });
                     }
 
+                    //Refactor ImagePath
                     if (model.ImageFile == null || model.ImageFile.Length == 0)
 
                     newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
@@ -114,6 +112,7 @@ namespace AnnonsonMVC.Controllers
 
                     }
 
+                    //Nästa Refactor
                     Stream stream = model.ImageFile.OpenReadStream();
                     Image resizeImage = Image.FromStream(stream);
 
@@ -152,58 +151,41 @@ namespace AnnonsonMVC.Controllers
             ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Company");
             ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Category");
             ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Store");
-            return View();
-
-            // Vad är kvar?
-
-            // Använda rätt path för image <appsettings> Lätt tror jag.
-            // User delen inlogg? Fråga Fredrik här.
-
-
-            // ------Errors--------
-            // Crashar ibland för att Category är null(listan).
-            // Kan inte ta mig till andra sidor samma sak där articles är null på index när jag skall tillbaka.
-
-            //      -------Styling--------
-            // Fixa till multiple selectlistan
-            // Snygga till knappar istället för länkar  
-            // Annotations meddelanden när man missat att fylla i någonting.
-            // Refactor Controllern.(Titta på vad jag skall lägga alla metoderna)
-            // Path så jag kommer tillbaka till alla artiklar eller Details delen.
-
+            return RedirectToAction("Index");
         }
 
-        private string GenerateSlug(ArticelViewModel model)
+        private string GenerateSlug(string tempSlug)
         {
-            model.Slug = model.Name;
-            model.Slug = model.Name.Replace('Ö', 'O').Replace('Ä', 'A').Replace('Å', 'A').Replace('ö', 'o').Replace('ä', 'a').Replace('å', 'a').ToLower();
-            model.Slug = Regex.Replace(model.Slug, @"[^a-z0-9\s-]", "");
-            model.Slug = Regex.Replace(model.Slug, @"\s+", " ").Trim();
-            model.Slug = Regex.Replace(model.Slug, @"\s", "-");
-            
-            return model.Slug;
+            tempSlug = tempSlug.ToLower();
+            tempSlug = Regex.Replace(tempSlug, "[äå]", "a");
+            tempSlug = Regex.Replace(tempSlug, "[óòöôõø]", "o");
+            tempSlug = Regex.Replace(tempSlug, "[úùüû]", "u");
+            tempSlug = Regex.Replace(tempSlug, "[éèëê]", "e");
+            tempSlug = Regex.Replace(tempSlug, @"\s", "-");
+            tempSlug = Regex.Replace(tempSlug, @"\s+", " ").Trim();
+            tempSlug = Regex.Replace(tempSlug, @"[^a-z0-9\s-]", "");
+            return tempSlug;
         }
 
-        private List<int> GenerateSelectedStoreList(ArticelViewModel model, IEnumerable<Store> stores)
+        private List<int> GenerateSelectedStoresList(ArticelViewModel model, IEnumerable<Store> stores)
         {
-                var selectedStores = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
-                model.Stores = selectedStores;
-                List<SelectListItem> selectedStoreList = model.Stores.Where(x => model.StoreIds.Contains(int.Parse(x.Value))).ToList();
+            var selectedStores = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
+            model.Stores = selectedStores;
+            List<SelectListItem> selectedStoreList = model.Stores.Where(x => model.StoreIds.Contains(int.Parse(x.Value))).ToList();
 
-                foreach (var selecteditem in selectedStoreList)
-                {
-                    selecteditem.Selected = true;
-                }
-
-                var selectedStoreListIds = selectedStoreList.Select(x => x.Value);
-                var selectedStoreListIdsToInt = selectedStoreListIds.Select(s => int.Parse(s)).ToList();
-
-                return selectedStoreListIdsToInt;
+            foreach (var selecteditem in selectedStoreList)
+            {
+                selecteditem.Selected = true;
             }
+
+            var selectedStoreListIds = selectedStoreList.Select(x => x.Value);
+            var selectedStoreListIdsToInt = selectedStoreListIds.Select(s => int.Parse(s)).ToList();
+
+            return selectedStoreListIdsToInt;
+        }
                
         private Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string imagepath)
         {
-
             var image = new Bitmap(imagepath);
 
             int originalWidth = imgFileBitmapSize.Width;
@@ -217,10 +199,9 @@ namespace AnnonsonMVC.Controllers
             graphic.SmoothingMode = SmoothingMode.HighQuality;
             graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-
-            // Figure out the ratio
             double ratioX = (double)canvasWidth / (double)resizeImage.Width;
             double ratioY = (double)canvasHeight / (double)resizeImage.Height;
+
             // use whichever multiplier is smaller
             double ratio = ratioX < ratioY ? ratioX : ratioY;
 
@@ -245,3 +226,19 @@ namespace AnnonsonMVC.Controllers
     }
   }
 
+// Vad är kvar?
+
+// Använda rätt path för image <appsettings> Lätt tror jag.
+// User delen inlogg? Fråga Fredrik här.
+
+
+// ------Errors--------
+// Crashar ibland för att Category är null(listan).
+// Kan inte ta mig till andra sidor samma sak där articles är null på index när jag skall tillbaka.
+
+//      -------Styling--------
+// Fixa till multiple selectlistan
+// Snygga till knappar istället för länkar  
+// Annotations meddelanden när man missat att fylla i någonting.
+// Refactor Controllern.(Titta på vad jag skall lägga alla metoderna)
+// Path så jag kommer tillbaka till alla artiklar eller Details delen.
