@@ -62,25 +62,20 @@ namespace AnnonsonMVC.Controllers
                 var stores = await _storeService.GetAll();
                 if (model.StoreIds != null)
                 {
-                    var selectedStores = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
-                    model.Stores = selectedStores;
-                    List<SelectListItem> selectedStoreList = model.Stores.Where(x => model.StoreIds.Contains(int.Parse(x.Value))).ToList();
 
-                    foreach (var selecteditem in selectedStoreList)
-                    {
-                        selecteditem.Selected = true;
-                    }
-
-                    var selectedStoreListIds = selectedStoreList.Select(x => x.Value);
-                    var selectedStoreListIdsToInt = selectedStoreListIds.Select(s => int.Parse(s)).ToList();
-
-                    GenerateSlug(model);
+                    var selectedStoreListIdsToInt = GenerateSelectedStoreList(model, stores);
+                    GenerateSlug(model);//Refactor igen räcker nog att skicka in en sträng här.
                     
-                    model.UserId = 3;//Detta är bara bas.
-                    var categoryId = model.Category.CategoryId;
+                    model.UserId = 3;//Detta är bara bas kan inte göra nåt åt denna atm.
+
+                    var categoryId = model.CategoryId;
                     var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
 
                     _articelService.Add(newArticle);
+
+
+
+
 
                     newArticle.ArticleCategory.Add(new ArticleCategory
                     {
@@ -164,6 +159,11 @@ namespace AnnonsonMVC.Controllers
             // Använda rätt path för image <appsettings> Lätt tror jag.
             // User delen inlogg? Fråga Fredrik här.
 
+
+            // ------Errors--------
+            // Crashar ibland för att Category är null(listan).
+            // Kan inte ta mig till andra sidor samma sak där articles är null på index när jag skall tillbaka.
+
             //      -------Styling--------
             // Fixa till multiple selectlistan
             // Snygga till knappar istället för länkar  
@@ -183,7 +183,24 @@ namespace AnnonsonMVC.Controllers
             
             return model.Slug;
         }
-       
+
+        private List<int> GenerateSelectedStoreList(ArticelViewModel model, IEnumerable<Store> stores)
+        {
+                var selectedStores = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
+                model.Stores = selectedStores;
+                List<SelectListItem> selectedStoreList = model.Stores.Where(x => model.StoreIds.Contains(int.Parse(x.Value))).ToList();
+
+                foreach (var selecteditem in selectedStoreList)
+                {
+                    selecteditem.Selected = true;
+                }
+
+                var selectedStoreListIds = selectedStoreList.Select(x => x.Value);
+                var selectedStoreListIdsToInt = selectedStoreListIds.Select(s => int.Parse(s)).ToList();
+
+                return selectedStoreListIdsToInt;
+            }
+               
         private Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string imagepath)
         {
 
@@ -223,7 +240,7 @@ namespace AnnonsonMVC.Controllers
             encoderParameters = new EncoderParameters(1);
             encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
 
-            return (newPicSize);
+            return newPicSize;
         }
     }
   }
