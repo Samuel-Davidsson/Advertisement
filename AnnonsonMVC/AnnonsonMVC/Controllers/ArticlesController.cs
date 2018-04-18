@@ -63,7 +63,6 @@ namespace AnnonsonMVC.Controllers
                 if (model.StoreIds != null)
                 {
                     var selectedStoreListIdsToInt = GenerateSelectedStoresList(model, stores);
-
                     var tempSlug = model.Name;
                     model.Slug = GenerateSlug(tempSlug);
 
@@ -89,30 +88,12 @@ namespace AnnonsonMVC.Controllers
                         });
                     }
 
-                    //Refactor ImagePath
-                    newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
-                    string year = DateTime.Now.ToString("yyyy");
-                    string month = DateTime.Now.ToString("MM");
-                    string day = DateTime.Now.ToString("dd");
-                    var todaysDate = year + @"\" + month + @"\" + day;
-                    var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads\\" + todaysDate);
+                    var uploadpath = ImageDirectory(newArticle);
 
-                    if (!Directory.Exists(uploadpath))
-                    {
-                        Directory.CreateDirectory(uploadpath);
-                    }
-
-                    var imagepath = Path.Combine(uploadpath, newArticle.ImageFileName + ".jpg").Replace(@"\\", @"\");
-
-                    using (var imagestream = new FileStream(imagepath, FileMode.Create))
-                    {
-                        model.ImageFile.CopyTo(imagestream);
-
-                    }
-
-                    ImageResize(model, imagepath);
-
-                    newArticle.ImagePath = todaysDate;
+                    var imagepath = ImagePath(newArticle, uploadpath, model);
+                    
+                    ImagesCreateAndResize(model, imagepath);
+                    
                     _articelService.Update(newArticle);
                 }
             }
@@ -123,7 +104,38 @@ namespace AnnonsonMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        private void ImageResize(ArticelViewModel model, string imagepath)
+        private string ImagePath(Article newArticle, string uploadpath, ArticelViewModel model)
+        {
+            var imagepath = Path.Combine(uploadpath, newArticle.ImageFileName + ".jpg").Replace(@"\\", @"\");
+
+            using (var imagestream = new FileStream(imagepath, FileMode.Create))
+            {
+                model.ImageFile.CopyTo(imagestream);
+
+            }
+            newArticle.ImagePath = DateTime.Now.ToString("yyy-MM-DD");//Tveksam här.
+            newArticle.ImagePath.Replace("-", @"\");
+            return imagepath;
+        }
+
+        private string ImageDirectory(Article newArticle)
+        {
+            newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
+            string year = DateTime.Now.ToString("yyyy");
+            string month = DateTime.Now.ToString("MM");
+            string day = DateTime.Now.ToString("dd");
+            var todaysDate = year + @"\" + month + @"\" + day;
+            var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads\\" + todaysDate);
+
+            if (!Directory.Exists(uploadpath))
+            {
+                Directory.CreateDirectory(uploadpath);
+            }
+
+            return uploadpath;
+        }
+
+        private void ImagesCreateAndResize(ArticelViewModel model, string imagepath)
         {
             Stream stream = model.ImageFile.OpenReadStream();
             Image resizeImage = Image.FromStream(stream);
@@ -154,6 +166,7 @@ namespace AnnonsonMVC.Controllers
                 var newImage = MakeImageSquareAndFillBlancs(128, 128, imgFileBitmapSize, resizeImage, imagepath);
                 newImage.Save(imagepath.Replace("jpg", "") + "128.jpg");
             }
+            //stream.Dispose();
 
         }
 
@@ -205,13 +218,12 @@ namespace AnnonsonMVC.Controllers
             double ratioX = (double)canvasWidth / (double)resizeImage.Width;
             double ratioY = (double)canvasHeight / (double)resizeImage.Height;
 
-            // use whichever multiplier is smaller
             double ratio = ratioX < ratioY ? ratioX : ratioY;
 
             int newHeight = Convert.ToInt32(resizeImage.Height * ratio);
             int newWidth = Convert.ToInt32(resizeImage.Width * ratio);
 
-            // Now calculate the X,Y position of the upper-left corner
+            // Now calculate the X,Y of upper-left corner
             // (one of these will always be zero)
             int posX = Convert.ToInt32((canvasWidth - (resizeImage.Width * ratio)) / 2);
             int posY = Convert.ToInt32((canvasHeight - (resizeImage.Height * ratio)) / 2);
@@ -233,11 +245,10 @@ namespace AnnonsonMVC.Controllers
 
 // Använda rätt path för image <appsettings> Lätt tror jag.
 // User delen inlogg? Fråga Fredrik här.
-// Refactorisera
 
 
 // ------Errors--------
-// Crashar ibland för att Category är null(listan).
+// Crashar ibland för att Category är null(listan).Måste bara se när detta händer.
 
 
 //      -------Styling--------
