@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.Text.RegularExpressions;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -68,17 +69,13 @@ namespace AnnonsonMVC.Controllers
                     foreach (var selecteditem in selectedStoreList)
                     {
                         selecteditem.Selected = true;
-                        //ViewBag.message += "\\n" + selecteditem.Text;
                     }
 
                     var selectedStoreListIds = selectedStoreList.Select(x => x.Value);
                     var selectedStoreListIdsToInt = selectedStoreListIds.Select(s => int.Parse(s)).ToList();
 
-                    //Dela upp och göra metod här för att få det att fungera.
-                    //Fungerar inte atm
-                    var slug = model.Name.Replace(@"\s+", " ").Replace(@"[^a-z0-9\s-]", "").Trim().Replace(@"\s", "-").ToLower();
-                    model.Slug = slug;
-                    model.UserId = 2;
+                    GenerateSlug(model.Slug, model.Name);
+                    model.UserId = 3;
                     var categoryId = model.Category.CategoryId;
                     var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
 
@@ -128,47 +125,26 @@ namespace AnnonsonMVC.Controllers
                     if (resizeImage.Width >= 2048)
                     {
                         resizeImage = MakeImageSquareAndFillBlancs(2048, 2048, imgFileBitmapSize, resizeImage, imagepath);
-                        ImageCodecInfo[] info = ImageCodecInfo.GetImageEncoders();
-                        EncoderParameters encoderParameters;
-                        encoderParameters = new EncoderParameters(1);
-                        encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
-
                         resizeImage.Save(imagepath.Replace(".jpg", "") + "-2048.jpg");
                     }
                     if (resizeImage.Width >= 1024)
                     {
                         resizeImage = MakeImageSquareAndFillBlancs(1024, 1024, imgFileBitmapSize, resizeImage, imagepath);
-                        ImageCodecInfo[] info = ImageCodecInfo.GetImageEncoders();
-                        EncoderParameters encoderParameters;
-                        encoderParameters = new EncoderParameters(1);
-                        encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
                         resizeImage.Save(imagepath.Replace(".jpg", "") + "-1024.jpg");
                     }
                     if (resizeImage.Width >= 512)
                     {
                         resizeImage = MakeImageSquareAndFillBlancs(512, 512, imgFileBitmapSize, resizeImage, imagepath);
-                        ImageCodecInfo[] info = ImageCodecInfo.GetImageEncoders();
-                        EncoderParameters encoderParameters;
-                        encoderParameters = new EncoderParameters(1);
-                        encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
                         resizeImage.Save(imagepath.Replace(".jpg", "") + "-512.jpg");
                     }
                     if (resizeImage.Width >= 256)
                     {
                         resizeImage = MakeImageSquareAndFillBlancs(256, 256, imgFileBitmapSize, resizeImage, imagepath);
-                        ImageCodecInfo[] info = ImageCodecInfo.GetImageEncoders();
-                        EncoderParameters encoderParameters;
-                        encoderParameters = new EncoderParameters(1);
-                        encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
                         resizeImage.Save(imagepath.Replace(".jpg", "") + "-256.jpg");
                     }
                     if (resizeImage.Width >= 128)
-                    {   //Tror det skall se ut så här istället flytta ner koden till metoden istället.
+                    {
                         var newImage = MakeImageSquareAndFillBlancs(128, 128, imgFileBitmapSize, resizeImage, imagepath);
-                        ImageCodecInfo[] info = ImageCodecInfo.GetImageEncoders();
-                        EncoderParameters encoderParameters;
-                        encoderParameters = new EncoderParameters(1);
-                        encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
                         newImage.Save(imagepath.Replace("jpg", "") + "128.jpg");
                     }
 
@@ -190,11 +166,22 @@ namespace AnnonsonMVC.Controllers
 
             //      -------Styling--------
             // Fixa till multiple selectlistan
-            // Snygga till knappar istället för länkar
+            // Snygga till knappar istället för länkar  
             // Annotations meddelanden när man missat att fylla i någonting.
             // Refactor Controllern.(Titta på vad jag skall lägga alla metoderna)
             // Path så jag kommer tillbaka till alla artiklar eller Details delen.
 
+        }
+
+        public string GenerateSlug(string slug, string name)
+        {
+            slug = name.ToLower();
+            slug = Regex.Replace(name, @"\s+", " ").ToLower();
+            slug = Regex.Replace(name, @"åäö", "aao");
+            slug = Regex.Replace(name, @"[^a-z0-9\s-]", "").Trim();
+            slug = Regex.Replace(name, @"\s", "-");
+            
+            return (slug);
         }
 
         public Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string imagepath)
@@ -231,10 +218,10 @@ namespace AnnonsonMVC.Controllers
             graphic.Clear(Color.White);
             graphic.DrawImage(image, posX, posY, newWidth, newHeight);
 
-            //ImageCodecInfo[] info = ImageCodecInfo.GetImageEncoders();
-            //EncoderParameters encoderParameters;
-            //encoderParameters = new EncoderParameters(1);
-            //encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
+            ImageCodecInfo[] info = ImageCodecInfo.GetImageEncoders();
+            EncoderParameters encoderParameters;
+            encoderParameters = new EncoderParameters(1);
+            encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
 
             return (newPicSize);
         }
