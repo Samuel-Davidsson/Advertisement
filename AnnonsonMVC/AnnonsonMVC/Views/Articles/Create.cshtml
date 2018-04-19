@@ -12,7 +12,7 @@
             <div class="col-md-5">
                 <div class="form-group">
                     <label asp-for="Name" class="control-label">Rubrik</label>
-                    <input asp-for="Name" class="form-control"/>
+                    <input asp-for="Name" class="form-control" />
                 </div>
 
                 <div class="form-group">
@@ -63,30 +63,25 @@
                     <div>
                         <span asp-validation-for="ImageFile" class="text-danger">Ladda upp bild</span>
                         <input asp-for="ImageFile" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
-                        <img id="output" class="ImagePreview"/>
-                    </div>  
+                        <img id="output" class="ImagePreview" />
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="Company.CompanyId" class="control-label">Företag</label>
                     <select asp-for="Company.CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
+                    
                 </div>
 
                 <div class="form-group">
                     <label asp-for="Stores" class="control-label">Butiker</label>
-                    <select asp-for="StoreIds" multiple="multiple" class="form-control" asp-items="@ViewBag.StoreId"></select>
+                    <select asp-for="StoreIds" multiple="multiple" class="" asp-items="@ViewBag.StoreId"></select>
                 </div>
 
                 <div class="form-group">
                     <input type="submit" value="Create" style="float: right" class="btn btn-primary" />
-                </div>           
+                </div>
             </div>
-            <style>
-                .ImagePreview {
-                    max-height: 300px;
-                    max-width: 300px;
-                }
-            </style>
         </form>
     </div>
 </div>
@@ -95,14 +90,33 @@
 
 </div>
 
-
 @section Scripts {
 
+<style>
+    .ImagePreview {
+        max-height: 300px;
+        max-width: 300px;
+    }
+    </style>
     <script>
         var loadFile = function (event) {
             var output = document.getElementById('output');
             output.src = URL.createObjectURL(event.target.files[0]);
         };
+
+        $('option').mousedown(function (e) {
+            e.preventDefault();
+            var originalScrollTop = $(this).parent().scrollTop();
+            console.log(originalScrollTop);
+            $(this).prop('selected', $(this).prop('selected') ? false : true);
+            var self = this;
+            $(this).parent().focus();
+            setTimeout(function () {
+                $(self).parent().scrollTop(originalScrollTop);
+            }, 0);
+
+            return false;
+        });
     </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

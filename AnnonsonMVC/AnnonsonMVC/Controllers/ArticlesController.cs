@@ -249,16 +249,21 @@ namespace AnnonsonMVC.Controllers
 
 // Vad är kvar?
 
-// Använda rätt path för image <appsettings> Lätt tror jag.(idag)
+//    ------Funktioner-------
+// Använda rätt path för image <appsettings>(idag).
 // User delen inlogg? Fråga Fredrik här.(Fredag kanske eventuellt ta det under helgen).
-// Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.
-// Hårdkodat imageWidths..(osäker)
+// Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.(ImageWidths hårdkodad for now).
+// Har en "upload" bilden kvar också måste ta bort den eller? fråga här till Richard.
+// Ladda upp bilden.
+
+
+//       --------Snygga till koden--------
 // Refactor flytta några saker till andra ställen.(osäker)
-// Har en "main" bilden kvar också måste ta bort den.
+//
 
-
-//      -------Styling--------
-// Fixa till multiple selectlistan.
+//      --------Styling--------
 // Snygga till knappar istället för länkar. 
 // Annotations meddelanden när man missat att fylla i någonting.(fredag)
+// Ändra ordningen på allt på create sidan.
+// Börja titta på Details, och Edit sidan också.
 
