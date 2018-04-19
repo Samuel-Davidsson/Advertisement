@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -93,7 +94,10 @@ namespace AnnonsonMVC.Controllers
                     var imagepath = ImagePath(newArticle, imageDirectoryPath, model);
 
                     CreateResizeImages(model, imagepath);
-                    
+
+                    TryToDelete(imagepath);
+
+
                     _articelService.Update(newArticle);
                 }
             }
@@ -104,6 +108,16 @@ namespace AnnonsonMVC.Controllers
             return RedirectToAction("Index");
         }
 
+        private void TryToDelete(string imagepath)
+        {
+            if (System.IO.File.Exists(imagepath))
+            {
+                var reader = new StreamReader(imagepath); //Debugging
+                System.IO.File.Delete(imagepath);
+            }
+
+        }
+
         private string ImagePath(Article newArticle, string uploadpath, ArticelViewModel model)
         {
             var imagepath = Path.Combine(uploadpath, newArticle.ImageFileName + ".jpg").Replace(@"\\", @"\");
@@ -111,7 +125,6 @@ namespace AnnonsonMVC.Controllers
             using (var imagestream = new FileStream(imagepath, FileMode.Create))
             {
                 model.ImageFile.CopyTo(imagestream);
-
             }
             newArticle.ImagePath = DateTime.Now.ToString("yyy-MM-dd").Replace("-", @"\");
             newArticle.ImageWidths = "1024,512,256,128";
@@ -132,7 +145,7 @@ namespace AnnonsonMVC.Controllers
 
             if (!Directory.Exists(uploadpath))
             {
-                Directory.CreateDirectory(uploadpath);
+                Directory.CreateDirectory(uploadpath);                
             }
 
             return uploadpath;
@@ -174,8 +187,9 @@ namespace AnnonsonMVC.Controllers
                 newImage.Save(imagepath.Replace("jpg", "") + "128.jpg");
                 model.ImageWidths = "128, ";
             }
+            stream.Dispose();
             return model.ImageWidths;
-            //stream.Dispose();
+            
 
         }
 
@@ -242,6 +256,7 @@ namespace AnnonsonMVC.Controllers
             encoderParameters = new EncoderParameters(1);
             encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
 
+            newImageSize.Dispose();
             return newImageSize;
         }
     }
@@ -249,12 +264,14 @@ namespace AnnonsonMVC.Controllers
 
 // Vad är kvar?
 
+
+    //TODO krasha i CreatenResize stänger strömmar innan det får ändra tillbaka och stänga allt innan jag skall deleta filen tror jag
 //    ------Funktioner-------
 // Använda rätt path för image <appsettings>(idag).
 // User delen inlogg? Fråga Fredrik här.(Fredag kanske eventuellt ta det under helgen).
 // Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.(ImageWidths hårdkodad for now).
 // Har en "upload" bilden kvar också måste ta bort den eller? fråga här till Richard.
-// Ladda upp bilden.
+// Ladda upp bilden till details & edit.
 
 
 //       --------Snygga till koden--------
