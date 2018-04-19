@@ -10,5 +10,7 @@ namespace Domain.Interfaces
         void Update(Article article);
         Task<IEnumerable<Article>> GetAll();
         Article Find(int id, params string[] includeProperties);
+        string GenerateSlug(string tempSlug);
+        string CreateImageDirectory(Article newArticle);
     }
 }

@@ -8,7 +8,7 @@ using Domain.Services;
 using Domain.Interfaces;
 using Domain.Entites;
 using Data.Repositories;
-
+using AnnonsonMVC.Utilities;
 
 namespace AnnonsonMVC
 {
@@ -30,7 +30,8 @@ namespace AnnonsonMVC
             services.AddScoped<IStoreService, StoreService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IStoreArticleService, StoreArticleService>();
-
+            services.AddScoped<ImageService>();
+            services.AddScoped<SelectedStoresService>();
             services.AddScoped<IRepository<Article>, Repository<Article>>();
             services.AddScoped<IRepository<Category>, Repository<Category>>();
             services.AddScoped<IRepository<Store>, Repository<Store>>();
