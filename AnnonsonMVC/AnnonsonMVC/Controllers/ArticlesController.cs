@@ -62,7 +62,7 @@ namespace AnnonsonMVC.Controllers
                 var stores = await _storeService.GetAll();
                 if (model.StoreIds != null)
                 {
-                    var selectedStoreListIdsToInt = GenerateSelectedStoresList(model, stores);
+                    var selectedStoreListIds = GetSelectedStoresList(model, stores);
                     var tempSlug = model.Name;
                     model.Slug = GenerateSlug(tempSlug);
 
@@ -79,7 +79,7 @@ namespace AnnonsonMVC.Controllers
                         CategoryId = categoryId,                        
                     });
 
-                    foreach (var storeId in selectedStoreListIdsToInt)
+                    foreach (var storeId in selectedStoreListIds)
                     {
                         newArticle.StoreArticle.Add(new StoreArticle
                         {
@@ -88,11 +88,11 @@ namespace AnnonsonMVC.Controllers
                         });
                     }
 
-                    var uploadpath = ImageDirectory(newArticle);
+                    var imageDirectoryPath = CreateImageDirectory(newArticle);
 
-                    var imagepath = ImagePath(newArticle, uploadpath, model);
-                    
-                    ImagesCreateAndResize(model, imagepath);
+                    var imagepath = ImagePath(newArticle, imageDirectoryPath, model);
+
+                    CreateResizeImages(model, imagepath);
                     
                     _articelService.Update(newArticle);
                 }
@@ -113,17 +113,20 @@ namespace AnnonsonMVC.Controllers
                 model.ImageFile.CopyTo(imagestream);
 
             }
-            newArticle.ImagePath = DateTime.Now.ToString("yyy-MM-dd");//Tveksam här...
-            newArticle.ImagePath.Replace("-", @"\");
+            newArticle.ImagePath = DateTime.Now.ToString("yyy-MM-dd").Replace("-", @"\");
+            newArticle.ImageWidths = "1024,512,256,128";
+            newArticle.ImageFileFormat = "jpg";                          //Tveksam här...
+
             return imagepath;
         }
 
-        private string ImageDirectory(Article newArticle)
+        private string CreateImageDirectory(Article newArticle)
         {
             newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
             string year = DateTime.Now.ToString("yyyy");
             string month = DateTime.Now.ToString("MM");
             string day = DateTime.Now.ToString("dd");
+
             var todaysDate = year + @"\" + month + @"\" + day;
             var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads\\" + todaysDate);
 
@@ -135,37 +138,43 @@ namespace AnnonsonMVC.Controllers
             return uploadpath;
         }
 
-        private void ImagesCreateAndResize(ArticelViewModel model, string imagepath)
+        private string CreateResizeImages(ArticelViewModel model, string imagepath)
         {
             Stream stream = model.ImageFile.OpenReadStream();
-            Image resizeImage = Image.FromStream(stream);
-
+            Image resizeImage = Image.FromStream(stream);            
             var imgFileBitmapSize = resizeImage.Size;
+
             if (resizeImage.Width >= 2048)
             {
                 resizeImage = MakeImageSquareAndFillBlancs(2048, 2048, imgFileBitmapSize, resizeImage, imagepath);
                 resizeImage.Save(imagepath.Replace(".jpg", "") + "-2048.jpg");
             }
+            
             if (resizeImage.Width >= 1024)
             {
                 resizeImage = MakeImageSquareAndFillBlancs(1024, 1024, imgFileBitmapSize, resizeImage, imagepath);
                 resizeImage.Save(imagepath.Replace(".jpg", "") + "-1024.jpg");
+                model.ImageWidths = "1024, ";
             }
             if (resizeImage.Width >= 512)
             {
                 resizeImage = MakeImageSquareAndFillBlancs(512, 512, imgFileBitmapSize, resizeImage, imagepath);
                 resizeImage.Save(imagepath.Replace(".jpg", "") + "-512.jpg");
+                model.ImageWidths = "512, ";
             }
             if (resizeImage.Width >= 256)
             {
                 resizeImage = MakeImageSquareAndFillBlancs(256, 256, imgFileBitmapSize, resizeImage, imagepath);
                 resizeImage.Save(imagepath.Replace(".jpg", "") + "-256.jpg");
+                model.ImageWidths = "256, ";
             }
             if (resizeImage.Width >= 128)
             {
                 var newImage = MakeImageSquareAndFillBlancs(128, 128, imgFileBitmapSize, resizeImage, imagepath);
                 newImage.Save(imagepath.Replace("jpg", "") + "128.jpg");
+                model.ImageWidths = "128, ";
             }
+            return model.ImageWidths;
             //stream.Dispose();
 
         }
@@ -183,7 +192,7 @@ namespace AnnonsonMVC.Controllers
             return tempSlug;
         }
 
-        private List<int> GenerateSelectedStoresList(ArticelViewModel model, IEnumerable<Store> stores)
+        private List<int> GetSelectedStoresList(ArticelViewModel model, IEnumerable<Store> stores)
         {
             var selectedStores = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
             model.Stores = selectedStores;
@@ -194,10 +203,9 @@ namespace AnnonsonMVC.Controllers
                 selecteditem.Selected = true;
             }
 
-            var selectedStoreListIds = selectedStoreList.Select(x => x.Value);
-            var selectedStoreListIdsToInt = selectedStoreListIds.Select(s => int.Parse(s)).ToList();
+            var selectedStoreListIds = selectedStoreList.Select(x => x.Value).Select(x => int.Parse(x)).ToList();
 
-            return selectedStoreListIdsToInt;
+            return selectedStoreListIds;
         }
                
         private Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string imagepath)
@@ -207,8 +215,8 @@ namespace AnnonsonMVC.Controllers
             int originalWidth = imgFileBitmapSize.Width;
             int originalHeight = imgFileBitmapSize.Height;
 
-            Image newPicSize = new Bitmap(canvasWidth, canvasHeight);
-            Graphics graphic = Graphics.FromImage(newPicSize);
+            Image newImageSize = new Bitmap(canvasWidth, canvasHeight);
+            Graphics graphic = Graphics.FromImage(newImageSize);
 
             graphic.CompositingQuality = CompositingQuality.HighQuality;
             graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
@@ -223,8 +231,6 @@ namespace AnnonsonMVC.Controllers
             int newHeight = Convert.ToInt32(resizeImage.Height * ratio);
             int newWidth = Convert.ToInt32(resizeImage.Width * ratio);
 
-            // Now calculate the X,Y of upper-left corner
-            // (one of these will always be zero)
             int posX = Convert.ToInt32((canvasWidth - (resizeImage.Width * ratio)) / 2);
             int posY = Convert.ToInt32((canvasHeight - (resizeImage.Height * ratio)) / 2);
 
@@ -236,25 +242,23 @@ namespace AnnonsonMVC.Controllers
             encoderParameters = new EncoderParameters(1);
             encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
 
-            return newPicSize;
+            return newImageSize;
         }
     }
   }
 
 // Vad är kvar?
 
-// Använda rätt path för image <appsettings> Lätt tror jag.(imorgon)
-// User delen inlogg? Fråga Fredrik här.(Imorgon)
-// Knyta ihop imagepath filformat och widths i db.
-
-
-// ------Errors--------
-// Crashar ibland för att Category är null(listan).Måste bara se när detta händer.
+// Använda rätt path för image <appsettings> Lätt tror jag.(idag)
+// User delen inlogg? Fråga Fredrik här.(Fredag kanske eventuellt ta det under helgen).
+// Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.
+// Hårdkodat imageWidths..(osäker)
+// Refactor flytta några saker till andra ställen.(osäker)
+// Har en "main" bilden kvar också måste ta bort den.
 
 
 //      -------Styling--------
-// Fixa till multiple selectlistan
-// Snygga till knappar istället för länkar  
-// Annotations meddelanden när man missat att fylla i någonting.
-// Refactor Controllern.(Titta på vad jag skall lägga alla metoderna)
-// Path så jag kommer tillbaka till alla artiklar eller Details delen.
+// Fixa till multiple selectlistan.
+// Snygga till knappar istället för länkar. 
+// Annotations meddelanden när man missat att fylla i någonting.(fredag)
+
