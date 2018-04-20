@@ -27,42 +27,42 @@ namespace AnnonsonMVC.Utilities
 
         public string CreateResizeImagesToImageDirectory(ArticelViewModel model, string imagepath)
         {
-            Stream stream = model.ImageFile.OpenReadStream();
-            Image resizeImage = Image.FromStream(stream);
-            var imgFileBitmapSize = resizeImage.Size;
+            Stream imageStream = model.ImageFile.OpenReadStream();
+            Image resizeImage = Image.FromStream(imageStream);
+            var imageFileBitmapSize = resizeImage.Size;
 
             if (resizeImage.Width >= 2048)
             {
-                resizeImage = MakeImageSquareAndFillBlancs(2048, 2048, imgFileBitmapSize, resizeImage, imagepath);
+                resizeImage = MakeImageSquareAndFillBlancs(2048, 2048, imageFileBitmapSize, resizeImage, imagepath);
                 resizeImage.Save(imagepath.Replace(".jpg", "") + "-2048.jpg");
             }
 
             if (resizeImage.Width >= 1024)
             {
-                resizeImage = MakeImageSquareAndFillBlancs(1024, 1024, imgFileBitmapSize, resizeImage, imagepath);
+                resizeImage = MakeImageSquareAndFillBlancs(1024, 1024, imageFileBitmapSize, resizeImage, imagepath);
                 resizeImage.Save(imagepath.Replace(".jpg", "") + "-1024.jpg");
                 model.ImageWidths = "1024, ";
             }
             if (resizeImage.Width >= 512)
             {
-                resizeImage = MakeImageSquareAndFillBlancs(512, 512, imgFileBitmapSize, resizeImage, imagepath);
+                resizeImage = MakeImageSquareAndFillBlancs(512, 512, imageFileBitmapSize, resizeImage, imagepath);
                 resizeImage.Save(imagepath.Replace(".jpg", "") + "-512.jpg");
                 model.ImageWidths = "512, ";
             }
             if (resizeImage.Width >= 256)
             {
-                resizeImage = MakeImageSquareAndFillBlancs(256, 256, imgFileBitmapSize, resizeImage, imagepath);
+                resizeImage = MakeImageSquareAndFillBlancs(256, 256, imageFileBitmapSize, resizeImage, imagepath);
                 resizeImage.Save(imagepath.Replace(".jpg", "") + "-256.jpg");
                 model.ImageWidths = "256, ";
             }
             if (resizeImage.Width >= 128)
             {
-                var newImage = MakeImageSquareAndFillBlancs(128, 128, imgFileBitmapSize, resizeImage, imagepath);
+                var newImage = MakeImageSquareAndFillBlancs(128, 128, imageFileBitmapSize, resizeImage, imagepath);
                 newImage.Save(imagepath.Replace("jpg", "") + "128.jpg");
                 model.ImageWidths = "128, ";
             }
             resizeImage.Dispose();
-            stream.Dispose();
+            imageStream.Dispose();
             return model.ImageWidths;
 
 
@@ -70,7 +70,7 @@ namespace AnnonsonMVC.Utilities
 
         public Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string imagepath)
         {
-            var image = new Bitmap(imagepath);
+            var originalImage = new Bitmap(imagepath);
 
             int originalWidth = imgFileBitmapSize.Width;
             int originalHeight = imgFileBitmapSize.Height;
@@ -95,8 +95,8 @@ namespace AnnonsonMVC.Utilities
             int posY = Convert.ToInt32((canvasHeight - (resizeImage.Height * ratio)) / 2);
 
             graphic.Clear(Color.White);
-            graphic.DrawImage(image, posX, posY, newWidth, newHeight);
-            image.Dispose();
+            graphic.DrawImage(originalImage, posX, posY, newWidth, newHeight);
+            originalImage.Dispose();
             ImageCodecInfo[] info = ImageCodecInfo.GetImageEncoders();
             EncoderParameters encoderParameters;
             encoderParameters = new EncoderParameters(1);
@@ -107,15 +107,14 @@ namespace AnnonsonMVC.Utilities
 
         public void TryToDeleteOriginalImage(string imagepath)
         {
-            if (System.IO.File.Exists(imagepath))
+            if (File.Exists(imagepath))
             {
-                System.IO.File.Delete(imagepath);
+                File.Delete(imagepath);
             }
             else
             {
                 System.Console.WriteLine("Path doesnt exist");
             }
-
         }
     }
 }
