@@ -107,18 +107,17 @@ namespace AnnonsonMVC.Controllers
 // Vad är kvar?
 
 
-//TODO krasha i CreatenResize stänger strömmar innan det får ändra tillbaka och stänga allt innan jag skall deleta filen tror jag
-
 //    ------Funktioner-------
 // Använda rätt path för image <appsettings>(Fredag).
+// Ladda upp bilden till details & edit.(Börja titta på detta imorgon Fredag om tid finns annars Måndag).
+
 // User delen inlogg? Fråga Fredrik här.(eventuellt ta det under helgen).
 // Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.(ImageWidths hårdkodad for now).
-// Ladda upp bilden till details & edit.(Börja titta på detta imorgon Fredag om tid finns annars Måndag).
+
 
 
 //      --------Styling---------
 // Snygga till knappar istället för länkar.(verkligen börja titta på detta under helgen imorgon eller nästa vecka) 
-// Annotations meddelanden när man missat att fylla i någonting.(fredag om tid finns)
 // Ändra ordningen på allt på create sidan.(Helgen eller imorgon eventuellt måndag)
 // Börja titta på Details, och Edit sidan också.(nästa vecka)
 

@@ -20,17 +20,29 @@ namespace AnnonsonMVC.ViewModels
 
         [Required]
         public int UserId { get; set; }
+
         [Required]
         public int CategoryId { get; set; }
+
         [Required]
+        [DataType(DataType.Text)]
+        [StringLength(250, MinimumLength = 2)]
         public string Name { get; set; }
+
         [Required]
+        [DataType(DataType.Text)]
         public string Description { get; set; }
+
         [Required]
+        [DataType(DataType.Currency)]
         public decimal Price { get; set; }
+
         [Required]
+        [StringLength(50, MinimumLength = 1)]
         public string PriceText { get; set; }
+
         [Required]
+        [StringLength(50, MinimumLength = 1)]
         public string PriceUnit { get; set; }
 
         public string Slug { get; set; }
