@@ -9,6 +9,7 @@ using AnnonsonMVC.Utilities;
 using System.Threading.Tasks;
 using Data.Appsettings;
 using Microsoft.Extensions.Options;
+using System.Drawing;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -19,7 +20,7 @@ namespace AnnonsonMVC.Controllers
         private readonly IStoreService _storeService;
         private readonly ICompanyService _companyService;
         private readonly IStoreArticleService _storeArticleService;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IHostingEnvironment _hostingEnvironment; // Får ligga kvar tills vidare.
         private readonly ImageService _imageService;
         private readonly SelectedStoresService _selectedStoresService;
         private readonly AppSettings _appSettings;
@@ -110,7 +111,7 @@ namespace AnnonsonMVC.Controllers
         {
 
             var article = _articelService.Find(id);
-
+            ViewBag.MediaFolder = _appSettings.MediaFolder;
             if (article == null)
             {
                 return NotFound();
@@ -126,12 +127,14 @@ namespace AnnonsonMVC.Controllers
 
 //    ------Funktioner-------
 // Ladda upp bilden till details & edit.(Börja titta på detta imorgon Fredag om tid finns annars Måndag).
+// Göra det som en viewbag into view.. kanske.
 
 
-//Frågor att ställa!
-// User inlogg?.
-// Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.(ImageWidths hårdkodad for now)
-// Angående strukturen på mitt projekt(om allt ligger "rätt").
+//   ----------Frågor att ställa!-----------
+// User inlogg?
+// Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.(ImageWidths hårdkodad for now)?
+// Angående strukturen på mitt projekt(om allt ligger "rätt")?
+// Appsettings rätt gjort/tänkt?
 
 
 //      --------Styling---------

@@ -1,4 +1,7 @@
 ﻿@model Domain.Entites.Article
+@using Microsoft.Extensions.Configuration 
+@inject IConfiguration _configuration;
+@*Eventuellt ta bort*@
 
 @{
     ViewData["Title"] = "Details";
@@ -55,12 +58,14 @@
         <dd>
             @Html.DisplayFor(model => model.PublishEnd)
         </dd>
-        @*<dt>
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
+
+        <dd>
+            <img src="@Url.Content("/Uploads/" + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-256." + Model.ImageFileFormat)" class="imagepreview" />
+        </dd>
+
         <dd>
             @Html.DisplayFor(model => model.ImageUrl)
-        </dd>*@
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Company)
         </dt>
