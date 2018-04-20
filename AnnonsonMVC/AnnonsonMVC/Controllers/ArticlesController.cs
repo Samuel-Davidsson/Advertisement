@@ -91,12 +91,12 @@ namespace AnnonsonMVC.Controllers
                     
                     var imageDirectoryPath = _imageService.CreateImageDirectory(newArticle);
 
-                    var imagepath = _imageService.ImagePath(newArticle, imageDirectoryPath, model);
+                    var saveImagePath = _imageService.SaveImageToPath(newArticle, imageDirectoryPath, model);
 
-                    _imageService.CreateResizeImagesToImageDirectory(model, imagepath);
+                    _imageService.CreateResizeImagesToImageDirectory(model, saveImagePath);
 
                     _articelService.Update(newArticle);
-                    _imageService.TryToDeleteOriginalImage(imagepath);
+                    _imageService.TryToDeleteOriginalImage(saveImagePath);
                 }
             }
 
@@ -128,11 +128,11 @@ namespace AnnonsonMVC.Controllers
 // Ladda upp bilden till details & edit.(Börja titta på detta imorgon Fredag om tid finns annars Måndag).
 
 
-//Frågor ställda!
-// User inlogg? Fråga Fredrik här.
+//Frågor att ställa!
+// User inlogg?.
 // Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.(ImageWidths hårdkodad for now)
 // Angående strukturen på mitt projekt(om allt ligger "rätt").
-// 
+
 
 //      --------Styling---------
 // Snygga till knappar istället för länkar.(verkligen börja titta på detta under helgen imorgon eller nästa vecka) 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Data.Appsettings
+﻿namespace Data.Appsettings
 {
     public class AppSettings
     {

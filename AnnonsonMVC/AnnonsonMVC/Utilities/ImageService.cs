@@ -22,11 +22,11 @@ namespace AnnonsonMVC.Utilities
             _appSettings = appSettings.Value;
         }
 
-        public string ImagePath(Article newArticle, string uploadpath, ArticelViewModel model)
+        public string SaveImageToPath(Article newArticle, string imageDirectoryPath, ArticelViewModel model)
         {
-            var imagepath = Path.Combine(uploadpath, newArticle.ImageFileName + ".jpg").Replace(@"\\", @"\");
+            var saveImagePath = Path.Combine(imageDirectoryPath, newArticle.ImageFileName + ".jpg").Replace(@"\\", @"\");
 
-            using (var imagestream = new FileStream(imagepath, FileMode.Create))
+            using (var imagestream = new FileStream(saveImagePath, FileMode.Create))
             {
                 model.ImageFile.CopyTo(imagestream);
             }
@@ -34,10 +34,10 @@ namespace AnnonsonMVC.Utilities
             newArticle.ImageWidths = "1024,512,256,128";
             newArticle.ImageFileFormat = "jpg";                          //Tveksam här...
 
-            return imagepath;
+            return saveImagePath;
         }
 
-        public string CreateResizeImagesToImageDirectory(ArticelViewModel model, string imagepath)
+        public string CreateResizeImagesToImageDirectory(ArticelViewModel model, string SaveImagePath)
         {
             Stream imageStream = model.ImageFile.OpenReadStream();
             Image resizeImage = Image.FromStream(imageStream);
@@ -45,32 +45,32 @@ namespace AnnonsonMVC.Utilities
 
             if (resizeImage.Width >= 2048)
             {
-                resizeImage = MakeImageSquareAndFillBlancs(2048, 2048, imageFileBitmapSize, resizeImage, imagepath);
-                resizeImage.Save(imagepath.Replace(".jpg", "") + "-2048.jpg");
+                resizeImage = MakeImageSquareAndFillBlancs(2048, 2048, imageFileBitmapSize, resizeImage, SaveImagePath);
+                resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-2048.jpg");
             }
 
             if (resizeImage.Width >= 1024)
             {
-                resizeImage = MakeImageSquareAndFillBlancs(1024, 1024, imageFileBitmapSize, resizeImage, imagepath);
-                resizeImage.Save(imagepath.Replace(".jpg", "") + "-1024.jpg");
+                resizeImage = MakeImageSquareAndFillBlancs(1024, 1024, imageFileBitmapSize, resizeImage, SaveImagePath);
+                resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-1024.jpg");
                 model.ImageWidths = "1024, ";
             }
             if (resizeImage.Width >= 512)
             {
-                resizeImage = MakeImageSquareAndFillBlancs(512, 512, imageFileBitmapSize, resizeImage, imagepath);
-                resizeImage.Save(imagepath.Replace(".jpg", "") + "-512.jpg");
+                resizeImage = MakeImageSquareAndFillBlancs(512, 512, imageFileBitmapSize, resizeImage, SaveImagePath);
+                resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-512.jpg");
                 model.ImageWidths = "512, ";
             }
             if (resizeImage.Width >= 256)
             {
-                resizeImage = MakeImageSquareAndFillBlancs(256, 256, imageFileBitmapSize, resizeImage, imagepath);
-                resizeImage.Save(imagepath.Replace(".jpg", "") + "-256.jpg");
+                resizeImage = MakeImageSquareAndFillBlancs(256, 256, imageFileBitmapSize, resizeImage, SaveImagePath);
+                resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-256.jpg");
                 model.ImageWidths = "256, ";
             }
             if (resizeImage.Width >= 128)
             {
-                var newImage = MakeImageSquareAndFillBlancs(128, 128, imageFileBitmapSize, resizeImage, imagepath);
-                newImage.Save(imagepath.Replace("jpg", "") + "128.jpg");
+                var newImage = MakeImageSquareAndFillBlancs(128, 128, imageFileBitmapSize, resizeImage, SaveImagePath);
+                newImage.Save(SaveImagePath.Replace("jpg", "") + "128.jpg");
                 model.ImageWidths = "128, ";
             }
             resizeImage.Dispose();
@@ -80,9 +80,9 @@ namespace AnnonsonMVC.Utilities
 
         }
 
-        public Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string imagepath)
+        public Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string saveImagePath)
         {
-            var originalImage = new Bitmap(imagepath);
+            var originalImage = new Bitmap(saveImagePath);
 
             int originalWidth = imgFileBitmapSize.Width;
             int originalHeight = imgFileBitmapSize.Height;
@@ -125,14 +125,14 @@ namespace AnnonsonMVC.Utilities
             string day = DateTime.Now.ToString("dd");
 
             var todaysDate = year + @"\" + month + @"\" + day;
-            var uploadpath = Path.Combine(_appSettings.MediaFolder + todaysDate).Trim();
+            var imageDirectoryPath = Path.Combine(_appSettings.MediaFolder + todaysDate).Trim();
 
-            if (!Directory.Exists(uploadpath))
+            if (!Directory.Exists(imageDirectoryPath))
             {
-                Directory.CreateDirectory(uploadpath);
+                Directory.CreateDirectory(imageDirectoryPath);
             }
 
-            return uploadpath;
+            return imageDirectoryPath;
         }
 
         public void TryToDeleteOriginalImage(string imagepath)
