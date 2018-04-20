@@ -1,5 +1,8 @@
 ﻿using AnnonsonMVC.ViewModels;
+using Data.Appsettings;
 using Domain.Entites;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -10,6 +13,15 @@ namespace AnnonsonMVC.Utilities
 {
     public class ImageService
     {
+        private readonly IHostingEnvironment _hostingEnvironment; //Får ligga kvar så länge
+        private readonly AppSettings _appSettings;
+
+        public ImageService(IHostingEnvironment hostingEnvironment, IOptions<AppSettings> appSettings)
+        {
+            _hostingEnvironment = hostingEnvironment;
+            _appSettings = appSettings.Value;
+        }
+
         public string ImagePath(Article newArticle, string uploadpath, ArticelViewModel model)
         {
             var imagepath = Path.Combine(uploadpath, newArticle.ImageFileName + ".jpg").Replace(@"\\", @"\");
@@ -103,6 +115,24 @@ namespace AnnonsonMVC.Utilities
             encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
 
             return newImageSize;
+        }
+
+        public string CreateImageDirectory(Article newArticle)
+        {
+            newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
+            string year = DateTime.Now.ToString("yyyy");
+            string month = DateTime.Now.ToString("MM");
+            string day = DateTime.Now.ToString("dd");
+
+            var todaysDate = year + @"\" + month + @"\" + day;
+            var uploadpath = Path.Combine(_appSettings.MediaFolder + todaysDate).Trim();
+
+            if (!Directory.Exists(uploadpath))
+            {
+                Directory.CreateDirectory(uploadpath);
+            }
+
+            return uploadpath;
         }
 
         public void TryToDeleteOriginalImage(string imagepath)

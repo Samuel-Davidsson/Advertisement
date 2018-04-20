@@ -9,6 +9,7 @@ using Domain.Interfaces;
 using Domain.Entites;
 using Data.Repositories;
 using AnnonsonMVC.Utilities;
+using Data.Appsettings;
 
 namespace AnnonsonMVC
 {
@@ -38,6 +39,8 @@ namespace AnnonsonMVC
             services.AddScoped<IRepository<Company>, Repository<Company>>();
             services.AddScoped<IRepository<StoreArticle>, Repository<StoreArticle>>();
 
+            var appSettings = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettings);
             //var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
             var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
             services.AddDbContext<AnnonsappenContext>(options => options.UseSqlServer(connection));

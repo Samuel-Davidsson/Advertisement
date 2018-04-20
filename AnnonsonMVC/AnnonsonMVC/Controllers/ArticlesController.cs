@@ -7,6 +7,8 @@ using Domain.Entites;
 using Microsoft.AspNetCore.Hosting;
 using AnnonsonMVC.Utilities;
 using System.Threading.Tasks;
+using Data.Appsettings;
+using Microsoft.Extensions.Options;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -20,9 +22,11 @@ namespace AnnonsonMVC.Controllers
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ImageService _imageService;
         private readonly SelectedStoresService _selectedStoresService;
+        private readonly AppSettings _appSettings;
 
         public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService, 
-            IHostingEnvironment hostingEnvironment,  IStoreArticleService storeArticleService, ImageService imageService, SelectedStoresService selectedStoresService)
+            IHostingEnvironment hostingEnvironment,  IStoreArticleService storeArticleService, ImageService imageService, 
+            SelectedStoresService selectedStoresService, IOptions<AppSettings> appSettings)
         {
             _articelService = articleService;
             _categoryService = categoryService;
@@ -32,6 +36,7 @@ namespace AnnonsonMVC.Controllers
             _hostingEnvironment = hostingEnvironment;
             _imageService = imageService;
             _selectedStoresService = selectedStoresService;
+            _appSettings = appSettings.Value;
         }
 
         public async Task<IActionResult> Index()
@@ -74,9 +79,7 @@ namespace AnnonsonMVC.Controllers
                         ArticleId = newArticle.ArticleId,
                         CategoryId = categoryId,                        
                     });
-
-                    newArticle.Company.CompanyId = newArticle.CompanyId;
-
+                  
                     foreach (var storeId in selectedStoreListIds)
                     {
                         newArticle.StoreArticle.Add(new StoreArticle
@@ -86,7 +89,7 @@ namespace AnnonsonMVC.Controllers
                         });
                     }
                     
-                    var imageDirectoryPath = _articelService.CreateImageDirectory(newArticle);
+                    var imageDirectoryPath = _imageService.CreateImageDirectory(newArticle);
 
                     var imagepath = _imageService.ImagePath(newArticle, imageDirectoryPath, model);
 
@@ -122,16 +125,17 @@ namespace AnnonsonMVC.Controllers
 
 
 //    ------Funktioner-------
-// Använda rätt path för image <appsettings>(Fredag).
 // Ladda upp bilden till details & edit.(Börja titta på detta imorgon Fredag om tid finns annars Måndag).
 
-// User delen inlogg? Fråga Fredrik här.(eventuellt ta det under helgen).
-// Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.(ImageWidths hårdkodad for now).
 
-
+//Frågor ställda!
+// User inlogg? Fråga Fredrik här.
+// Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.(ImageWidths hårdkodad for now)
+// Angående strukturen på mitt projekt(om allt ligger "rätt").
+// 
 
 //      --------Styling---------
 // Snygga till knappar istället för länkar.(verkligen börja titta på detta under helgen imorgon eller nästa vecka) 
-// Ändra ordningen på allt på create sidan.(Helgen eller imorgon eventuellt måndag)
+// Ändra ordningen på allt på create sidan.(Idag)
 // Börja titta på Details, och Edit sidan också.(nästa vecka)
 

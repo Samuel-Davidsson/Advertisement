@@ -1,9 +1,6 @@
 ﻿using Domain.Entites;
 using Domain.Interfaces;
-using Microsoft.AspNetCore.Hosting;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -12,11 +9,10 @@ namespace Domain.Services
     public class ArticleService : IArticleService
     {
         private readonly IRepository<Article> _repository;
-        private readonly IHostingEnvironment _hostingEnvironment;
-        public ArticleService(IRepository<Article> repository, IHostingEnvironment hostingEnvironment)
+
+        public ArticleService(IRepository<Article> repository)
         {
-            _repository = repository;
-            _hostingEnvironment = hostingEnvironment;
+            _repository = repository;            
         }
 
         public void Add(Article article)
@@ -50,24 +46,6 @@ namespace Domain.Services
             tempSlug = Regex.Replace(tempSlug, @"\s+", " ").Trim();
             tempSlug = Regex.Replace(tempSlug, @"[^a-z0-9\s-]", "");
             return tempSlug;
-        }
-
-        public string CreateImageDirectory(Article newArticle)
-        {
-            newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
-            string year = DateTime.Now.ToString("yyyy");
-            string month = DateTime.Now.ToString("MM");
-            string day = DateTime.Now.ToString("dd");
-
-            var todaysDate = year + @"\" + month + @"\" + day;
-            var uploadpath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads\\" + todaysDate);
-
-            if (!Directory.Exists(uploadpath))
-            {
-                Directory.CreateDirectory(uploadpath);
-            }
-
-            return uploadpath;
-        }
+        }      
     }
 }
