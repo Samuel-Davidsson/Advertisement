@@ -5,7 +5,6 @@ using AnnonsonMVC.ViewModels;
 using Domain.Interfaces;
 using Domain.Entites;
 using Microsoft.AspNetCore.Hosting;
-using System.IO;
 using AnnonsonMVC.Utilities;
 using System.Threading.Tasks;
 
@@ -76,6 +75,8 @@ namespace AnnonsonMVC.Controllers
                         CategoryId = categoryId,                        
                     });
 
+                    newArticle.Company.CompanyId = newArticle.CompanyId;
+
                     foreach (var storeId in selectedStoreListIds)
                     {
                         newArticle.StoreArticle.Add(new StoreArticle
@@ -84,7 +85,7 @@ namespace AnnonsonMVC.Controllers
                             StoreId = storeId
                         });
                     }
-
+                    
                     var imageDirectoryPath = _articelService.CreateImageDirectory(newArticle);
 
                     var imagepath = _imageService.ImagePath(newArticle, imageDirectoryPath, model);
@@ -100,6 +101,19 @@ namespace AnnonsonMVC.Controllers
             ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Category");
             ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Store");
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Details(int id)
+        {
+
+            var article = _articelService.Find(id);
+
+            if (article == null)
+            {
+                return NotFound();
+            }
+
+            return View(article);
         }
     }
   }

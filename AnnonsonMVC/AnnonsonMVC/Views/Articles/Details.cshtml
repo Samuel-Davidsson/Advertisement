@@ -1,4 +1,4 @@
-﻿@model AnnonsonMVC.ViewModels.ArticelViewModel
+﻿@model Domain.Entites.Article
 
 @{
     ViewData["Title"] = "Details";
@@ -7,15 +7,10 @@
 <h2>Details</h2>
 
 <div>
-    <h4>TArticle</h4>
+    <h4>Artikel</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -23,11 +18,6 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Slug)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Slug)
-        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
@@ -35,29 +25,6 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ImageFileName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ImageFileName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ImageFileFormat)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ImageFileFormat)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ImageWidths)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ImageWidths)
-        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Price)
         </dt>
@@ -103,6 +70,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ArticleId">Edit</a> |
+    @*<a asp-action="Edit" asp-route-id="@Model.ArticleId">Edit</a> |*@
     <a asp-action="Index">Back to List</a>
 </div>
