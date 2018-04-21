@@ -1,7 +1,6 @@
-﻿using AnnonsonMVC.ViewModels;
-using Data.Appsettings;
+﻿using Data.Appsettings;
 using Domain.Entites;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
 using System.Drawing;
@@ -13,33 +12,31 @@ namespace AnnonsonMVC.Utilities
 {
     public class ImageService
     {
-        private readonly IHostingEnvironment _hostingEnvironment; //Får ligga kvar så länge
         private readonly AppSettings _appSettings;
 
-        public ImageService(IHostingEnvironment hostingEnvironment, IOptions<AppSettings> appSettings)
+        public ImageService(IOptions<AppSettings> appSettings)
         {
-            _hostingEnvironment = hostingEnvironment;
             _appSettings = appSettings.Value;
         }
 
-        public string SaveImageToPath(Article newArticle, string imageDirectoryPath, ArticelViewModel model)
+        public string SaveImageToPath(Article newArticle, string imageDirectoryPath, IFormFile imageFile)
         {
             var saveImagePath = Path.Combine(imageDirectoryPath, newArticle.ImageFileName + ".jpg").Replace(@"\\", @"\");
 
             using (var imagestream = new FileStream(saveImagePath, FileMode.Create))
             {
-                model.ImageFile.CopyTo(imagestream);
+                imageFile.CopyTo(imagestream);
             }
             newArticle.ImagePath = DateTime.Now.ToString("yyy-MM-dd").Replace("-", @"\");
-            newArticle.ImageWidths = "1024,512,256,128";
-            newArticle.ImageFileFormat = "jpg";                          //Tveksam här...
+            newArticle.ImageWidths = "1024,512,256,128";   // Förmodligen inte bra även om den alltid verkar ge 1024,512,256,128 i db.
+            newArticle.ImageFileFormat = "jpg";                          
 
             return saveImagePath;
         }
 
-        public string CreateResizeImagesToImageDirectory(ArticelViewModel model, string SaveImagePath)
+        public string CreateResizeImagesToImageDirectory(IFormFile imageFile, string SaveImagePath)
         {
-            Stream imageStream = model.ImageFile.OpenReadStream();
+            Stream imageStream = imageFile.OpenReadStream();
             Image resizeImage = Image.FromStream(imageStream);
             var imageFileBitmapSize = resizeImage.Size;
 
@@ -53,29 +50,29 @@ namespace AnnonsonMVC.Utilities
             {
                 resizeImage = MakeImageSquareAndFillBlancs(1024, 1024, imageFileBitmapSize, resizeImage, SaveImagePath);
                 resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-1024.jpg");
-                model.ImageWidths = "1024, ";
+                //imageFile.ImageWidths = "1024, "; //Stringbuilder?
             }
             if (resizeImage.Width >= 512)
             {
                 resizeImage = MakeImageSquareAndFillBlancs(512, 512, imageFileBitmapSize, resizeImage, SaveImagePath);
                 resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-512.jpg");
-                model.ImageWidths = "512, ";
+                //imageFile.ImageWidths = "512, ";
             }
             if (resizeImage.Width >= 256)
             {
                 resizeImage = MakeImageSquareAndFillBlancs(256, 256, imageFileBitmapSize, resizeImage, SaveImagePath);
                 resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-256.jpg");
-                model.ImageWidths = "256, ";
+                //imageFile.ImageWidths = "256, ";
             }
             if (resizeImage.Width >= 128)
             {
                 var newImage = MakeImageSquareAndFillBlancs(128, 128, imageFileBitmapSize, resizeImage, SaveImagePath);
                 newImage.Save(SaveImagePath.Replace("jpg", "") + "128.jpg");
-                model.ImageWidths = "128, ";
+                //imageFile. = "128, ";
             }
             resizeImage.Dispose();
             imageStream.Dispose();
-            return model.ImageWidths;
+            return null;
 
 
         }
@@ -143,7 +140,7 @@ namespace AnnonsonMVC.Utilities
             }
             else
             {
-                System.Console.WriteLine("Path doesnt exist");
+                System.Console.WriteLine("Path doesnt exist");//Göra nåt annat här.
             }
         }
     }

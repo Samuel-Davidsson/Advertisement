@@ -4,12 +4,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using AnnonsonMVC.ViewModels;
 using Domain.Interfaces;
 using Domain.Entites;
-using Microsoft.AspNetCore.Hosting;
 using AnnonsonMVC.Utilities;
 using System.Threading.Tasks;
 using Data.Appsettings;
 using Microsoft.Extensions.Options;
-using System.Drawing;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -20,13 +18,12 @@ namespace AnnonsonMVC.Controllers
         private readonly IStoreService _storeService;
         private readonly ICompanyService _companyService;
         private readonly IStoreArticleService _storeArticleService;
-        private readonly IHostingEnvironment _hostingEnvironment; // Får ligga kvar tills vidare.
         private readonly ImageService _imageService;
         private readonly SelectedStoresService _selectedStoresService;
         private readonly AppSettings _appSettings;
 
         public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService, 
-            IHostingEnvironment hostingEnvironment,  IStoreArticleService storeArticleService, ImageService imageService, 
+            IStoreArticleService storeArticleService, ImageService imageService, 
             SelectedStoresService selectedStoresService, IOptions<AppSettings> appSettings)
         {
             _articelService = articleService;
@@ -34,7 +31,6 @@ namespace AnnonsonMVC.Controllers
             _storeService = storeService;
             _companyService = companyService;
             _storeArticleService = storeArticleService;
-            _hostingEnvironment = hostingEnvironment;
             _imageService = imageService;
             _selectedStoresService = selectedStoresService;
             _appSettings = appSettings.Value;
@@ -73,8 +69,10 @@ namespace AnnonsonMVC.Controllers
                     var categoryId = model.CategoryId;
                     var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
 
+                    
                     _articelService.Add(newArticle);
 
+;
                     newArticle.ArticleCategory.Add(new ArticleCategory
                     {
                         ArticleId = newArticle.ArticleId,
@@ -92,12 +90,13 @@ namespace AnnonsonMVC.Controllers
                     
                     var imageDirectoryPath = _imageService.CreateImageDirectory(newArticle);
 
-                    var saveImagePath = _imageService.SaveImageToPath(newArticle, imageDirectoryPath, model);
+                    var imageFile = model.ImageFile;
+                    var saveImageToPath = _imageService.SaveImageToPath(newArticle, imageDirectoryPath, imageFile);
 
-                    _imageService.CreateResizeImagesToImageDirectory(model, saveImagePath);
+                    _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath);
 
                     _articelService.Update(newArticle);
-                    _imageService.TryToDeleteOriginalImage(saveImagePath);
+                    _imageService.TryToDeleteOriginalImage(saveImageToPath);
                 }
             }
 
@@ -111,7 +110,7 @@ namespace AnnonsonMVC.Controllers
         {
 
             var article = _articelService.Find(id);
-            ViewBag.MediaFolder = _appSettings.MediaFolder;
+            ViewBag.MediaFolder = _imageService.CreateImageDirectory(article); //Gillar inte att jag hämtar hela pathen funkar om jag bara ger Mediafolder value /Uplods/.
             if (article == null)
             {
                 return NotFound();
@@ -126,19 +125,31 @@ namespace AnnonsonMVC.Controllers
 
 
 //    ------Funktioner-------
-// Ladda upp bilden till details & edit.(Börja titta på detta imorgon Fredag om tid finns annars Måndag).
-// Göra det som en viewbag into view.. kanske.
+// Ladda upp bilden till details & edit.(Funka nu på details med appsettings , edit blir något annat mer som create antar jag).
+// Vart skall appsettings vara flytta över till domänen + interface..?
+// Det mesta ligger i imageservice.
+
+
+// --------Refactoring-----------
+
+// Flytta tillbaka Sluggen till utilitys hör hemma där mer än vad den gör i articleservice
+// Titta över namngivningen på allt igen(gå igenom hela flödet).
+// Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt.
+// Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details)
 
 
 //   ----------Frågor att ställa!-----------
 // User inlogg?
+
 // Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.(ImageWidths hårdkodad for now)?
-// Angående strukturen på mitt projekt(om allt ligger "rätt")?
+// Widths görs i Ifstatsen med någon slags stringbuilder.
+
+// Angående strukturen på mitt projekt(om allt ligger hyfsat rätt)?
 // Appsettings rätt gjort/tänkt?
 
 
 //      --------Styling---------
-// Snygga till knappar istället för länkar.(verkligen börja titta på detta under helgen imorgon eller nästa vecka) 
-// Ändra ordningen på allt på create sidan.(Idag)
-// Börja titta på Details, och Edit sidan också.(nästa vecka)
+// Snygga till knappar istället för länkar.
+// Ändra ordningen på allt på create sidan.
+// Börja titta på Details, och Edit sidan också.(nästa vecka), smygstart här eftersom visa image är det enda som egentligen är kvar när det gäller funktioner.
 
