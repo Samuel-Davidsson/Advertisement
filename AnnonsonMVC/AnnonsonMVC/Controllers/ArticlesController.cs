@@ -110,7 +110,8 @@ namespace AnnonsonMVC.Controllers
         {
 
             var article = _articelService.Find(id);
-            ViewBag.MediaFolder = _imageService.CreateImageDirectory(article); //Gillar inte att jag hämtar hela pathen funkar om jag bara ger Mediafolder value /Uplods/.
+             ViewBag.MediaUrl = _appSettings.MediaUrl;
+            /*ViewBag.MediaUrl;*/  //Gillar inte att jag hämtar hela pathen funkar om jag bara ger Mediafolder value /Uplods/.
             if (article == null)
             {
                 return NotFound();
@@ -125,9 +126,9 @@ namespace AnnonsonMVC.Controllers
 
 
 //    ------Funktioner-------
-// Ladda upp bilden till details & edit.(Funka nu på details med appsettings , edit blir något annat mer som create antar jag).
-// Vart skall appsettings vara flytta över till domänen + interface..?
-// Det mesta ligger i imageservice.
+// Det mesta ligger i imageservice(om det är några funktioner kvar..)
+// Logiken för att visa bilden på details är nästan klar måste ha någon slags check om en bild inte finns i storlek skall den ta nästa efter det.
+// Förmodligen göra det i controllern och sen refactorisera ut det.
 
 
 // --------Refactoring-----------

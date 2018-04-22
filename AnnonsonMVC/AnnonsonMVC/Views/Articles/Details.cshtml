@@ -57,7 +57,7 @@
         </dd>
 
         <dd>
-            <img src="@Url.Content(@ViewBag.MediaFolder.Replace(@"\", "/")+ Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-256." + Model.ImageFileFormat)" class="imagepreview" />
+            <img src="@Url.Content(ViewBag.MediaUrl + "/" + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-256." + Model.ImageFileFormat)" class="imagepreview" />
         </dd>
         <dd>
             @Html.DisplayFor(model => model.ImageUrl)
