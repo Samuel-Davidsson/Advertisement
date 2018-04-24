@@ -117,23 +117,50 @@ namespace AnnonsonMVC.Controllers
                 return NotFound();
             }
 
+            return View();
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var article = _articelService.Find(id);
+            var model = Mapper.ModelToViewModelMapping.ArticleToArticleViewModel(article);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
             return View(model);
+        }
+
+        public IActionResult Edit(ArticelViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var article = _articelService.Find(model.ArticleId);
+                article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(article, model);
+                _articelService.Update(article);
+
+            }
+
+            return Redirect("Index");
         }
      }
   }
 
 
 //    ------Funktioner-------
-// Logiken för att visa bilden på details är nästan klar måste ha någon slags check om en bild inte finns i storlek skall den ta nästa efter det.
-// Förmodligen göra det i controllern och sen refactorisera ut det är nog det mesta alternativet.
+// Logiken för att visa bilden på details är nästan klar måste ha någon slags check om en bild inte finns i storlek skall den ta nästa efter det,
+// förmodligen göra det i controllern och sen refactorisera ut det är nog det mesta alternativet.
+// Fixa så att jag kan mappa till edit func och också ändra på något och spara det halvfärdig.
 
 
 // --------Refactoring-----------
 
-// Flytta tillbaka Sluggen till utilitys hör hemma där mer än vad den gör i articleservice Osäker antar att jag kan göra det.
+// Flytta tillbaka Sluggen till utilitys hör hemma där mer än vad den gör i articleservice Osäker antar att jag kan göra det.(Idag)
 // Titta över namngivningen på allt igen(gå igenom hela flödet).*
 // Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt.*
-// Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details)NEJ.
+// Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details)Sista grejen.
 
 
 
@@ -143,30 +170,13 @@ namespace AnnonsonMVC.Controllers
 // Att göra idag:
 // Styla Details sidan(Får göra om hela sidan där den ser förjävlig ut)
 // Refactorisera gå igenom hela flödet alla klasser(Bara ta bort sånt som inte används)
-// Edit påbörja den.(Blir nog svårt att hinna med denna idag.)
+// Edit fixa funktionalitet bakom den.
 
 
 
 //      --------Styling---------
-// Börja titta på Details, och Edit sidan också.(nästa vecka), smygstart här eftersom visa image är det enda som egentligen är kvar när det gäller funktioner.*
-
-
-
-
-
-
-
-
-//KOD
-//public IActionResult Details(ArticelViewModel model)
-//{
-//    var article = _articelService.Find(model.ArticleId);
-//    article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
-
-//    return View(article);
-//}
-
-
+// Styla Details sidan*
+// Styla Edit sidan
 
 
 //   ----------Frågor att ställa!-----------
