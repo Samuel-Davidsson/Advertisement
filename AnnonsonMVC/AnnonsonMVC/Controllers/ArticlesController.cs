@@ -108,59 +108,73 @@ namespace AnnonsonMVC.Controllers
 
         public IActionResult Details(int id)
         {
-
             var article = _articelService.Find(id);
-             ViewBag.MediaUrl = _appSettings.MediaUrl;
-            /*ViewBag.MediaUrl;*/  //Gillar inte att jag hämtar hela pathen funkar om jag bara ger Mediafolder value /Uplods/.
+            var model = Mapper.ModelToViewModelMapping.ArticleToArticleViewModel(article);
+
+            ViewBag.MediaUrl = _appSettings.MediaUrl;
             if (article == null)
             {
                 return NotFound();
             }
 
-            return View(article);
+            return View(model);
         }
-    }
+     }
   }
 
 
 //    ------Funktioner-------
 // Logiken för att visa bilden på details är nästan klar måste ha någon slags check om en bild inte finns i storlek skall den ta nästa efter det.
-// Förmodligen göra det i controllern och sen refactorisera ut det.
-// Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.(ImageWidths hårdkodad for now)?*
-// Widths görs i Ifstatsen med någon slags stringbuilder.*
+// Förmodligen göra det i controllern och sen refactorisera ut det är nog det mesta alternativet.
 
 
 // --------Refactoring-----------
 
-// Flytta tillbaka Sluggen till utilitys hör hemma där mer än vad den gör i articleservice
-// Titta över namngivningen på allt igen(gå igenom hela flödet).
+// Flytta tillbaka Sluggen till utilitys hör hemma där mer än vad den gör i articleservice Osäker antar att jag kan göra det.
+// Titta över namngivningen på allt igen(gå igenom hela flödet).*
 // Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt.*
 // Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details)NEJ.
+
+
+
+
+
+
+// Att göra idag:
+// Styla Details sidan(Får göra om hela sidan där den ser förjävlig ut)
+// Refactorisera gå igenom hela flödet alla klasser(Bara ta bort sånt som inte används)
+// Edit påbörja den.(Blir nog svårt att hinna med denna idag.)
+
+
+
+//      --------Styling---------
+// Börja titta på Details, och Edit sidan också.(nästa vecka), smygstart här eftersom visa image är det enda som egentligen är kvar när det gäller funktioner.*
+
+
+
+
+
+
+
+
+//KOD
+//public IActionResult Details(ArticelViewModel model)
+//{
+//    var article = _articelService.Find(model.ArticleId);
+//    article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
+
+//    return View(article);
+//}
+
+
 
 
 //   ----------Frågor att ställa!-----------
 
 // User inlogg?
-// Image loop i details?
+// Image loop i details? Så att mindre bilder syns om 512 inte finns.
 // Säkerhet när det gäller image vi tar den och spara ner orignalet för att sedan ta bort den(virus annan skit..?)
 
 
 // Angående strukturen på mitt projekt(om allt ligger hyfsat rätt)?
 // Appsettings rätt gjort/tänkt?
-
-
-
-// Att göra idag:
-// Imagewidths
-// Styla Create sidan
-// Styla Details sidan
-// Refactorisera gå igenom hela flödet alla klasser(Bara ta bort sånt som inte används)
-// Edit påbörja den.
-
-
-
-//      --------Styling---------
-// Snygga till knappar istället för länkar.*
-// Ändra ordningen på allt på create sidan.*
-// Börja titta på Details, och Edit sidan också.(nästa vecka), smygstart här eftersom visa image är det enda som egentligen är kvar när det gäller funktioner.*
-
