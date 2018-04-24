@@ -24,24 +24,24 @@ namespace AnnonsonMVC.ViewModels
         [Required]
         public int CategoryId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Artklen måste ha en rubrik.")]
         [DataType(DataType.Text)]
         [StringLength(250, MinimumLength = 2)]
         public string Name { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Artklen måste ha en beskrivning.")]
         [DataType(DataType.Text)]
         public string Description { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Artklen måste ha ett pris.")]
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Artklen måste ha en pristext.")]
         [StringLength(50, MinimumLength = 1)]
         public string PriceText { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Artklen måste ha en prisenhet.")]
         [StringLength(50, MinimumLength = 1)]
         public string PriceUnit { get; set; }
 
@@ -51,15 +51,15 @@ namespace AnnonsonMVC.ViewModels
         public string ImageFileFormat { get; set; }
         public string ImageWidths { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Artikeln måste ha ett startdatum.")]
         [DataType(DataType.Date)]
         public DateTime PublishBegin { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Artikeln måste ha ett slutdatum.")]
         [DataType(DataType.Date)]
         public DateTime PublishEnd { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Artikeln måste ha en bild.")]
         public IFormFile ImageFile { get; set; }
 
         public Company Company { get; set; }

@@ -11,7 +11,6 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="col-md-10">
                 <div class="form-group">
-                    <span asp-validation-for="ImageFile" class="text-danger">Ladda upp bild</span>
                     <div>
                         <input asp-for="ImageFile" accept="image/*" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
                         <span asp-validation-for="ImageFile" class="text-danger"></span>
@@ -23,20 +22,24 @@
                 <div class="form-group">
                     <label asp-for="Name" class="control-label">Rubrik</label>
                     <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Price" class="control-label">Pris</label>
                     <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="PriceUnit" class="control-label">Prisenhet</label>
                     <input asp-for="PriceUnit" class="form-control" />
+                    <span asp-validation-for="PriceUnit" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="PriceText" class="control-label">Prísbeskrivning</label>
                     <input asp-for="PriceText" class="form-control" />
+                    <span asp-validation-for="PriceText" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Description" class="control-label">Beskrivning</label>
@@ -52,11 +55,13 @@
                 <div class="form-group">
                     <label asp-for="PublishBegin" class="control-label">Start datum</label>
                     <input asp-for="PublishBegin" class="form-control" />
+                    <span asp-validation-for="PublishBegin" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="PublishEnd" class="control-label">Slut datum</label>
                     <input asp-for="PublishEnd" class="form-control" />
+                    <span asp-validation-for="PublishEnd" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
