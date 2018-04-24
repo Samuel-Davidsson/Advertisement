@@ -93,7 +93,7 @@ namespace AnnonsonMVC.Controllers
                     var imageFile = model.ImageFile;
                     var saveImageToPath = _imageService.SaveImageToPath(newArticle, imageDirectoryPath, imageFile);
 
-                    _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath);
+                    newArticle.ImageWidths = _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath);
 
                     _articelService.Update(newArticle);
                     _imageService.TryToDeleteOriginalImage(saveImageToPath);
@@ -122,35 +122,45 @@ namespace AnnonsonMVC.Controllers
     }
   }
 
-// Vad är kvar?
-
 
 //    ------Funktioner-------
-// Det mesta ligger i imageservice(om det är några funktioner kvar..)
 // Logiken för att visa bilden på details är nästan klar måste ha någon slags check om en bild inte finns i storlek skall den ta nästa efter det.
 // Förmodligen göra det i controllern och sen refactorisera ut det.
+// Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.(ImageWidths hårdkodad for now)?*
+// Widths görs i Ifstatsen med någon slags stringbuilder.*
 
 
 // --------Refactoring-----------
 
 // Flytta tillbaka Sluggen till utilitys hör hemma där mer än vad den gör i articleservice
 // Titta över namngivningen på allt igen(gå igenom hela flödet).
-// Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt.
-// Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details)
+// Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt.*
+// Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details)NEJ.
 
 
 //   ----------Frågor att ställa!-----------
-// User inlogg?
 
-// Widths kvar kan inte göra en stringbuilder här göra det i utilitys och importa hit? kan inte göra det eftersom encodern inte gillar det.(ImageWidths hårdkodad for now)?
-// Widths görs i Ifstatsen med någon slags stringbuilder.
+// User inlogg?
+// Image loop i details?
+// Säkerhet när det gäller image vi tar den och spara ner orignalet för att sedan ta bort den(virus annan skit..?)
+
 
 // Angående strukturen på mitt projekt(om allt ligger hyfsat rätt)?
 // Appsettings rätt gjort/tänkt?
 
 
+
+// Att göra idag:
+// Imagewidths
+// Styla Create sidan
+// Styla Details sidan
+// Refactorisera gå igenom hela flödet alla klasser(Bara ta bort sånt som inte används)
+// Edit påbörja den.
+
+
+
 //      --------Styling---------
-// Snygga till knappar istället för länkar.
-// Ändra ordningen på allt på create sidan.
-// Börja titta på Details, och Edit sidan också.(nästa vecka), smygstart här eftersom visa image är det enda som egentligen är kvar när det gäller funktioner.
+// Snygga till knappar istället för länkar.*
+// Ändra ordningen på allt på create sidan.*
+// Börja titta på Details, och Edit sidan också.(nästa vecka), smygstart här eftersom visa image är det enda som egentligen är kvar när det gäller funktioner.*
 

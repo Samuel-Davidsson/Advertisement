@@ -28,7 +28,6 @@ namespace AnnonsonMVC.Utilities
                 imageFile.CopyTo(imagestream);
             }
             newArticle.ImagePath = DateTime.Now.ToString("yyy-MM-dd").Replace("-", @"\");
-            newArticle.ImageWidths = "1024,512,256,128";   // Förmodligen inte bra även om den alltid verkar ge 1024,512,256,128 i db.
             newArticle.ImageFileFormat = "jpg";                          
 
             return saveImagePath;
@@ -39,6 +38,7 @@ namespace AnnonsonMVC.Utilities
             Stream imageStream = imageFile.OpenReadStream();
             Image resizeImage = Image.FromStream(imageStream);
             var imageFileBitmapSize = resizeImage.Size;
+            var article = new Article();
 
             if (resizeImage.Width >= 2048)
             {
@@ -50,29 +50,29 @@ namespace AnnonsonMVC.Utilities
             {
                 resizeImage = MakeImageSquareAndFillBlancs(1024, 1024, imageFileBitmapSize, resizeImage, SaveImagePath);
                 resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-1024.jpg");
-                //imageFile.ImageWidths = "1024, "; //Stringbuilder?
+                article.ImageWidths += "1024, ";
             }
             if (resizeImage.Width >= 512)
             {
                 resizeImage = MakeImageSquareAndFillBlancs(512, 512, imageFileBitmapSize, resizeImage, SaveImagePath);
                 resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-512.jpg");
-                //imageFile.ImageWidths = "512, ";
+                article.ImageWidths += "512, ";
             }
             if (resizeImage.Width >= 256)
             {
                 resizeImage = MakeImageSquareAndFillBlancs(256, 256, imageFileBitmapSize, resizeImage, SaveImagePath);
                 resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-256.jpg");
-                //imageFile.ImageWidths = "256, ";
+                article.ImageWidths += "256, ";
             }
             if (resizeImage.Width >= 128)
             {
                 var newImage = MakeImageSquareAndFillBlancs(128, 128, imageFileBitmapSize, resizeImage, SaveImagePath);
                 newImage.Save(SaveImagePath.Replace("jpg", "") + "128.jpg");
-                //imageFile. = "128, ";
+                article.ImageWidths += "128";
             }
             resizeImage.Dispose();
             imageStream.Dispose();
-            return null;
+            return article.ImageWidths;
 
 
         }
