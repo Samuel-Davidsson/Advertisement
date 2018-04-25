@@ -33,7 +33,7 @@ namespace AnnonsonMVC.Utilities
             return saveImagePath;
         }
 
-        public string CreateResizeImagesToImageDirectory(IFormFile imageFile, string SaveImagePath)
+        public string CreateResizeImagesToImageDirectory(IFormFile imageFile, string saveImagePath, string imageDirectoryPath)
         {
             Stream imageStream = imageFile.OpenReadStream();
             Image resizeImage = Image.FromStream(imageStream);
@@ -42,32 +42,26 @@ namespace AnnonsonMVC.Utilities
 
             if (resizeImage.Width >= 2048)
             {
-                resizeImage = MakeImageSquareAndFillBlancs(2048, 2048, imageFileBitmapSize, resizeImage, SaveImagePath);
-                resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-2048.jpg");
+                MakeImageSquareAndFillBlancs(2048, 2048, imageFileBitmapSize, resizeImage, saveImagePath, imageDirectoryPath);
             }
-
             if (resizeImage.Width >= 1024)
             {
-                resizeImage = MakeImageSquareAndFillBlancs(1024, 1024, imageFileBitmapSize, resizeImage, SaveImagePath);
-                resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-1024.jpg");
+                MakeImageSquareAndFillBlancs(1024, 1024, imageFileBitmapSize, resizeImage, saveImagePath, imageDirectoryPath);
                 article.ImageWidths += "1024, ";
             }
             if (resizeImage.Width >= 512)
             {
-                resizeImage = MakeImageSquareAndFillBlancs(512, 512, imageFileBitmapSize, resizeImage, SaveImagePath);
-                resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-512.jpg");
+                MakeImageSquareAndFillBlancs(512, 512, imageFileBitmapSize, resizeImage, saveImagePath, imageDirectoryPath);
                 article.ImageWidths += "512, ";
             }
             if (resizeImage.Width >= 256)
             {
-                resizeImage = MakeImageSquareAndFillBlancs(256, 256, imageFileBitmapSize, resizeImage, SaveImagePath);
-                resizeImage.Save(SaveImagePath.Replace(".jpg", "") + "-256.jpg");
+                MakeImageSquareAndFillBlancs(256, 256, imageFileBitmapSize, resizeImage, saveImagePath, imageDirectoryPath);
                 article.ImageWidths += "256, ";
             }
             if (resizeImage.Width >= 128)
             {
-                var newImage = MakeImageSquareAndFillBlancs(128, 128, imageFileBitmapSize, resizeImage, SaveImagePath);
-                newImage.Save(SaveImagePath.Replace("jpg", "") + "128.jpg");
+                MakeImageSquareAndFillBlancs(128, 128, imageFileBitmapSize, resizeImage, saveImagePath, imageDirectoryPath);
                 article.ImageWidths += "128";
             }
             resizeImage.Dispose();
@@ -77,12 +71,12 @@ namespace AnnonsonMVC.Utilities
 
         }
 
-        public Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string saveImagePath)
+        public Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string saveImagePath, string imageDirectoryPath)
         {
             var originalImage = new Bitmap(saveImagePath);
 
-            int originalWidth = imgFileBitmapSize.Width;
-            int originalHeight = imgFileBitmapSize.Height;
+            //int originalWidth = imgFileBitmapSize.Width;
+            //int originalHeight = imgFileBitmapSize.Height;
 
             Image newImageSize = new Bitmap(canvasWidth, canvasHeight);
             Graphics graphic = Graphics.FromImage(newImageSize);
@@ -105,12 +99,17 @@ namespace AnnonsonMVC.Utilities
 
             graphic.Clear(Color.White);
             graphic.DrawImage(originalImage, posX, posY, newWidth, newHeight);
-            originalImage.Dispose();
+           
             ImageCodecInfo[] info = ImageCodecInfo.GetImageEncoders();
             EncoderParameters encoderParameters;
             encoderParameters = new EncoderParameters(1);
             encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
 
+            using (var fileStream = new FileStream(saveImagePath + "-" + canvasWidth + ".jpg", FileMode.Create))
+            {
+                newImageSize.Save(fileStream, info[1], encoderParameters);
+            }
+            originalImage.Dispose();
             return newImageSize;
         }
 

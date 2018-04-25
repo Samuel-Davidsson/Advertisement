@@ -93,7 +93,7 @@ namespace AnnonsonMVC.Controllers
                     var imageFile = model.ImageFile;
                     var saveImageToPath = _imageService.SaveImageToPath(newArticle, imageDirectoryPath, imageFile);
 
-                    newArticle.ImageWidths = _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath);
+                    newArticle.ImageWidths = _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath, imageDirectoryPath);
 
                     _articelService.Update(newArticle);
                     _imageService.TryToDeleteOriginalImage(saveImageToPath);
@@ -183,7 +183,6 @@ namespace AnnonsonMVC.Controllers
 
 // User inlogg?
 // Image loop i details? Så att mindre bilder syns om 512 inte finns.
-// Säkerhet när det gäller image vi tar den och spara ner orignalet för att sedan ta bort den(virus annan skit..?)
 
 
 // Angående strukturen på mitt projekt(om allt ligger hyfsat rätt)?
