@@ -6,24 +6,24 @@ namespace AnnonsonMVC.Utilities
     internal class ViewModelToModelMapper
     {
 
-        public Article EditActicleViewModelToArticle(Article articleToEdit, ArticelViewModel model)
+        public Article EditActicleViewModelToArticle(ArticelViewModel model, Article article)
         {
-            articleToEdit.Name = model.Name;
-            articleToEdit.Description = model.Description;
-            articleToEdit.Price = model.Price;
-            articleToEdit.PriceText = model.PriceText;
-            articleToEdit.PriceUnit = model.PriceUnit;
-            articleToEdit.Slug = model.Slug;
-            articleToEdit.ImagePath = model.ImagePath;
-            articleToEdit.ImageFileFormat = model.ImageFileFormat;
-            articleToEdit.ImageFileName = model.ImageFileName;
-            articleToEdit.ImageWidths = model.ImageWidths;
-            articleToEdit.PublishBegin = model.PublishBegin;
-            articleToEdit.PublishEnd = model.PublishEnd;
-            articleToEdit.CompanyId = model.Company.CompanyId;
-            articleToEdit.UserId = model.UserId;
-            articleToEdit.ArticleCategory = model.ArticleCategory;
-            return articleToEdit;
+            article.Name = model.Name;
+            article.Description = model.Description;
+            article.Price = model.Price;
+            article.PriceText = model.PriceText;
+            article.PriceUnit = model.PriceUnit;
+            article.Slug = model.Slug;
+            article.ImagePath = model.ImagePath;
+            article.ImageFileFormat = model.ImageFileFormat;
+            article.ImageFileName = model.ImageFileName;
+            article.ImageWidths = model.ImageWidths;
+            article.PublishBegin = model.PublishBegin;
+            article.PublishEnd = model.PublishEnd;
+            article.CompanyId = model.Company.CompanyId;
+            article.UserId = model.UserId;
+            article.ArticleCategory = model.ArticleCategory;
+            return article;
 
     }
 

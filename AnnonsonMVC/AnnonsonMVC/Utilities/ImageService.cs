@@ -21,7 +21,7 @@ namespace AnnonsonMVC.Utilities
 
         public string SaveImageToPath(Article newArticle, string imageDirectoryPath, IFormFile imageFile)
         {
-            var saveImagePath = Path.Combine(imageDirectoryPath, newArticle.ImageFileName + ".jpg").Replace(@"\\", @"\");
+            var saveImagePath = Path.Combine(imageDirectoryPath, newArticle.ImageFileName).Replace(@"\\", @"\");
 
             using (var imagestream = new FileStream(saveImagePath, FileMode.Create))
             {
@@ -42,26 +42,26 @@ namespace AnnonsonMVC.Utilities
 
             if (resizeImage.Width >= 2048)
             {
-                MakeImageSquareAndFillBlancs(2048, 2048, imageFileBitmapSize, resizeImage, saveImagePath, imageDirectoryPath);
+                MakeImageSquareAndFillBlancs(2048, 2048, resizeImage, saveImagePath, imageDirectoryPath);
             }
             if (resizeImage.Width >= 1024)
             {
-                MakeImageSquareAndFillBlancs(1024, 1024, imageFileBitmapSize, resizeImage, saveImagePath, imageDirectoryPath);
+                MakeImageSquareAndFillBlancs(1024, 1024, resizeImage, saveImagePath, imageDirectoryPath);
                 article.ImageWidths += "1024, ";
             }
             if (resizeImage.Width >= 512)
             {
-                MakeImageSquareAndFillBlancs(512, 512, imageFileBitmapSize, resizeImage, saveImagePath, imageDirectoryPath);
+                MakeImageSquareAndFillBlancs(512, 512, resizeImage, saveImagePath, imageDirectoryPath);
                 article.ImageWidths += "512, ";
             }
             if (resizeImage.Width >= 256)
             {
-                MakeImageSquareAndFillBlancs(256, 256, imageFileBitmapSize, resizeImage, saveImagePath, imageDirectoryPath);
+                MakeImageSquareAndFillBlancs(256, 256, resizeImage, saveImagePath, imageDirectoryPath);
                 article.ImageWidths += "256, ";
             }
             if (resizeImage.Width >= 128)
             {
-                MakeImageSquareAndFillBlancs(128, 128, imageFileBitmapSize, resizeImage, saveImagePath, imageDirectoryPath);
+                MakeImageSquareAndFillBlancs(128, 128, resizeImage, saveImagePath, imageDirectoryPath);
                 article.ImageWidths += "128";
             }
             resizeImage.Dispose();
@@ -71,12 +71,9 @@ namespace AnnonsonMVC.Utilities
 
         }
 
-        public Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Size imgFileBitmapSize, Image resizeImage, string saveImagePath, string imageDirectoryPath)
+        public Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Image resizeImage, string saveImagePath, string imageDirectoryPath)
         {
             var originalImage = new Bitmap(saveImagePath);
-
-            //int originalWidth = imgFileBitmapSize.Width;
-            //int originalHeight = imgFileBitmapSize.Height;
 
             Image newImageSize = new Bitmap(canvasWidth, canvasHeight);
             Graphics graphic = Graphics.FromImage(newImageSize);

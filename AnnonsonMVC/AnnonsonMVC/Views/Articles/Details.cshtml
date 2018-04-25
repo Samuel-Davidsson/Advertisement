@@ -12,7 +12,7 @@
 
     <dl>
         <dd>
-            <img src="@Url.Content(ViewBag.MediaUrl + "/" + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-256." + Model.ImageFileFormat)" class="imagepreview" />
+            <img src="@Url.Content(ViewBag.MediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-256." + Model.ImageFileFormat)" class="imagepreview" />
         </dd>
     </dl>
     <dl class="media-right">

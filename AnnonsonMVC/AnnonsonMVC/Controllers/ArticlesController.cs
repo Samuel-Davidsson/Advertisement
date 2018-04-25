@@ -117,10 +117,10 @@ namespace AnnonsonMVC.Controllers
                 return NotFound();
             }
 
-            return View();
+            return View(model);
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             var article = _articelService.Find(id);
             var model = Mapper.ModelToViewModelMapping.ArticleToArticleViewModel(article);
@@ -129,61 +129,56 @@ namespace AnnonsonMVC.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Name");
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Name");
+            ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Name", model.StoreIds);
+            // Måste nog ändra detta.
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(ArticelViewModel model)
         {
+
             if (ModelState.IsValid)
             {
                 var article = _articelService.Find(model.ArticleId);
-                article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(article, model);
+                article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
                 _articelService.Update(article);
-
             }
 
             return Redirect("Index");
         }
-     }
-  }
+
+    }
+
+            
+    }
+
 
 
 //    ------Funktioner-------
-// Logiken för att visa bilden på details är nästan klar måste ha någon slags check om en bild inte finns i storlek skall den ta nästa efter det,
-// förmodligen göra det i controllern och sen refactorisera ut det är nog det mesta alternativet.
-// Fixa så att jag kan mappa till edit func och också ändra på något och spara det halvfärdig.
-
+// Fixa så att jag kan mappa till edit func och också ändra på något och spara det (halvfärdigt).
+// Hämta alla filer i en if stats och deleta dom.(för edit).
+// Fixa till Image preview visar gammla bilden när du väljer en ny fil så syns den nya bilden där istället.(Svåraste)
+// Ta bort gamla bilderna när man updaterar med nån check som kollar om man faktiskt har bytt bild.
 
 // --------Refactoring-----------
 
-// Flytta tillbaka Sluggen till utilitys hör hemma där mer än vad den gör i articleservice Osäker antar att jag kan göra det.(Idag)
 // Titta över namngivningen på allt igen(gå igenom hela flödet).*
 // Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt.*
 // Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details)Sista grejen.
 
 
-
-
-
-
-// Att göra idag:
-// Styla Details sidan(Får göra om hela sidan där den ser förjävlig ut)
-// Refactorisera gå igenom hela flödet alla klasser(Bara ta bort sånt som inte används)
-// Edit fixa funktionalitet bakom den.
-
-
-
 //      --------Styling---------
-// Styla Details sidan*
-// Styla Edit sidan
+// Stylingen skall påminna om den som redan finns på hemsidan får titta på den och se hur det ser ut(Kommer ta lite tid).
+// Styla Details sidan.
+// Styla Edit sidan.
+// Styla Create sidan.
 
 
-//   ----------Frågor att ställa!-----------
+//   ----------Frågor-----------
 
-// User inlogg?
-// Image loop i details? Så att mindre bilder syns om 512 inte finns.
-
-
-// Angående strukturen på mitt projekt(om allt ligger hyfsat rätt)?
+// Angående strukturen på mitt projekt(Speciellt funktionerna i utilitys om dom skall vara där)?
 // Appsettings rätt gjort/tänkt?
