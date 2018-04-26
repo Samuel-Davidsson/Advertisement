@@ -108,7 +108,8 @@ namespace AnnonsonMVC.Controllers
 
         public IActionResult Details(int id)
         {
-            var article = _articelService.Find(id);
+            var article = _articelService.Find(id, "ArticleCategory.Category", "StoreArticle.Store");
+            var test = article.ArticleCategory;
             var model = Mapper.ModelToViewModelMapping.ArticleToArticleViewModel(article);
 
             ViewBag.MediaUrl = _appSettings.MediaUrl;
@@ -120,19 +121,10 @@ namespace AnnonsonMVC.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Edit(int id)
+        public IActionResult Edit(int id)
         {
-            var article = _articelService.Find(id);
+            var article = _articelService.Find(id, "StoreArticle.Store", "ArticleCategory.Category");
             var model = Mapper.ModelToViewModelMapping.ArticleToArticleViewModel(article);
-
-            if (model == null)
-            {
-                return NotFound();
-            }
-            ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Name");
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Name");
-            ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Name", model.StoreIds);
-            // Måste nog ändra detta.
             return View(model);
         }
 
@@ -143,26 +135,30 @@ namespace AnnonsonMVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var article = _articelService.Find(model.ArticleId);
+                var article = _articelService.Find(model.ArticleId, "StorArticle.Store", "ArticleCategory.Category");
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
                 _articelService.Update(article);
             }
 
-            return Redirect("Index");
+            return Redirect("Details");
         }
 
     }
 
-            
-    }
+
+}
 
 
 
 //    ------Funktioner-------
 // Fixa så att jag kan mappa till edit func och också ändra på något och spara det (halvfärdigt).
-// Hämta alla filer i en if stats och deleta dom.(för edit).
+// Deleta alla gamla bilder om man lägger till en ny.
 // Fixa till Image preview visar gammla bilden när du väljer en ny fil så syns den nya bilden där istället.(Svåraste)
 // Ta bort gamla bilderna när man updaterar med nån check som kollar om man faktiskt har bytt bild.
+
+
+    // Att tänka på vissa har inte gått igenom hela vägen eftersom jag inte velat köra hela vägen så inte blivit uppdaterade.
+// Vissa av dem jag har sparat har jag förmodligen sparat innan jag har lagt till därför dom är tomma kan testa mot ID 8229 "Testarsomfan" 3:dje från slutet.
 
 // --------Refactoring-----------
 

@@ -28,7 +28,8 @@ namespace AnnonsonMVC.Utilities
                 PublishEnd = article.PublishEnd,
                 Company = article.Company,
                 UserId = article.UserId,
-                ArticleCategory = article.ArticleCategory
+                ArticleCategory = article.ArticleCategory,
+                StoreArticle = article.StoreArticle,
             };
         }
 
@@ -47,6 +48,8 @@ namespace AnnonsonMVC.Utilities
                 ImageWidths = article.ImageWidths,
                 PublishBegin = article.PublishBegin,
                 PublishEnd = article.PublishEnd,
+                ArticleCategory = article.ArticleCategory,
+                StoreArticle = article.StoreArticle,
             };
         }
     }
