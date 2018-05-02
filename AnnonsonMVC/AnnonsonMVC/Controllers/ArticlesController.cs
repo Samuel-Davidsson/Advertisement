@@ -67,15 +67,16 @@ namespace AnnonsonMVC.Controllers
 
                     var selectedStoreListIds = _selectedStoresService.GetSelectedStoresList(model, stores);
                     var categoryId = model.CategoryId;
-                    var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
 
-                    
+                    var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
+                 
                     _articelService.Add(newArticle);
 
                     newArticle.ArticleCategory.Add(new ArticleCategory
                     {
                         ArticleId = newArticle.ArticleId,
-                        CategoryId = categoryId,                        
+                        
+                        CategoryId = categoryId,                 
                     });
                   
                     foreach (var storeId in selectedStoreListIds)
@@ -124,34 +125,38 @@ namespace AnnonsonMVC.Controllers
             return View(model);
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             var article = _articelService.Find(id, "StoreArticle.Store", "ArticleCategory.Category");
             var model = Mapper.ModelToViewModelMapping.ArticleToArticleViewModel(article);
+            var stores = model.StoreArticle.Select(x => x.StoreId).ToArray();
+            model.StoreIds = stores;
+            //ViewBag.CategoryId = await _categoryService.GetAll();
+            //ViewBag.Stores = new MultiSelectList(stores)
+            //ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Company");
+            //ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Category");
+            //ViewData["StoreId"] = new SelectList( await _storeService.GetAll(), "StoreId", "Store");
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(ArticelViewModel model)
+        public async Task<IActionResult> Edit(ArticelViewModel model)
         {
-
             if (ModelState.IsValid)
             {
                 var article = _articelService.Find(model.ArticleId, "StorArticle.Store", "ArticleCategory.Category");
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
                 _articelService.Update(article);
             }
+            ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Company");
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Category");
+            ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Store");
 
             return Redirect("Details");
         }
-
     }
-
-
 }
-
-
 
 //    ------Funktioner-------
 
@@ -159,9 +164,11 @@ namespace AnnonsonMVC.Controllers
 // Man skall se orginalet först väljer man ny bild så byts den ut bara man kan INTE ändra tillbaka då får man gå tillbaka
 // precis som i annonsonappen är just nu.
 
+// Måste få fram alla stores och categories men dom som är valda skall vara "valda" när man kommer in på edit sidan.
+// Testa kategori först garanterat lättare än vad stores är.
 
-    // Att tänka på vissa har inte gått igenom hela vägen eftersom jag inte velat köra hela vägen så inte blivit uppdaterade.
-// Vissa av dem jag har sparat har jag förmodligen sparat innan jag har lagt till därför dom är tomma kan testa mot ID 8229 "Testarsomfan" 3:dje från slutet.
+// Problem av nån anledning så är listorna Viewdata 0 vet inte exakt vad det beror på MEN tror att det har nåt att göra med 
+// att jag tar in ett ID(artikel) och därför är dom 0 när jag försöker att gå in på Edit sidan.
 
 // --------Refactoring-----------
 
