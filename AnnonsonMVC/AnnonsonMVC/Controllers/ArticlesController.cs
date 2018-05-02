@@ -72,7 +72,6 @@ namespace AnnonsonMVC.Controllers
                     
                     _articelService.Add(newArticle);
 
-;
                     newArticle.ArticleCategory.Add(new ArticleCategory
                     {
                         ArticleId = newArticle.ArticleId,
@@ -112,7 +111,11 @@ namespace AnnonsonMVC.Controllers
             var test = article.ArticleCategory;
             var model = Mapper.ModelToViewModelMapping.ArticleToArticleViewModel(article);
 
-            ViewBag.MediaUrl = _appSettings.MediaUrl;
+            ViewBag.categoryNames = model.ArticleCategory.Select(x => x.Category.Name);
+            ViewBag.storeNames = model.StoreArticle.Select(x => x.Store.Name);
+            var categoryName = model.ArticleCategory.Select(x => x.Category.Name);
+
+            ViewBag.mediaUrl = _appSettings.MediaUrl;
             if (article == null)
             {
                 return NotFound();
@@ -151,10 +154,10 @@ namespace AnnonsonMVC.Controllers
 
 
 //    ------Funktioner-------
-// Fixa så att jag kan mappa till edit func och också ändra på något och spara det (halvfärdigt).
+
 // Deleta alla gamla bilder om man lägger till en ny.
-// Fixa till Image preview visar gammla bilden när du väljer en ny fil så syns den nya bilden där istället.(Svåraste)
-// Ta bort gamla bilderna när man updaterar med nån check som kollar om man faktiskt har bytt bild.
+// Man skall se orginalet först väljer man ny bild så byts den ut bara man kan INTE ändra tillbaka då får man gå tillbaka
+// precis som i annonsonappen är just nu.
 
 
     // Att tänka på vissa har inte gått igenom hela vägen eftersom jag inte velat köra hela vägen så inte blivit uppdaterade.

@@ -74,8 +74,9 @@ namespace AnnonsonMVC.ViewModels
         public List<SelectListItem> Stores { get; set; }
         public int[] StoreIds { get; set; }
 
-
+        [Display(Name = "Kategori")]
         public ICollection<ArticleCategory> ArticleCategory { get; set; }
+        [Display(Name = "Butiker")]
         public ICollection<StoreArticle> StoreArticle { get; set; }
     }
 }

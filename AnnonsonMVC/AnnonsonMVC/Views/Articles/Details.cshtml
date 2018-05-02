@@ -12,7 +12,7 @@
 
     <dl>
         <dd>
-            <img src="@Url.Content(ViewBag.MediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-256." + Model.ImageFileFormat)" class="imagepreview" />
+            <img src="@Url.Content(ViewBag.mediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-256." + Model.ImageFileFormat)" class="imagepreview" />
         </dd>
     </dl>
     <dl class="media-right">
@@ -65,13 +65,19 @@
             @Html.DisplayNameFor(model => model.StoreArticle)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.StoreArticle)
+            @foreach (var stores in ViewBag.storeNames)
+            {
+                    <div>@stores</div>
+            }
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ArticleCategory)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ArticleCategory);
+            @foreach (var categories in ViewBag.categoryNames)
+            {
+                    <div>@categories</div>               
+            }
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Company.CompanyId)
