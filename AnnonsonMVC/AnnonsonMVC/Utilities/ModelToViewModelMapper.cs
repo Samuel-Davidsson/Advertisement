@@ -36,7 +36,8 @@ namespace AnnonsonMVC.Utilities
         public ArticelViewModel ArticleToArticleViewModel(Article article)
         {
             return new ArticelViewModel
-            {
+            { 
+                ArticleId = article.ArticleId,
                 Name = article.Name,
                 Description = article.Description,
                 Price = article.Price,
@@ -50,6 +51,7 @@ namespace AnnonsonMVC.Utilities
                 PublishEnd = article.PublishEnd,
                 ArticleCategory = article.ArticleCategory,
                 StoreArticle = article.StoreArticle,
+                Company = article.Company,
             };
         }
     }

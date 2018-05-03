@@ -126,16 +126,28 @@ namespace AnnonsonMVC.Controllers
         }
 
         public async Task<IActionResult> Edit(int id)
-        {
+        {     
             var article = _articelService.Find(id, "StoreArticle.Store", "ArticleCategory.Category");
+            var companyId = article.CompanyId;
+            
+            var categoryId = article.ArticleCategory;
+            var test = categoryId.Select(x => x.ArticleId);
+
+            var categorytest = article.ArticleCategory.FirstOrDefault(x => x.ArticleId == article.ArticleId);
             var model = Mapper.ModelToViewModelMapping.ArticleToArticleViewModel(article);
+
+            
+            model.CategoryId = categorytest.CategoryId;
+            model.CompanyId = companyId;
             var stores = model.StoreArticle.Select(x => x.StoreId).ToArray();
             model.StoreIds = stores;
-            //ViewBag.CategoryId = await _categoryService.GetAll();
-            //ViewBag.Stores = new MultiSelectList(stores)
-            //ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Company");
-            //ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Category");
-            //ViewData["StoreId"] = new SelectList( await _storeService.GetAll(), "StoreId", "Store");
+
+            var category = model.ArticleCategory.FirstOrDefault(x => x.CategoryId == model.CategoryId);
+
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Name");
+            ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Name");
+            ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Name", companyId);
+
             return View(model);
         }
 
@@ -149,6 +161,7 @@ namespace AnnonsonMVC.Controllers
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
                 _articelService.Update(article);
             }
+
             ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Company");
             ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Category");
             ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Store");
@@ -163,12 +176,9 @@ namespace AnnonsonMVC.Controllers
 // Deleta alla gamla bilder om man lägger till en ny.
 // Man skall se orginalet först väljer man ny bild så byts den ut bara man kan INTE ändra tillbaka då får man gå tillbaka
 // precis som i annonsonappen är just nu.
+// Bygga en ny Viewmodel som är till för edit.
 
-// Måste få fram alla stores och categories men dom som är valda skall vara "valda" när man kommer in på edit sidan.
-// Testa kategori först garanterat lättare än vad stores är.
-
-// Problem av nån anledning så är listorna Viewdata 0 vet inte exakt vad det beror på MEN tror att det har nåt att göra med 
-// att jag tar in ett ID(artikel) och därför är dom 0 när jag försöker att gå in på Edit sidan.
+// Fixa till dom som är single value det är inte snyggt måste kunna göra det på ett bättre sätt? Funkar i alla fall.
 
 // --------Refactoring-----------
 

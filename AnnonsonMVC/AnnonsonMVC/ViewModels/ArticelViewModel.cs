@@ -70,9 +70,12 @@ namespace AnnonsonMVC.ViewModels
         public IFormFile ImageFile { get; set; }
 
         public Company Company { get; set; }
-
+        public int CompanyId { get; set; }
         public List<SelectListItem> Stores { get; set; }
         public int[] StoreIds { get; set; }
+
+        //public List<SelectListItem> Categories { get; set; }
+        //public int [] CategoriesIds { get; set; }
 
         [Display(Name = "Kategori")]
         public ICollection<ArticleCategory> ArticleCategory { get; set; }
