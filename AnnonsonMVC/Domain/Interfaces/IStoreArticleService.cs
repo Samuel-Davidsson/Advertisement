@@ -7,5 +7,6 @@ namespace Domain.Interfaces
     public interface IStoreArticleService
     {
         Task<IEnumerable<StoreArticle>> GetAll();
+        void Update(StoreArticle storeArticle);
     }
 }

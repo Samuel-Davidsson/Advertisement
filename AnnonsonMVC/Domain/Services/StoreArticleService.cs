@@ -17,5 +17,9 @@ namespace Domain.Services
         {
             return await _repository.GetAll();
         }
+        public void Update(StoreArticle storeArticle)
+        {
+            _repository.Update(storeArticle);
+        }
     }
 }

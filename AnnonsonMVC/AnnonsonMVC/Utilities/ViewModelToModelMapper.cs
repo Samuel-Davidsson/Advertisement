@@ -22,8 +22,8 @@ namespace AnnonsonMVC.Utilities
             article.PublishEnd = model.PublishEnd;
             article.CompanyId = model.CompanyId;
             article.UserId = model.UserId;
-            article.ArticleCategory = model.ArticleCategory;
-            article.StoreArticle = model.StoreArticle;          
+            //article.ArticleCategory = model.ArticleCategory;
+            //article.StoreArticle = model.StoreArticle;          
             return article;
 
     }

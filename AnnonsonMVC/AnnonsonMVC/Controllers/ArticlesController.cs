@@ -160,26 +160,32 @@ namespace AnnonsonMVC.Controllers
                     model.ImagePath = article.ImagePath;
                     model.ImageWidths = article.ImageWidths;
                 }
+
                 var tempSlug = model.Name;
                 model.Slug = _articelService.GenerateSlug(tempSlug);
                 model.UserId = article.UserId;
+                var categoryId = model.CategoryId;
 
-                //model.ArticleCategory.Add(new ArticleCategory
-                //{
-                //    ArticleId = model.ArticleId,
-                //    CategoryId = model.CategoryId,
-                //});
+                var test = model.StoreArticle;
+                foreach (var store in test)
+                {
+                    if (store.ArticleId != model.ArticleId)
+                    {
+                        _storeArticleService.Update(store);
+                    }
+                    
+                }
 
-                //foreach (var storeId in model.StoreIds)
-                //{
-                //    model.StoreArticle.Add(new StoreArticle
-                //    {
-                //        ArticleId = model.ArticleId,
-                //        StoreId = storeId
-                //    });
-                //}
+                model.ArticleCategory.Add(new ArticleCategory
+                {
+                    ArticleId = model.ArticleId,
+
+                    CategoryId = categoryId,
+                });
 
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
+
+
                 _articelService.Update(article);
             }
             return RedirectToAction("Index");
@@ -193,7 +199,8 @@ namespace AnnonsonMVC.Controllers
 // Man skall se orginalet först väljer man ny bild så byts den ut bara man kan INTE ändra tillbaka då får man gå tillbaka(vänta med)
 // Bygga en ny Viewmodel som är till för edit.(idag)
 
-    // Problem om man inte ändrar kategori eller storeart t.ex då blir det error eftersom den redan finns måste ha nån check på detta.
+// Problem om man inte ändrar kategori eller storeart t.ex då blir det error eftersom den redan finns måste ha nån check på detta.
+// Vet inte just nu får tänka på det.
 
 // Fixa till dom som är single value det är inte snyggt måste kunna göra det på ett bättre sätt? Funkar i alla fall.
 

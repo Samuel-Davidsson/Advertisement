@@ -12,8 +12,8 @@ namespace AnnonsonMVC.ViewModels
     {
         public ArticelViewModel()
         {
-            ArticleCategory = new HashSet<ArticleCategory>();
-            StoreArticle = new HashSet<StoreArticle>();
+            //ArticleCategory = new HashSet<ArticleCategory>();
+            //StoreArticle = new HashSet<StoreArticle>();
         }
 
         public int ArticleId { get; set; }
@@ -75,8 +75,8 @@ namespace AnnonsonMVC.ViewModels
         public int[] StoreIds { get; set; }
 
         [Display(Name = "Kategori")]
-        public ICollection<ArticleCategory> ArticleCategory { get; set; }
+        public ICollection<ArticleCategory> ArticleCategory { get; set; } = new List<ArticleCategory>();
         [Display(Name = "Butiker")]
-        public ICollection<StoreArticle> StoreArticle { get; set; }
+        public ICollection<StoreArticle> StoreArticle { get; set; } = new List<StoreArticle>();
     }
 }
