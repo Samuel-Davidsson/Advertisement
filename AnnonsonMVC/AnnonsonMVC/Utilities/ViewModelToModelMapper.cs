@@ -20,9 +20,10 @@ namespace AnnonsonMVC.Utilities
             article.ImageWidths = model.ImageWidths;
             article.PublishBegin = model.PublishBegin;
             article.PublishEnd = model.PublishEnd;
-            article.CompanyId = model.Company.CompanyId;
+            article.CompanyId = model.CompanyId;
             article.UserId = model.UserId;
             article.ArticleCategory = model.ArticleCategory;
+            article.StoreArticle = model.StoreArticle;          
             return article;
 
     }

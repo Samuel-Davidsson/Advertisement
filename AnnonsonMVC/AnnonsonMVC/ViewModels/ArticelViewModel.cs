@@ -66,16 +66,13 @@ namespace AnnonsonMVC.ViewModels
         [DataType(DataType.Date)]
         public DateTime PublishEnd { get; set; }
 
-        [Required(ErrorMessage = "Artikeln måste ha en bild.")]
+        //[Required(ErrorMessage = "Artikeln måste ha en bild.")]
         public IFormFile ImageFile { get; set; }
 
         public Company Company { get; set; }
         public int CompanyId { get; set; }
         public List<SelectListItem> Stores { get; set; }
         public int[] StoreIds { get; set; }
-
-        //public List<SelectListItem> Categories { get; set; }
-        //public int [] CategoriesIds { get; set; }
 
         [Display(Name = "Kategori")]
         public ICollection<ArticleCategory> ArticleCategory { get; set; }

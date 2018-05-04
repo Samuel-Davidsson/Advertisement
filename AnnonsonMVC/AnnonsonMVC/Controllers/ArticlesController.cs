@@ -130,53 +130,70 @@ namespace AnnonsonMVC.Controllers
             var article = _articelService.Find(id, "StoreArticle.Store", "ArticleCategory.Category");
             var companyId = article.CompanyId;
             
-            var categoryId = article.ArticleCategory;
-            var test = categoryId.Select(x => x.ArticleId);
+            var articleCategory = article.ArticleCategory.FirstOrDefault(x => x.ArticleId == article.ArticleId);
 
-            var categorytest = article.ArticleCategory.FirstOrDefault(x => x.ArticleId == article.ArticleId);
             var model = Mapper.ModelToViewModelMapping.ArticleToArticleViewModel(article);
-
-            
-            model.CategoryId = categorytest.CategoryId;
-            model.CompanyId = companyId;
+           
+            model.CategoryId = articleCategory.CategoryId;
             var stores = model.StoreArticle.Select(x => x.StoreId).ToArray();
             model.StoreIds = stores;
 
-            var category = model.ArticleCategory.FirstOrDefault(x => x.CategoryId == model.CategoryId);
-
             ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Name");
             ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Name");
-            ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Name", companyId);
+            ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Name");
 
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ArticelViewModel model)
+        public IActionResult Edit(ArticelViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var article = _articelService.Find(model.ArticleId, "StorArticle.Store", "ArticleCategory.Category");
+                var article = _articelService.Find(model.ArticleId, "StoreArticle.Store", "ArticleCategory.Category");
+
+                if (model.ImageFile == null)
+                {
+                    model.ImageFileFormat = article.ImageFileFormat;
+                    model.ImageFileName = article.ImageFileName;
+                    model.ImagePath = article.ImagePath;
+                    model.ImageWidths = article.ImageWidths;
+                }
+                var tempSlug = model.Name;
+                model.Slug = _articelService.GenerateSlug(tempSlug);
+                model.UserId = article.UserId;
+
+                //model.ArticleCategory.Add(new ArticleCategory
+                //{
+                //    ArticleId = model.ArticleId,
+                //    CategoryId = model.CategoryId,
+                //});
+
+                //foreach (var storeId in model.StoreIds)
+                //{
+                //    model.StoreArticle.Add(new StoreArticle
+                //    {
+                //        ArticleId = model.ArticleId,
+                //        StoreId = storeId
+                //    });
+                //}
+
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
                 _articelService.Update(article);
             }
-
-            ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Company");
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Category");
-            ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Store");
-
-            return Redirect("Details");
+            return RedirectToAction("Index");
         }
     }
 }
 
 //    ------Funktioner-------
 
-// Deleta alla gamla bilder om man lägger till en ny.
-// Man skall se orginalet först väljer man ny bild så byts den ut bara man kan INTE ändra tillbaka då får man gå tillbaka
-// precis som i annonsonappen är just nu.
-// Bygga en ny Viewmodel som är till för edit.
+// Deleta alla gamla bilder om man lägger till en ny.(vänta med)
+// Man skall se orginalet först väljer man ny bild så byts den ut bara man kan INTE ändra tillbaka då får man gå tillbaka(vänta med)
+// Bygga en ny Viewmodel som är till för edit.(idag)
+
+    // Problem om man inte ändrar kategori eller storeart t.ex då blir det error eftersom den redan finns måste ha nån check på detta.
 
 // Fixa till dom som är single value det är inte snyggt måste kunna göra det på ett bättre sätt? Funkar i alla fall.
 

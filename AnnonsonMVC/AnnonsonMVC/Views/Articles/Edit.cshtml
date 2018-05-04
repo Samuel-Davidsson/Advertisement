@@ -1,82 +1,98 @@
 ﻿@model AnnonsonMVC.ViewModels.ArticelViewModel
 
-    @{
-        ViewData["Title"] = "Edit";
-    }
+@{
+    ViewData["Title"] = "Edit";
+}
 
-    <h4>Ändra Artikel</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Edit">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="ArticleId" />
-                <div class="form-group">
+<h4>Ändra Artikel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ArticleId" />
+            @*<div class="form-group">
                     <div>
                         <input asp-for="ImageFile" accept="image/*" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
                         <span asp-validation-for="ImageFile" class="text-danger"></span>
                         <img id="output" class="ImagePreview" />
                     </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="CompanyId" class="control-label"></label>
-                    <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Stores" class="control-label"></label>
-                    <select asp-for="StoreIds" class="form-control" asp-items="ViewBag.StoreId"></select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="CategoryId" class="control-label"></label>
-                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
+                </div>*@
+            <div class="form-group">
+                <label asp-for="CompanyId" class="control-label"></label>
+                <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Stores" class="control-label"></label>
+                <select asp-for="StoreIds" class="form-control" asp-items="ViewBag.StoreId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
 
-                <div class="form-group">
-                    <label asp-for="Price" class="control-label"></label>
-                    <input asp-for="Price" class="form-control" />
-                    <span asp-validation-for="Price" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PriceText" class="control-label"></label>
-                    <input asp-for="PriceText" class="form-control" />
-                    <span asp-validation-for="PriceText" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PriceUnit" class="control-label"></label>
-                    <input asp-for="PriceUnit" class="form-control" />
-                    <span asp-validation-for="PriceUnit" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PublishBegin" class="control-label"></label>
-                    <input asp-for="PublishBegin" class="form-control" />
-                    <span asp-validation-for="PublishBegin" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PublishEnd" class="control-label"></label>
-                    <input asp-for="PublishEnd" class="form-control" />
-                    <span asp-validation-for="PublishEnd" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
-            </form>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceText" class="control-label"></label>
+                <input asp-for="PriceText" class="form-control" />
+                <span asp-validation-for="PriceText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceUnit" class="control-label"></label>
+                <input asp-for="PriceUnit" class="form-control" />
+                <span asp-validation-for="PriceUnit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublishBegin" class="control-label"></label>
+                <input asp-for="PublishBegin" class="form-control" />
+                <span asp-validation-for="PublishBegin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublishEnd" class="control-label"></label>
+                <input asp-for="PublishEnd" class="form-control" />
+                <span asp-validation-for="PublishEnd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
     </div>
-    </div>
+</div>
 
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 
-    @section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    }
+@section Scripts {
+    <script>
+        $('option').mousedown(function (e) {
+            e.preventDefault();
+            var originalScrollTop = $(this).parent().scrollTop();
+            console.log(originalScrollTop);
+            $(this).prop('selected', $(this).prop('selected') ? false : true);
+            var self = this;
+            $(this).parent().focus();
+            setTimeout(function () {
+                $(self).parent().scrollTop(originalScrollTop);
+            }, 0);
+
+            return false;
+        });
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
