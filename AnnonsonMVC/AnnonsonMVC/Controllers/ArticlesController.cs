@@ -5,7 +5,6 @@ using AnnonsonMVC.ViewModels;
 using Domain.Interfaces;
 using Domain.Entites;
 using AnnonsonMVC.Utilities;
-using System.Threading.Tasks;
 using Data.Appsettings;
 using Microsoft.Extensions.Options;
 
@@ -63,8 +62,7 @@ namespace AnnonsonMVC.Controllers
                 var stores = _storeService.GetAll();
                 if (model.StoreIds != null)
                 {                    
-                    var tempSlug = model.Name;
-                    model.Slug = _articelService.GenerateSlug(tempSlug);
+                    model.Slug = _articelService.GenerateSlug(model.Name);
                     model.UserId = 3;
 
                     var selectedStoreListIds = _selectedStoresService.GetSelectedStoresList(model, stores);
@@ -166,34 +164,37 @@ namespace AnnonsonMVC.Controllers
                     model.ImageWidths = article.ImageWidths;
                 }
 
-                var tempSlug = model.Name;
-                model.Slug = _articelService.GenerateSlug(tempSlug);
-                model.UserId = article.UserId;               
-                //var categoryId = model.CategoryId;
-                
+                model.Slug = _articelService.GenerateSlug(model.Name);
+                model.UserId = article.UserId;
 
-                //var test = model.StoreIds;
-                //foreach (var store in test)
+                var storesId = article.StoreArticle.Select(X => X.StoreId).ToArray();
+
+                //foreach (var storeId in model.StoreIds)
                 //{
-                //        _storeArticleService.Update(store);                 
+                //    if (storesId != model.StoreIds)
+                //    {
+                //        model.StoreArticle = article.StoreArticle;
+                //    }
+                //    else
+                //    {
+                //        model.StoreArticle.Add(new StoreArticle
+                //        {
+                //            ArticleId = model.ArticleId,
+                //            StoreId = storeId,
+                //        });
+                //    }
                 //}
-                //model.ArticleCategory.Add(new ArticleCategory
-                //{
-                //    ArticleId = model.ArticleId,
+               
+            
 
-                //    CategoryId = categoryId,
-                //});
-                var categoriesId = article.ArticleCategory.Select(x => x.CategoryId);
-
+            var categoriesId = article.ArticleCategory.Select(x => x.CategoryId);
                 foreach (var categoryId in categoriesId)
                 {
                     if (categoryId != model.CategoryId)
-                    {
-                        
+                    {                       
                         model.ArticleCategory.Add(new ArticleCategory
                         {
                             ArticleId = model.ArticleId,
-
                             CategoryId = model.CategoryId,
                         });
                     }
@@ -202,10 +203,8 @@ namespace AnnonsonMVC.Controllers
                         model.ArticleCategory = article.ArticleCategory;
                     }
                 }
-
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
 
-                //_articleCategoryService.Update();
                 _articelService.Update(article);
             }
             return RedirectToAction("Index");
@@ -219,9 +218,7 @@ namespace AnnonsonMVC.Controllers
 // Man skall se orginalet först väljer man ny bild så byts den ut bara man kan INTE ändra tillbaka då får man gå tillbaka(vänta med)
 // Bygga en ny Viewmodel som är till för edit.(idag)
 
-// Problem om man inte ändrar kategori eller storeart t.ex då blir det error eftersom den redan finns måste ha nån check på detta.
-// Vet inte just nu får tänka på det.
-// Funkar när jag byter men när jag INTE vill ändra kategori så blir den 0 eftersom modellen inte har nån art kat.
+//Problem med stores är ju en lista jag måste jämföra mot istället.
 
 
 
