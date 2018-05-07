@@ -10,7 +10,7 @@ namespace Domain.Interfaces
     {
         void Add(TEntity entity);
         void Update(TEntity entity);
-        Task<IEnumerable<TEntity>> GetAll();
+        IEnumerable<TEntity> GetAll();
         TEntity Find(Expression<Func<TEntity, bool>> predicate, params string[] includeProperties);
     }
 }

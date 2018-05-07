@@ -24,9 +24,9 @@ namespace Domain.Services
             return _repository.Find(x => x.CategoryId == id, includeProperties);
         }
 
-        public async Task<IEnumerable<Category>> GetAll()
+        public IEnumerable<Category> GetAll()
         {
-            return await _repository.GetAll();
+            return _repository.GetAll();
         }
     }
 }

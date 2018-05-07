@@ -24,7 +24,7 @@ namespace Domain.Services
         return _repository.Find(x => x.CompanyId == id, includeProperties);
     }
 
-    public Task<IEnumerable<Company>> GetAll()
+    public IEnumerable<Company> GetAll()
     {
         return _repository.GetAll();
     }

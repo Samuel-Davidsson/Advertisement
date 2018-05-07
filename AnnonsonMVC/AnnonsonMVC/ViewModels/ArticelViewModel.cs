@@ -10,10 +10,11 @@ namespace AnnonsonMVC.ViewModels
 {
     public class ArticelViewModel
     {
+        //Ändrat detta.
         public ArticelViewModel()
         {
-            //ArticleCategory = new HashSet<ArticleCategory>();
-            //StoreArticle = new HashSet<StoreArticle>();
+            ArticleCategory = new HashSet<ArticleCategory>();
+            StoreArticle = new HashSet<StoreArticle>();
         }
 
         public int ArticleId { get; set; }

@@ -7,6 +7,6 @@ namespace Domain.Interfaces
     public interface ICompanyService
     {
         void Add(Company company);
-        Task<IEnumerable<Company>> GetAll();
+        IEnumerable<Company> GetAll();
     }
 }

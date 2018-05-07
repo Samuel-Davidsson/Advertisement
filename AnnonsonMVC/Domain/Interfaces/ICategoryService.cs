@@ -7,7 +7,7 @@ namespace Domain.Interfaces
     public interface ICategoryService
     {
         void Add(Category category);
-        Task<IEnumerable<Category>> GetAll();
+        IEnumerable<Category> GetAll();
         Category Find(int id, params string[] includeProperties);
     }
 }

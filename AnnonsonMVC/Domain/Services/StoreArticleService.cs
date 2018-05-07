@@ -13,9 +13,9 @@ namespace Domain.Services
         {
             _repository = repository;
         }
-        public async Task<IEnumerable<StoreArticle>> GetAll()
+        public IEnumerable<StoreArticle> GetAll()
         {
-            return await _repository.GetAll();
+            return _repository.GetAll();
         }
         public void Update(StoreArticle storeArticle)
         {

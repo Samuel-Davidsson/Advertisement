@@ -31,6 +31,7 @@ namespace AnnonsonMVC
             services.AddScoped<IStoreService, StoreService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IStoreArticleService, StoreArticleService>();
+            services.AddScoped<IArticleCategoryService, ArticleCategoryService>();
             services.AddScoped<ImageService>();
             services.AddScoped<SelectedStoresService>();
             services.AddScoped<IRepository<Article>, Repository<Article>>();
@@ -38,11 +39,12 @@ namespace AnnonsonMVC
             services.AddScoped<IRepository<Store>, Repository<Store>>();
             services.AddScoped<IRepository<Company>, Repository<Company>>();
             services.AddScoped<IRepository<StoreArticle>, Repository<StoreArticle>>();
+            services.AddScoped<IRepository<ArticleCategory>, Repository<ArticleCategory>>();
 
             var appSettings = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettings);
-            //var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
-            var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
+            var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
+            //var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
             services.AddDbContext<AnnonsappenContext>(options => options.UseSqlServer(connection));
             services.AddMvc();
         }

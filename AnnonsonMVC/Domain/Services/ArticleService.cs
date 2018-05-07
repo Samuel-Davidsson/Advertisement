@@ -25,9 +25,9 @@ namespace Domain.Services
             return _repository.Find(x => x.ArticleId == id, includeProperties);
         }
 
-        public async Task<IEnumerable<Article>> GetAll()
+        public IEnumerable<Article> GetAll()
         {
-            return await _repository.GetAll();
+            return _repository.GetAll();
         }
 
         public void Update(Article article)

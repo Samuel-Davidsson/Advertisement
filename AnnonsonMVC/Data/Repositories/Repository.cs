@@ -23,13 +23,13 @@ namespace Data.Repositories
         public void Add(TEntity entity)
         {
             _set.Add(entity);
-            //_context.Update(entity);
+            _context.Update(entity);
             _context.SaveChanges();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public IEnumerable<TEntity> GetAll()
         {
-            return await _set.ToListAsync();
+            return _set.ToList();
         }
 
         public async Task SaveChangesAsync()

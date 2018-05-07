@@ -18,47 +18,49 @@ namespace AnnonsonMVC.Controllers
         private readonly IStoreService _storeService;
         private readonly ICompanyService _companyService;
         private readonly IStoreArticleService _storeArticleService;
+        private readonly IArticleCategoryService _articleCategoryService;
         private readonly ImageService _imageService;
         private readonly SelectedStoresService _selectedStoresService;
         private readonly AppSettings _appSettings;
 
         public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService, 
             IStoreArticleService storeArticleService, ImageService imageService, 
-            SelectedStoresService selectedStoresService, IOptions<AppSettings> appSettings)
+            SelectedStoresService selectedStoresService, IOptions<AppSettings> appSettings, IArticleCategoryService articleCategoryService)
         {
             _articelService = articleService;
             _categoryService = categoryService;
             _storeService = storeService;
             _companyService = companyService;
             _storeArticleService = storeArticleService;
+            _articleCategoryService = articleCategoryService;
             _imageService = imageService;
             _selectedStoresService = selectedStoresService;
             _appSettings = appSettings.Value;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var articles = await _articelService.GetAll();
+            var articles = _articelService.GetAll();
             var userArticles = articles.Where(x => x.UserId == 3);
             return View(userArticles.ToList());
         }
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Name");
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Name");
-            ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Name");
+            ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
+            ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
+            ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ArticelViewModel model)
+        public IActionResult Create(ArticelViewModel model)
         {
 
             if (ModelState.IsValid)
             {
-                var stores = await _storeService.GetAll();
+                var stores = _storeService.GetAll();
                 if (model.StoreIds != null)
                 {                    
                     var tempSlug = model.Name;
@@ -100,9 +102,9 @@ namespace AnnonsonMVC.Controllers
                 }
             }
 
-            ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Company");
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Category");
-            ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Store");
+            ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Company");
+            ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Category");
+            ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Store");
             return RedirectToAction("Index");
         }
 
@@ -125,7 +127,7 @@ namespace AnnonsonMVC.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Edit(int id)
+        public IActionResult Edit(int id)
         {     
             var article = _articelService.Find(id, "StoreArticle.Store", "ArticleCategory.Category");
             var companyId = article.CompanyId;
@@ -133,14 +135,17 @@ namespace AnnonsonMVC.Controllers
             var articleCategory = article.ArticleCategory.FirstOrDefault(x => x.ArticleId == article.ArticleId);
 
             var model = Mapper.ModelToViewModelMapping.ArticleToArticleViewModel(article);
-           
-            model.CategoryId = articleCategory.CategoryId;
+
+            foreach (var categoryId in model.ArticleCategory.Select(x =>x.CategoryId))
+            {
+                model.CategoryId = categoryId;
+            }
             var stores = model.StoreArticle.Select(x => x.StoreId).ToArray();
             model.StoreIds = stores;
 
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAll(), "CategoryId", "Name");
-            ViewData["StoreId"] = new SelectList(await _storeService.GetAll(), "StoreId", "Name");
-            ViewData["CompanyId"] = new SelectList(await _companyService.GetAll(), "CompanyId", "Name");
+            ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
+            ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name");
+            ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
 
             return View(model);
         }
@@ -163,29 +168,44 @@ namespace AnnonsonMVC.Controllers
 
                 var tempSlug = model.Name;
                 model.Slug = _articelService.GenerateSlug(tempSlug);
-                model.UserId = article.UserId;
-                var categoryId = model.CategoryId;
+                model.UserId = article.UserId;               
+                //var categoryId = model.CategoryId;
+                
 
-                var test = model.StoreArticle;
-                foreach (var store in test)
+                //var test = model.StoreIds;
+                //foreach (var store in test)
+                //{
+                //        _storeArticleService.Update(store);                 
+                //}
+                //model.ArticleCategory.Add(new ArticleCategory
+                //{
+                //    ArticleId = model.ArticleId,
+
+                //    CategoryId = categoryId,
+                //});
+                var categoriesId = article.ArticleCategory.Select(x => x.CategoryId);
+
+                foreach (var categoryId in categoriesId)
                 {
-                    if (store.ArticleId != model.ArticleId)
+                    if (categoryId != model.CategoryId)
                     {
-                        _storeArticleService.Update(store);
+                        
+                        model.ArticleCategory.Add(new ArticleCategory
+                        {
+                            ArticleId = model.ArticleId,
+
+                            CategoryId = model.CategoryId,
+                        });
                     }
-                    
+                    else
+                    {
+                        model.ArticleCategory = article.ArticleCategory;
+                    }
                 }
-
-                model.ArticleCategory.Add(new ArticleCategory
-                {
-                    ArticleId = model.ArticleId,
-
-                    CategoryId = categoryId,
-                });
 
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
 
-
+                //_articleCategoryService.Update();
                 _articelService.Update(article);
             }
             return RedirectToAction("Index");
@@ -201,6 +221,12 @@ namespace AnnonsonMVC.Controllers
 
 // Problem om man inte ändrar kategori eller storeart t.ex då blir det error eftersom den redan finns måste ha nån check på detta.
 // Vet inte just nu får tänka på det.
+// Funkar när jag byter men när jag INTE vill ändra kategori så blir den 0 eftersom modellen inte har nån art kat.
+
+
+
+
+
 
 // Fixa till dom som är single value det är inte snyggt måste kunna göra det på ett bättre sätt? Funkar i alla fall.
 
