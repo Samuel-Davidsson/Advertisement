@@ -12,6 +12,7 @@ namespace Domain.Entites
         public DateTime Date { get; set; }
 
         public Company Company { get; set; }
+        public Contract Contract { get; set; }
         public User User { get; set; }
     }
 }

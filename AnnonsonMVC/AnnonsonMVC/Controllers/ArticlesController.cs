@@ -152,7 +152,7 @@ namespace AnnonsonMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var article = _articelService.Find(model.ArticleId, "ArticleCategory.Category");
+                var article = _articelService.Find(model.ArticleId, "ArticleCategory.Category", "StoreArticle.Store");
 
                 if (model.ImageFile == null)
                 {
@@ -204,30 +204,36 @@ namespace AnnonsonMVC.Controllers
 }
 
 //    ------Funktioner-------
+// Bilden fungerar nu bara att spara ner den och deleta(de gamla bilderna) som är kvar.
+// 30min-60min
 
-// Deleta alla gamla bilder om man lägger till en ny.(vänta med)
-// Man skall se orginalet först väljer man ny bild så byts den ut bara man kan INTE ändra tillbaka då får man gå tillbaka(vänta med)
 // Bygga en ny Viewmodel som är till för edit.(idag)
+// 1 timma    
 
-//Problem
+//        --------Problem-----------
 // Nu sparar jag istället för att uppdatera..
 // Dessutom blir det ju dubbletter förutom när det gäller Identity columnen.
+// Så vi uppdatera egentligen inte utan vi sparar nya, lösning är att radera alla de befintliga och lägga till nya problemet med det är nog att det måste man göra varje
+// gång någon editerar måste finnas nåt smidigare sätt att lösa det på.
+// Lägga till fungerar utan problem, problemet är när du unselectar nånting, och sparar, då kommer du fortfarande att ha den icheckad när du kommer tillbaka nästa gång.
+// Osäkert här tidsmässigt.
+
+// Image bara delete och imagepath kvar måste bara veta om dom skulle sparas i samma mapp eller inte(Väntar på svar från Richard här) Går snabbt att fixa löser jag på halvtimme/timma.
+
+// Stora problemet ligger i Db och edit stores.
+
+
 
 // --------Refactoring-----------
-
 // Titta över namngivningen på allt igen(gå igenom hela flödet).*
 // Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt.*
 // Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details)Sista grejen.
-
+// 1dag ungefär
 
 //      --------Styling---------
 // Stylingen skall påminna om den som redan finns på hemsidan får titta på den och se hur det ser ut(Kommer ta lite tid).
 // Styla Details sidan.
 // Styla Edit sidan.
 // Styla Create sidan.
+//Osäker här gissar på 2-3 dagar
 
-
-//   ----------Frågor-----------
-
-// Angående strukturen på mitt projekt(Speciellt funktionerna i utilitys om dom skall vara där)?
-// Appsettings rätt gjort/tänkt?

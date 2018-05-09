@@ -9,6 +9,7 @@ namespace Domain.Entites
         {
             ArticleCategory = new HashSet<ArticleCategory>();
             StoreArticle = new HashSet<StoreArticle>();
+            Notification = new HashSet<Notification>();
         }
 
         public int ArticleId { get; set; }
@@ -35,5 +36,6 @@ namespace Domain.Entites
         public Company Company { get; set; }
         public ICollection<ArticleCategory> ArticleCategory { get; set; }
         public ICollection<StoreArticle> StoreArticle { get; set; }
+        public ICollection<Notification> Notification { get; set; }
     }
 }

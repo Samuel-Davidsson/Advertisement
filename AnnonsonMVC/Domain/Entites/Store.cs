@@ -9,6 +9,11 @@ namespace Domain.Entites
         {
             StoreArticle = new HashSet<StoreArticle>();
             UserStore = new HashSet<UserStore>();
+            BonusStore = new HashSet<BonusStore>();
+            MallStore = new HashSet<MallStore>();
+            NotificationHub = new HashSet<NotificationHub>();
+            StoreSubscription = new HashSet<StoreSubscription>();
+            UserStoreInvite = new HashSet<UserStoreInvite>();
         }
 
         public int StoreId { get; set; }
@@ -64,5 +69,11 @@ namespace Domain.Entites
         public Company Company { get; set; }
         public ICollection<StoreArticle> StoreArticle { get; set; }
         public ICollection<UserStore> UserStore { get; set; }
+        public Municipality Municipality { get; set; }
+        public ICollection<BonusStore> BonusStore { get; set; }
+        public ICollection<MallStore> MallStore { get; set; }
+        public ICollection<NotificationHub> NotificationHub { get; set; }
+        public ICollection<StoreSubscription> StoreSubscription { get; set; }
+        public ICollection<UserStoreInvite> UserStoreInvite { get; set; }
     }
 }

@@ -16,7 +16,7 @@
                 <div>
                     <input asp-for="ImageFile" accept="image/*" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
                     <span asp-validation-for="ImageFile" class="text-danger"></span>
-                    <img src="@Url.Content(ViewBag.mediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-256." + Model.ImageFileFormat)" id="output" class="ImagePreview" />
+                    <img src="@Url.Content(ViewBag.mediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-512." + Model.ImageFileFormat)" id="output" class="ImagePreview" />
                 </div>
             </div>
     <div class="form-group">
