@@ -7,6 +7,7 @@ using Domain.Entites;
 using AnnonsonMVC.Utilities;
 using Data.Appsettings;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -128,10 +129,7 @@ namespace AnnonsonMVC.Controllers
         public IActionResult Edit(int id)
         {     
             var article = _articelService.Find(id, "StoreArticle.Store", "ArticleCategory.Category");
-            var companyId = article.CompanyId;
             
-            var articleCategory = article.ArticleCategory.FirstOrDefault(x => x.ArticleId == article.ArticleId);
-
             var model = Mapper.ModelToViewModelMapping.ArticleToArticleViewModel(article);
 
             foreach (var categoryId in model.ArticleCategory.Select(x =>x.CategoryId))
@@ -154,7 +152,7 @@ namespace AnnonsonMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var article = _articelService.Find(model.ArticleId, "StoreArticle.Store", "ArticleCategory.Category");
+                var article = _articelService.Find(model.ArticleId, "ArticleCategory.Article", "StoreArticle.Article");
 
                 if (model.ImageFile == null)
                 {
@@ -164,34 +162,31 @@ namespace AnnonsonMVC.Controllers
                     model.ImageWidths = article.ImageWidths;
                 }
 
-                model.Slug = _articelService.GenerateSlug(model.Name);
-                model.UserId = article.UserId;
 
-                var storesId = article.StoreArticle.Select(X => X.StoreId).ToArray();
+                var list = article.StoreArticle.ToList();
+                foreach (var storeArticle in list)
+                {
+                    article.StoreArticle.Remove(storeArticle);
+                    _storeArticleService.Update(storeArticle);
+                }
 
-                //foreach (var storeId in model.StoreIds)
-                //{
-                //    if (storesId != model.StoreIds)
-                //    {
-                //        model.StoreArticle = article.StoreArticle;
-                //    }
-                //    else
-                //    {
-                //        model.StoreArticle.Add(new StoreArticle
-                //        {
-                //            ArticleId = model.ArticleId,
-                //            StoreId = storeId,
-                //        });
-                //    }
-                //}
-               
-            
+                foreach (var storeId in model.StoreIds)
+                {
+                    model.StoreArticle.Add(new StoreArticle
+                    {
+                        StoreId = storeId,
+                        ArticleId = model.ArticleId
+                    });
+                }
+                
+                
 
-            var categoriesId = article.ArticleCategory.Select(x => x.CategoryId);
+           
+                var categoriesId = article.ArticleCategory.Select(x => x.CategoryId);
                 foreach (var categoryId in categoriesId)
                 {
                     if (categoryId != model.CategoryId)
-                    {                       
+                    {
                         model.ArticleCategory.Add(new ArticleCategory
                         {
                             ArticleId = model.ArticleId,
@@ -203,6 +198,9 @@ namespace AnnonsonMVC.Controllers
                         model.ArticleCategory = article.ArticleCategory;
                     }
                 }
+
+                model.Slug = _articelService.GenerateSlug(model.Name);
+                model.UserId = article.UserId;
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
 
                 _articelService.Update(article);
@@ -218,11 +216,8 @@ namespace AnnonsonMVC.Controllers
 // Man skall se orginalet först väljer man ny bild så byts den ut bara man kan INTE ändra tillbaka då får man gå tillbaka(vänta med)
 // Bygga en ny Viewmodel som är till för edit.(idag)
 
-//Problem med stores är ju en lista jag måste jämföra mot istället.
-
-
-
-
+//Problem
+// Asnoincluding nu när jag har den funkar det hela vägen förutom att jag inte sparar nånting alls istället.
 
 
 // Fixa till dom som är single value det är inte snyggt måste kunna göra det på ett bättre sätt? Funkar i alla fall.

@@ -46,7 +46,8 @@ namespace AnnonsonMVC.Utilities
                 PublishEnd = model.PublishEnd,
                 CompanyId = model.Company.CompanyId,
                 UserId = model.UserId,
-                ArticleCategory = model.ArticleCategory
+                ArticleCategory = model.ArticleCategory,
+                StoreArticle = model.StoreArticle
             };
         }
     }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,11 +11,10 @@ namespace AnnonsonMVC.ViewModels
 {
     public class ArticelViewModel
     {
-        //Ändrat detta.
         public ArticelViewModel()
         {
-            ArticleCategory = new HashSet<ArticleCategory>();
-            StoreArticle = new HashSet<StoreArticle>();
+            ArticleCategory = new Collection<ArticleCategory>();
+            StoreArticle = new Collection<StoreArticle>();
         }
 
         public int ArticleId { get; set; }
