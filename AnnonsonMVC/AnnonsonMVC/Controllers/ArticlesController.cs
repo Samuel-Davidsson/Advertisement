@@ -138,9 +138,9 @@ namespace AnnonsonMVC.Controllers
             }
             var stores = model.StoreArticle.Select(x => x.StoreId).ToArray();
             model.StoreIds = stores;
-
+            ViewBag.mediaUrl = _appSettings.MediaUrl;
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
-            ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name");
+            ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name", stores);
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
 
             return View(model);
@@ -152,7 +152,7 @@ namespace AnnonsonMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var article = _articelService.Find(model.ArticleId, "ArticleCategory.Article", "StoreArticle.Article");
+                var article = _articelService.Find(model.ArticleId, "ArticleCategory.Category");
 
                 if (model.ImageFile == null)
                 {
@@ -160,14 +160,6 @@ namespace AnnonsonMVC.Controllers
                     model.ImageFileName = article.ImageFileName;
                     model.ImagePath = article.ImagePath;
                     model.ImageWidths = article.ImageWidths;
-                }
-
-
-                var list = article.StoreArticle.ToList();
-                foreach (var storeArticle in list)
-                {
-                    article.StoreArticle.Remove(storeArticle);
-                    _storeArticleService.Update(storeArticle);
                 }
 
                 foreach (var storeId in model.StoreIds)
@@ -178,10 +170,11 @@ namespace AnnonsonMVC.Controllers
                         ArticleId = model.ArticleId
                     });
                 }
+                foreach (var item in model.StoreArticle)
+                {
+                    _storeArticleService.Update(item);
+                }
                 
-                
-
-           
                 var categoriesId = article.ArticleCategory.Select(x => x.CategoryId);
                 foreach (var categoryId in categoriesId)
                 {
@@ -191,6 +184,7 @@ namespace AnnonsonMVC.Controllers
                         {
                             ArticleId = model.ArticleId,
                             CategoryId = model.CategoryId,
+                            
                         });
                     }
                     else
@@ -198,7 +192,6 @@ namespace AnnonsonMVC.Controllers
                         model.ArticleCategory = article.ArticleCategory;
                     }
                 }
-
                 model.Slug = _articelService.GenerateSlug(model.Name);
                 model.UserId = article.UserId;
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
@@ -217,10 +210,8 @@ namespace AnnonsonMVC.Controllers
 // Bygga en ny Viewmodel som är till för edit.(idag)
 
 //Problem
-// Asnoincluding nu när jag har den funkar det hela vägen förutom att jag inte sparar nånting alls istället.
-
-
-// Fixa till dom som är single value det är inte snyggt måste kunna göra det på ett bättre sätt? Funkar i alla fall.
+// Nu sparar jag istället för att uppdatera..
+// Dessutom blir det ju dubbletter förutom när det gäller Identity columnen.
 
 // --------Refactoring-----------
 

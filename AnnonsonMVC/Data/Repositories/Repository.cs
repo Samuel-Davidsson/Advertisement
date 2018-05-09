@@ -23,7 +23,7 @@ namespace Data.Repositories
         public void Add(TEntity entity)
         {
             _set.Add(entity);
-            _context.Update(entity);
+            //_context.Update(entity);
             _context.SaveChanges();
         }
 
