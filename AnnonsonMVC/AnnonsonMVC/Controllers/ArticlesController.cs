@@ -8,6 +8,7 @@ using AnnonsonMVC.Utilities;
 using Data.Appsettings;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
+using System;
 
 namespace AnnonsonMVC.Controllers
 {
@@ -47,10 +48,15 @@ namespace AnnonsonMVC.Controllers
 
         public IActionResult Create()
         {
+            var articleViewModel = new ArticelViewModel
+            {
+                PublishBegin = DateTime.Today,
+                PublishEnd = DateTime.Today
+            };
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
             ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name");
-            return View();
+            return View(articleViewModel);
         }
 
         [HttpPost]
@@ -75,8 +81,7 @@ namespace AnnonsonMVC.Controllers
 
                     newArticle.ArticleCategory.Add(new ArticleCategory
                     {
-                        ArticleId = newArticle.ArticleId,
-                        
+                        ArticleId = newArticle.ArticleId,                        
                         CategoryId = categoryId,                 
                     });
                   
@@ -210,28 +215,14 @@ namespace AnnonsonMVC.Controllers
 // Bygga en ny Viewmodel som är till för edit.(idag)
 // 1 timma    
 
-//        --------Problem-----------
-// Nu sparar jag istället för att uppdatera..
-// Dessutom blir det ju dubbletter förutom när det gäller Identity columnen.
-// Så vi uppdatera egentligen inte utan vi sparar nya, lösning är att radera alla de befintliga och lägga till nya problemet med det är nog att det måste man göra varje
-// gång någon editerar måste finnas nåt smidigare sätt att lösa det på.
-// Lägga till fungerar utan problem, problemet är när du unselectar nånting, och sparar, då kommer du fortfarande att ha den icheckad när du kommer tillbaka nästa gång.
-// Osäkert här tidsmässigt.
-
-// Image bara delete och imagepath kvar måste bara veta om dom skulle sparas i samma mapp eller inte(Väntar på svar från Richard här) Går snabbt att fixa löser jag på halvtimme/timma.
-
-// Stora problemet ligger i Db och edit stores.
-
-
-
 // --------Refactoring-----------
 // Titta över namngivningen på allt igen(gå igenom hela flödet).*
 // Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt.*
 // Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details)Sista grejen.
-// 1dag ungefär
+// 1 dag ungefär
 
 //      --------Styling---------
-// Stylingen skall påminna om den som redan finns på hemsidan får titta på den och se hur det ser ut(Kommer ta lite tid).
+// Stylingen skall påminna om den som redan finns på hemsidan får titta på den och se hur det ser ut.
 // Styla Details sidan.
 // Styla Edit sidan.
 // Styla Create sidan.
