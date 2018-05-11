@@ -136,7 +136,30 @@ namespace AnnonsonMVC.Utilities
             }
             else
             {
-                System.Console.WriteLine("Path doesnt exist");//Göra nåt annat här.
+                System.Console.WriteLine("Path doesnt exist");
+            }
+        }
+
+        public void DeleteAllOldImages(string imagepath)
+        {
+            if (File.Exists(imagepath + "-1024" + ".jpg"))
+            {
+                File.Delete(imagepath + "-1024" + ".jpg");
+            }
+
+            if (File.Exists(imagepath + "-512" + ".jpg"))
+            {
+                File.Delete(imagepath + "-512" + ".jpg");
+            }
+
+            if (File.Exists(imagepath + "-256" + ".jpg"))
+            {
+                File.Delete(imagepath + "-256" + ".jpg");
+            }
+
+            if (File.Exists(imagepath + "-128" + ".jpg"))
+            {
+                File.Delete(imagepath + "-128" + ".jpg");
             }
         }
     }

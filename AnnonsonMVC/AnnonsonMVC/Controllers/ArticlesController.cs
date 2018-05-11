@@ -181,22 +181,29 @@ namespace AnnonsonMVC.Controllers
                 }
                 
                 var categoriesId = article.ArticleCategory.Select(x => x.CategoryId);
-                foreach (var categoryId in categoriesId)
+
+                model.ArticleCategory.Add(new ArticleCategory
                 {
-                    if (categoryId != model.CategoryId)
-                    {
-                        model.ArticleCategory.Add(new ArticleCategory
-                        {
-                            ArticleId = model.ArticleId,
-                            CategoryId = model.CategoryId,
-                            
-                        });
-                    }
-                    else
-                    {
-                        model.ArticleCategory = article.ArticleCategory;
-                    }
-                }
+                    ArticleId = model.ArticleId,
+                    CategoryId = model.CategoryId
+                });
+                //foreach (var categoryId in categoriesId)
+                //{
+
+                //    if (categoryId != model.CategoryId)
+                //    {
+                //        model.ArticleCategory.Add(new ArticleCategory
+                //        {
+                //            ArticleId = model.ArticleId,
+                //            CategoryId = model.CategoryId,
+
+                //        });
+                //    }
+                //    else
+                //    {
+                //        model.ArticleCategory = article.ArticleCategory;
+                //    }
+                //}
                 model.Slug = _articelService.GenerateSlug(model.Name);
                 model.UserId = article.UserId;
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
@@ -210,9 +217,12 @@ namespace AnnonsonMVC.Controllers
 
 //    ------Funktioner-------
 // Bilden fungerar nu bara att spara ner den och deleta(de gamla bilderna) som är kvar.
+// Validation för datum.
+// Litet problem med Kategori om den är tom ifrån början så går det inte att uppdatera den via Edit.
+// Antagligen ge den en IdentityColumn också.
 // 30min-60min
 
-// Bygga en ny Viewmodel som är till för edit.(idag)
+// Bygga en ny Viewmodel som är till för edit.
 // 1 timma    
 
 // --------Refactoring-----------

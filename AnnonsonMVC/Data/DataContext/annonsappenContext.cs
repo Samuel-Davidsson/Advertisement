@@ -53,7 +53,8 @@ namespace Data.DataContext
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Data Source=SAMUEL;Initial Catalog=annonsappen;Integrated Security=True;");
+                //optionsBuilder.UseSqlServer(@"Data Source=SAMUEL;Initial Catalog=annonsappen;Integrated Security=True;");
+                optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-M702LBS;Initial Catalog=annonsappen;Integrated Security=True;");
             }
         }
 
