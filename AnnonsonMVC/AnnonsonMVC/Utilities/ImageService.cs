@@ -1,5 +1,6 @@
 ﻿using Data.Appsettings;
 using Domain.Entites;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
@@ -13,10 +14,12 @@ namespace AnnonsonMVC.Utilities
     public class ImageService
     {
         private readonly AppSettings _appSettings;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public ImageService(IOptions<AppSettings> appSettings)
+        public ImageService(IOptions<AppSettings> appSettings, IHostingEnvironment hostingEnvironment)
         {
             _appSettings = appSettings.Value;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public string SaveImageToPath(Article newArticle, string imageDirectoryPath, IFormFile imageFile)
@@ -139,28 +142,33 @@ namespace AnnonsonMVC.Utilities
                 System.Console.WriteLine("Path doesnt exist");
             }
         }
-        // Bygga om min delete funktion fungerar inte alls.
-        public void DeleteAllOldImages(string imagepath, string filename)
-        {        
-            if (File.Exists(filename))
-            {
-                File.Delete(filename + "-512" + ".kpg");
-            }
 
-            if (File.Exists(imagepath))
+        public void DeleteArticleImages(string imageDirectory, string imageFileName)
+        {
+        
+            DirectoryInfo di = new DirectoryInfo(imageDirectory + @"\" + imageFileName);
+            
+            foreach (FileInfo file in di.GetFiles())
             {
-                File.Delete(imagepath);
+                file.Delete();
             }
-
-            if (File.Exists(imagepath + filename + "-256" + ".jpg"))
+            foreach (DirectoryInfo dir in di.GetDirectories())
             {
-                File.Delete(imagepath + filename + "-256" + ".jpg");
+                dir.Delete(true);
             }
-
-            if (File.Exists(imagepath + filename + "-128" + ".jpg"))
+            if (!Directory.Exists(imageDirectory))
             {
-                File.Delete(imagepath + filename + "-128" + ".jpg");
+                var directory = imageDirectory + @"\";
+                var fullpath = directory + imageFileName;
+
+                var fileList = Directory.GetFiles(fullpath, "*-512" + "*.jpg");
+
+                foreach (string file in fileList)
+                {
+                    File.Delete(file);
+                }
             }
         }
     }
 }
+

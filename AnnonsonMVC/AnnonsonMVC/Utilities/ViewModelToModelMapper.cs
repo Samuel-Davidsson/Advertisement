@@ -28,7 +28,7 @@ namespace AnnonsonMVC.Utilities
 
     }
 
-        public Article EditActicleViewModelToArticle(ArticelViewModel model)
+        public Article ActicleViewModelToArticle(ArticelViewModel model)
         {
             return new Article
             {

@@ -74,7 +74,7 @@ namespace AnnonsonMVC.Controllers
                     var selectedStoreListIds = _selectedStoresService.GetSelectedStoresList(model, stores);
                     var categoryId = model.CategoryId;
 
-                    var newArticle = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model);
+                    var newArticle = Mapper.ViewModelToModelMapping.ActicleViewModelToArticle(model);
                  
                     _articelService.Add(newArticle);
 
@@ -166,6 +166,20 @@ namespace AnnonsonMVC.Controllers
                     model.ImageWidths = article.ImageWidths;
                 }
 
+                if (model.ImageFile != null)
+                {
+                    _imageService.DeleteArticleImages(article.ImagePath, article.ImageFileName);
+                    var imageDirectoryPath = _imageService.CreateImageDirectory(article);
+
+                    var imageFile = model.ImageFile;
+                    var saveImageToPath = _imageService.SaveImageToPath(article, imageDirectoryPath, imageFile);
+
+                    article.ImageWidths = _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath, imageDirectoryPath);
+
+                    
+                    _imageService.TryToDeleteOriginalImage(saveImageToPath);
+                }
+
 
                 foreach (var storeId in model.StoreIds)
                 {
@@ -175,18 +189,13 @@ namespace AnnonsonMVC.Controllers
                         ArticleId = model.ArticleId
                     });
                 }
-                foreach (var item in model.StoreArticle)//Storeart service refactor
-                {
-                    _storeArticleService.Update(item);
-                }
+                //foreach (var item in model.StoreArticle)//Storeart service refactor
+                //{
+                //    _storeArticleService.Update(item); //Onödig?
+                //}
                 
                 var categoriesId = article.ArticleCategory.Select(x => x.CategoryId);
 
-                model.ArticleCategory.Add(new ArticleCategory
-                {
-                    ArticleId = model.ArticleId,
-                    CategoryId = model.CategoryId
-                });
                 foreach (var categoryId in categoriesId)// Artcategory serive refactor
                 {
 
@@ -206,25 +215,9 @@ namespace AnnonsonMVC.Controllers
                 }
                 model.Slug = _articelService.GenerateSlug(model.Name);
                 model.UserId = article.UserId;
-                if (model.ImageFile != null)
-                {
-                    _imageService.DeleteAllOldImages(article.ImagePath, article.ImageFileName);
-                }
+
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
-
-                if (model.ImageFile != null)
-                {                    
-                    var imageDirectoryPath = _imageService.CreateImageDirectory(article);
-
-                    var imageFile = model.ImageFile;
-                    var saveImageToPath = _imageService.SaveImageToPath(article, imageDirectoryPath, imageFile);
-
-                    article.ImageWidths = _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath, imageDirectoryPath);
-
-                   
-                    _imageService.TryToDeleteOriginalImage(saveImageToPath);
-                }
-                
+         
                 _articelService.Update(article);
             }
             return RedirectToAction("Index");
@@ -234,19 +227,15 @@ namespace AnnonsonMVC.Controllers
 
 //    ------Funktioner-------
 
-// Litet problem med Kategori om den är tom ifrån början så går det inte att uppdatera den via Edit.
-// Antagligen ge den en IdentityColumn också.
-// 30min-60min
-
-// Bygga en ny Viewmodel som är till för edit.
-// 1 timma
+// Testa hemma sen när den är knuten till db på ett bättre sätt(Category).
+// Funka inte här måste ställa in det hemma där jag har hela den biten klar redan alltså lättare att fixa för mig.
 
 // Validera datum
-// 1-2 timmar
+// Funkar inte riktigt än.
 
 // Bygga till Image grejen på edit
 // Ny image att lägga till. DONE
-// Ta bort dom gamla.
+// Ta bort dom gamla. Problem här...
 // 1 timma
 
 // --------Refactoring-----------
@@ -264,4 +253,13 @@ namespace AnnonsonMVC.Controllers
 // Styla Edit sidan.
 // Styla Create sidan.
 //Osäker här gissar på 2-3 dagar
+
+
+    // DEN JAG och JACOB gjorde får titta på den och applicera på validering av datum här.
+//public class FromBookingDateValidations : ValidationAttribute
+//{
+//    private int pastMonths;
+//    private int futureMonths;
+
+
 
