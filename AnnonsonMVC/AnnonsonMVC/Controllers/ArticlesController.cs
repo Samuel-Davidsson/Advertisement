@@ -63,7 +63,6 @@ namespace AnnonsonMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ArticelViewModel model)
         {
-
             if (ModelState.IsValid)
             {
                 var stores = _storeService.GetAll();
@@ -159,13 +158,14 @@ namespace AnnonsonMVC.Controllers
             {
                 var article = _articelService.Find(model.ArticleId, "ArticleCategory.Category", "StoreArticle.Store");
 
-                if (model.ImageFile == null)
-                {
-                    model.ImageFileFormat = article.ImageFileFormat;
-                    model.ImageFileName = article.ImageFileName;
-                    model.ImagePath = article.ImagePath;
-                    model.ImageWidths = article.ImageWidths;
-                }
+                //if (model.ImageFile == null)//Image service? //Onödig?
+                //{
+                //    model.ImageFileFormat = article.ImageFileFormat;
+                //    model.ImageFileName = article.ImageFileName;
+                //    model.ImagePath = article.ImagePath;
+                //    model.ImageWidths = article.ImageWidths;
+                //}
+
 
                 foreach (var storeId in model.StoreIds)
                 {
@@ -175,7 +175,7 @@ namespace AnnonsonMVC.Controllers
                         ArticleId = model.ArticleId
                     });
                 }
-                foreach (var item in model.StoreArticle)
+                foreach (var item in model.StoreArticle)//Storeart service refactor
                 {
                     _storeArticleService.Update(item);
                 }
@@ -187,27 +187,44 @@ namespace AnnonsonMVC.Controllers
                     ArticleId = model.ArticleId,
                     CategoryId = model.CategoryId
                 });
-                //foreach (var categoryId in categoriesId)
-                //{
+                foreach (var categoryId in categoriesId)// Artcat serive refactor
+                {
 
-                //    if (categoryId != model.CategoryId)
-                //    {
-                //        model.ArticleCategory.Add(new ArticleCategory
-                //        {
-                //            ArticleId = model.ArticleId,
-                //            CategoryId = model.CategoryId,
+                    if (categoryId != model.CategoryId)
+                    {
+                        model.ArticleCategory.Add(new ArticleCategory
+                        {
+                            ArticleId = model.ArticleId,
+                            CategoryId = model.CategoryId,
 
-                //        });
-                //    }
-                //    else
-                //    {
-                //        model.ArticleCategory = article.ArticleCategory;
-                //    }
-                //}
+                        });
+                    }
+                    else
+                    {
+                        model.ArticleCategory = article.ArticleCategory;
+                    }
+                }
                 model.Slug = _articelService.GenerateSlug(model.Name);
                 model.UserId = article.UserId;
+                if (model.ImageFile != null)
+                {
+                    _imageService.DeleteAllOldImages(article.ImagePath, article.ImageFileName);
+                }
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
 
+                if (model.ImageFile != null)
+                {                    
+                    var imageDirectoryPath = _imageService.CreateImageDirectory(article);
+
+                    var imageFile = model.ImageFile;
+                    var saveImageToPath = _imageService.SaveImageToPath(article, imageDirectoryPath, imageFile);
+
+                    article.ImageWidths = _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath, imageDirectoryPath);
+
+                   
+                    _imageService.TryToDeleteOriginalImage(saveImageToPath);
+                }
+                
                 _articelService.Update(article);
             }
             return RedirectToAction("Index");
@@ -216,19 +233,29 @@ namespace AnnonsonMVC.Controllers
 }
 
 //    ------Funktioner-------
-// Bilden fungerar nu bara att spara ner den och deleta(de gamla bilderna) som är kvar.
-// Validation för datum.
+
 // Litet problem med Kategori om den är tom ifrån början så går det inte att uppdatera den via Edit.
 // Antagligen ge den en IdentityColumn också.
 // 30min-60min
 
 // Bygga en ny Viewmodel som är till för edit.
-// 1 timma    
+// 1 timma
+
+// Validera datum
+// 1-2 timmar
+
+// Bygga till Image grejen på edit
+// Ny image att lägga till. DONE
+// Ta bort dom gamla.
+// 1 timma
 
 // --------Refactoring-----------
 // Titta över namngivningen på allt igen(gå igenom hela flödet).*
 // Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt.*
 // Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details)Sista grejen.
+// Domain
+// Data
+// MVC
 // 1 dag ungefär
 
 //      --------Styling---------
