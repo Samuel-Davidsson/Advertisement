@@ -152,19 +152,19 @@ namespace AnnonsonMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(ArticelViewModel model)
+        public IActionResult Edit(ArticleEditViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var article = _articelService.Find(model.ArticleId, "ArticleCategory.Category", "StoreArticle.Store");
 
-                //if (model.ImageFile == null)//Image service? //Onödig?
-                //{
-                //    model.ImageFileFormat = article.ImageFileFormat;
-                //    model.ImageFileName = article.ImageFileName;
-                //    model.ImagePath = article.ImagePath;
-                //    model.ImageWidths = article.ImageWidths;
-                //}
+                if (model.ImageFile == null)//Image service?
+                {
+                    model.ImageFileFormat = article.ImageFileFormat;
+                    model.ImageFileName = article.ImageFileName;
+                    model.ImagePath = article.ImagePath;
+                    model.ImageWidths = article.ImageWidths;
+                }
 
 
                 foreach (var storeId in model.StoreIds)
@@ -187,7 +187,7 @@ namespace AnnonsonMVC.Controllers
                     ArticleId = model.ArticleId,
                     CategoryId = model.CategoryId
                 });
-                foreach (var categoryId in categoriesId)// Artcat serive refactor
+                foreach (var categoryId in categoriesId)// Artcategory serive refactor
                 {
 
                     if (categoryId != model.CategoryId)

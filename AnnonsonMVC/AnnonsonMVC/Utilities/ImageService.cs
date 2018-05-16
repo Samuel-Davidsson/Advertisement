@@ -141,15 +141,15 @@ namespace AnnonsonMVC.Utilities
         }
         // Bygga om min delete funktion fungerar inte alls.
         public void DeleteAllOldImages(string imagepath, string filename)
-        {
-            if (File.Exists(imagepath + filename + "-1024" + ".jpg"))
+        {        
+            if (File.Exists(filename))
             {
-                File.Delete(imagepath + filename + "-1024" + ".jpg");
+                File.Delete(filename + "-512" + ".kpg");
             }
 
-            if (File.Exists(imagepath + filename + "-512" + ".jpg"))
+            if (File.Exists(imagepath))
             {
-                File.Delete(imagepath + filename + "-512" + ".jpg");
+                File.Delete(imagepath);
             }
 
             if (File.Exists(imagepath + filename + "-256" + ".jpg"))

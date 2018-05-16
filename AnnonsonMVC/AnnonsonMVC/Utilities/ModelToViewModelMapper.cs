@@ -10,9 +10,9 @@ namespace AnnonsonMVC.Utilities
 
         }
 
-        public ArticelViewModel ArticleToArticleViewModel(Article article)
+        public ArticleEditViewModel ArticleToArticleViewModel(Article article)
         {
-            return new ArticelViewModel
+            return new ArticleEditViewModel
             { 
                 ArticleId = article.ArticleId,
                 Name = article.Name,

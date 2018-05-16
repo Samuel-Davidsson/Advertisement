@@ -6,7 +6,7 @@ namespace AnnonsonMVC.Utilities
     internal class ViewModelToModelMapper
     {
 
-        public Article EditActicleViewModelToArticle(ArticelViewModel model, Article article)
+        public Article EditActicleViewModelToArticle(ArticleEditViewModel model, Article article)
         {
             article.Name = model.Name;
             article.Description = model.Description;
