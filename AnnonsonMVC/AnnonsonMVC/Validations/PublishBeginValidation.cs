@@ -10,7 +10,7 @@ namespace AnnonsonMVC.Validations
         {
             ArticleEditViewModel articelEditViewModel = (ArticleEditViewModel)validationContext.ObjectInstance;
 
-            if (articelEditViewModel.PublishBegin < DateTime.Today)
+            if (articelEditViewModel.PublishBegin > DateTime.Today)
             {
                 return new ValidationResult("Du kan inte välja datum som har varit");
             }
@@ -22,4 +22,6 @@ namespace AnnonsonMVC.Validations
         }
     }
 }
+
+
 

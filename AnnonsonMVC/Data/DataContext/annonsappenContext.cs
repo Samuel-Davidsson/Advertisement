@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
 using Domain.Entites;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Data.DataContext
 {
@@ -8,12 +10,12 @@ namespace Data.DataContext
         public virtual DbSet<ApplicationLog> ApplicationLog { get; set; }
         public virtual DbSet<ApplicationSetting> ApplicationSetting { get; set; }
         public virtual DbSet<Article> Article { get; set; }
-        public virtual DbSet<ArticleCategory> ArticleCategory { get; set; }
+        public virtual DbSet<ArticleCategory> TArticleCategory { get; set; }
         public virtual DbSet<ArticleLog> ArticleLog { get; set; }
         public virtual DbSet<Bonus> Bonus { get; set; }
         public virtual DbSet<BonusStore> BonusStore { get; set; }
         public virtual DbSet<Category> Category { get; set; }
-        public virtual DbSet<Company> TCompany { get; set; }
+        public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<CompanyContract> CompanyContract { get; set; }
         public virtual DbSet<CompanyIndustry> CompanyIndustry { get; set; }
         public virtual DbSet<Consumer> Consumer { get; set; }
@@ -33,7 +35,7 @@ namespace Data.DataContext
         public virtual DbSet<Notification> Notification { get; set; }
         public virtual DbSet<NotificationHub> NotificationHub { get; set; }
         public virtual DbSet<NotificationOutcome> NotificationOutcome { get; set; }
-        public virtual DbSet<NotificationPlatform> TNotificationPlatform { get; set; }
+        public virtual DbSet<NotificationPlatform> NotificationPlatform { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethod { get; set; }
         public virtual DbSet<Region> Region { get; set; }
         public virtual DbSet<Seller> Seller { get; set; }
@@ -53,11 +55,10 @@ namespace Data.DataContext
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseSqlServer(@"Data Source=SAMUEL;Initial Catalog=annonsappen;Integrated Security=True;");
-                optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-M702LBS;Initial Catalog=annonsappen;Integrated Security=True;");
+                optionsBuilder.UseSqlServer(@"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;");
+              //optionsBuilder.UseSqlServer(@"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;");
             }
         }
-
         public AnnonsappenContext(DbContextOptions<AnnonsappenContext> options)
         : base(options)
         {
@@ -209,9 +210,11 @@ namespace Data.DataContext
 
             modelBuilder.Entity<ArticleCategory>(entity =>
             {
-                entity.HasKey(e => new { e.ArticleId, e.CategoryId });
+                entity.HasKey(e => new { e.ArticleId, e.CategoryId, e.ArticleCategoryId });
 
                 entity.ToTable("T_ArticleCategory");
+
+                entity.Property(e => e.ArticleCategoryId).ValueGeneratedOnAdd();
 
                 entity.HasOne(d => d.Article)
                     .WithMany(p => p.ArticleCategory)

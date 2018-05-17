@@ -76,6 +76,7 @@ namespace AnnonsonMVC.ViewModels
         public Company Company { get; set; }
         public int CompanyId { get; set; }
         public List<SelectListItem> Stores { get; set; }
+        [Required]
         public int[] StoreIds { get; set; }
 
         [Display(Name = "Kategori")]

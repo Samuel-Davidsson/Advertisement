@@ -181,38 +181,20 @@ namespace AnnonsonMVC.Controllers
                 }
 
 
-                foreach (var storeId in model.StoreIds)
+                foreach (var storeId in model.StoreIds) //Bygga bort detta till servicar?
                 {
                     model.StoreArticle.Add(new StoreArticle
                     {
                         StoreId = storeId,
                         ArticleId = model.ArticleId
                     });
-                }
-                //foreach (var item in model.StoreArticle)//Storeart service refactor
-                //{
-                //    _storeArticleService.Update(item); //Onödig?
-                //}
-                
-                var categoriesId = article.ArticleCategory.Select(x => x.CategoryId);
-
-                foreach (var categoryId in categoriesId)// Artcategory serive refactor
-                {
-
-                    if (categoryId != model.CategoryId)
+                }             
+                    model.ArticleCategory.Add(new ArticleCategory // Bygga bort?
                     {
-                        model.ArticleCategory.Add(new ArticleCategory
-                        {
-                            ArticleId = model.ArticleId,
-                            CategoryId = model.CategoryId,
+                        ArticleId = model.ArticleId,
+                        CategoryId = model.CategoryId
+                    });
 
-                        });
-                    }
-                    else
-                    {
-                        model.ArticleCategory = article.ArticleCategory;
-                    }
-                }
                 model.Slug = _articelService.GenerateSlug(model.Name);
                 model.UserId = article.UserId;
 
@@ -227,14 +209,10 @@ namespace AnnonsonMVC.Controllers
 
 //    ------Funktioner-------
 
-// Testa hemma sen när den är knuten till db på ett bättre sätt(Category).
-// Funka inte här måste ställa in det hemma där jag har hela den biten klar redan alltså lättare att fixa för mig.
-
 // Validera datum
 // Funkar inte riktigt än.
 
 // Bygga till Image grejen på edit
-// Ny image att lägga till. DONE
 // Ta bort dom gamla. Problem här...
 // 1 timma
 
@@ -253,13 +231,6 @@ namespace AnnonsonMVC.Controllers
 // Styla Edit sidan.
 // Styla Create sidan.
 //Osäker här gissar på 2-3 dagar
-
-
-    // DEN JAG och JACOB gjorde får titta på den och applicera på validering av datum här.
-//public class FromBookingDateValidations : ValidationAttribute
-//{
-//    private int pastMonths;
-//    private int futureMonths;
 
 
 
