@@ -60,13 +60,11 @@ namespace AnnonsonMVC.ViewModels
 
         [Required(ErrorMessage ="Artikeln måste ha ett startdatum.")]
         [Display(Name = "Startdatum")]
-        [PublishBeginValidation]
         [DataType(DataType.Date)]
         public DateTime PublishBegin { get; set; }
 
         [Required(ErrorMessage = "Artikeln måste ha ett slutdatum.")]
         [Display(Name = "Slutdatum")]
-        [PublishBeginValidation]
         [DataType(DataType.Date)]
         public DateTime PublishEnd { get; set; }
 

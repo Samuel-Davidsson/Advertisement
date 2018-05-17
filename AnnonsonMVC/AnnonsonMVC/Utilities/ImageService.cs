@@ -139,36 +139,19 @@ namespace AnnonsonMVC.Utilities
             }
             else
             {
-                System.Console.WriteLine("Path doesnt exist");
+               Console.WriteLine("Path doesnt exist");
             }
         }
 
-        public void DeleteArticleImages(string imageDirectory, string imageFileName)
+        public void DeleteArticleImages(string path, string fileName)
         {
-        
-            DirectoryInfo di = new DirectoryInfo(imageDirectory + @"\" + imageFileName);
-            
-            foreach (FileInfo file in di.GetFiles())
+            var fullpath = Path.Combine(_appSettings.MediaFolder + path);
+            string[] fileList = Directory.GetFiles(fullpath, "*" + fileName + "*");
+            foreach (string file in fileList)
             {
-                file.Delete();
+                File.Delete(file);
             }
-            foreach (DirectoryInfo dir in di.GetDirectories())
-            {
-                dir.Delete(true);
-            }
-            if (!Directory.Exists(imageDirectory))
-            {
-                var directory = imageDirectory + @"\";
-                var fullpath = directory + imageFileName;
-
-                var fileList = Directory.GetFiles(fullpath, "*-512" + "*.jpg");
-
-                foreach (string file in fileList)
-                {
-                    File.Delete(file);
-                }
-            }
-        }
+        }          
     }
 }
 

@@ -7,7 +7,6 @@ using Domain.Entites;
 using AnnonsonMVC.Utilities;
 using Data.Appsettings;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 using System;
 
 namespace AnnonsonMVC.Controllers
@@ -165,21 +164,10 @@ namespace AnnonsonMVC.Controllers
                     model.ImagePath = article.ImagePath;
                     model.ImageWidths = article.ImageWidths;
                 }
-
-                if (model.ImageFile != null)
+                else
                 {
                     _imageService.DeleteArticleImages(article.ImagePath, article.ImageFileName);
-                    var imageDirectoryPath = _imageService.CreateImageDirectory(article);
-
-                    var imageFile = model.ImageFile;
-                    var saveImageToPath = _imageService.SaveImageToPath(article, imageDirectoryPath, imageFile);
-
-                    article.ImageWidths = _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath, imageDirectoryPath);
-
-                    
-                    _imageService.TryToDeleteOriginalImage(saveImageToPath);
                 }
-
 
                 foreach (var storeId in model.StoreIds) //Bygga bort detta till servicar?
                 {
@@ -199,7 +187,20 @@ namespace AnnonsonMVC.Controllers
                 model.UserId = article.UserId;
 
                 article = Mapper.ViewModelToModelMapping.EditActicleViewModelToArticle(model, article);
-         
+
+                if (model.ImageFile != null)
+                {    
+                    var imageDirectoryPath = _imageService.CreateImageDirectory(article);
+
+                    var imageFile = model.ImageFile;
+                    var saveImageToPath = _imageService.SaveImageToPath(article, imageDirectoryPath, imageFile);
+
+                    article.ImageWidths = _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath, imageDirectoryPath);
+
+
+                    _imageService.TryToDeleteOriginalImage(saveImageToPath);
+                }
+
                 _articelService.Update(article);
             }
             return RedirectToAction("Index");
@@ -211,10 +212,6 @@ namespace AnnonsonMVC.Controllers
 
 // Validera datum
 // Funkar inte riktigt än.
-
-// Bygga till Image grejen på edit
-// Ta bort dom gamla. Problem här...
-// 1 timma
 
 // --------Refactoring-----------
 // Titta över namngivningen på allt igen(gå igenom hela flödet).*
