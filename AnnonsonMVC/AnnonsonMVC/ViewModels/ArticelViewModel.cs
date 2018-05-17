@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace AnnonsonMVC.ViewModels
@@ -39,8 +38,8 @@ namespace AnnonsonMVC.ViewModels
 
         [Required(ErrorMessage = "Artikeln måste ha ett pris.")]
         [Display(Name = "Pris")]
-        [DataType(DataType.Currency)]
-        public decimal Price { get; set; }
+        [DataType(DataType.Currency, ErrorMessage = "Priset måste bestå av nummer.")]//Funkar inte.
+        public decimal Price { get; set; } //Verkar overrida allt...
 
         [Required(ErrorMessage = "Artikeln måste ha en pristext.")]
         [Display(Name = "Pristext")]
@@ -60,6 +59,7 @@ namespace AnnonsonMVC.ViewModels
 
         [Required(ErrorMessage ="Artikeln måste ha ett startdatum.")]
         [Display(Name = "Startdatum")]
+        [PublishBeginValidation]
         [DataType(DataType.Date)]
         public DateTime PublishBegin { get; set; }
 
@@ -74,7 +74,7 @@ namespace AnnonsonMVC.ViewModels
         public Company Company { get; set; }
         public int CompanyId { get; set; }
         public List<SelectListItem> Stores { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Artikeln måste tillhöra en eller flera butiker.")]
         public int[] StoreIds { get; set; }
 
         [Display(Name = "Kategori")]

@@ -208,18 +208,20 @@ namespace AnnonsonMVC.Controllers
     }
 }
 
-//    ------Funktioner-------
+//  ------Funktioner-------
 
 // Validera datum
-// Funkar inte riktigt än.
+// Funkar inte riktigt än.. osäker här på varför det inte fungerar
 
 // --------Refactoring-----------
-// Titta över namngivningen på allt igen(gå igenom hela flödet).*
-// Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt.*
-// Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details)Sista grejen.
-// Domain
-// Data
-// MVC
+
+// Titta över namngivningen på allt igen(gå igenom hela flödet) Idag
+// Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt. Idag
+// Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details) Sista grejen.
+// Domain Idag
+// Data Idag
+// MVC backend delen Idag
+// MVC frontend delen
 // 1 dag ungefär
 
 //      --------Styling---------
@@ -227,6 +229,7 @@ namespace AnnonsonMVC.Controllers
 // Styla Details sidan.
 // Styla Edit sidan.
 // Styla Create sidan.
+// Annotation för Pris skrivs i engelska just nu...
 //Osäker här gissar på 2-3 dagar
 
 

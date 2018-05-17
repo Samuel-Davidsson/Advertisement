@@ -75,6 +75,7 @@
                 <div class="form-group">
                     <label asp-for="Stores" class="control-label">Butiker</label>
                     <select asp-for="StoreIds" multiple="multiple" id="storelist" asp-items="@ViewBag.StoreId"></select>
+                    <span asp-validation-for="StoreIds" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-10">

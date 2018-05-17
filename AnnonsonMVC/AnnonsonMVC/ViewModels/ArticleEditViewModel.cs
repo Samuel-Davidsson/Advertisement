@@ -72,7 +72,7 @@ namespace AnnonsonMVC.ViewModels
         public Company Company { get; set; }
         public int CompanyId { get; set; }
         public List<SelectListItem> Stores { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Artikeln måste tillhöra en eller flera butiker.")]
         public int[] StoreIds { get; set; }
 
         [Display(Name = "Kategori")]
