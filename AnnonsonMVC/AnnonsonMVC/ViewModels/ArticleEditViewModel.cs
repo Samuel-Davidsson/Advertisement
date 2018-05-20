@@ -38,6 +38,7 @@ namespace AnnonsonMVC.ViewModels
 
         [Required(ErrorMessage = "Artikeln måste ha ett pris.")]
         [Display(Name = "Pris")]
+        [RegularExpression("([0-9])", ErrorMessage = "Skall bara innehåller nummer.")]
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
@@ -60,6 +61,7 @@ namespace AnnonsonMVC.ViewModels
         [Required(ErrorMessage = "Artikeln måste ha ett startdatum.")]
         [Display(Name = "Startdatum")]
         [DataType(DataType.Date)]
+        [PublishBeginValidation]
         public DateTime PublishBegin { get; set; }
 
         [Required(ErrorMessage = "Artikeln måste ha ett slutdatum.")]

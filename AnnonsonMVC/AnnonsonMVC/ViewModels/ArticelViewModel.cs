@@ -38,8 +38,8 @@ namespace AnnonsonMVC.ViewModels
 
         [Required(ErrorMessage = "Artikeln måste ha ett pris.")]
         [Display(Name = "Pris")]
-        [DataType(DataType.Currency, ErrorMessage = "Priset måste bestå av nummer.")]//Funkar inte.
-        public decimal Price { get; set; } //Verkar overrida allt...
+        [DataType(DataType.Currency)]
+        public decimal Price { get; set; }
 
         [Required(ErrorMessage = "Artikeln måste ha en pristext.")]
         [Display(Name = "Pristext")]
@@ -59,13 +59,14 @@ namespace AnnonsonMVC.ViewModels
 
         [Required(ErrorMessage ="Artikeln måste ha ett startdatum.")]
         [Display(Name = "Startdatum")]
-        [PublishBeginValidation]
+        //[PublishBeginValidation]
         [DataType(DataType.Date)]
         public DateTime PublishBegin { get; set; }
 
         [Required(ErrorMessage = "Artikeln måste ha ett slutdatum.")]
         [Display(Name = "Slutdatum")]
         [DataType(DataType.Date)]
+        //[PublishBeginValidation]
         public DateTime PublishEnd { get; set; }
 
         [Required(ErrorMessage = "Artikeln måste ha en bild.")]

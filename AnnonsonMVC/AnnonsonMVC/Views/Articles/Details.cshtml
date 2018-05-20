@@ -1,7 +1,7 @@
-﻿@model AnnonsonMVC.ViewModels.ArticleEditViewModel
+﻿@model AnnonsonMVC.ViewModels.ArticleDetailViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detaljer";
 }
 
 <h2>Details</h2>
@@ -80,14 +80,11 @@
             }
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Company.CompanyId)
+            @Html.DisplayNameFor(model => model.CompanyId)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Company.CompanyId)
+            @Html.DisplayFor(model => model.Company.Name)
         </dd>
     </dl>
 </div>
-<div>
-    @*<a asp-action="Edit" asp-route-id="@Model.ArticleId">Edit</a> |*@
-    <a asp-action="Index">Back to List</a>
-</div>
+

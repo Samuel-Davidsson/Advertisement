@@ -71,8 +71,7 @@ namespace AnnonsonMVC.Controllers
                     model.UserId = 3;
 
                     var selectedStoreListIds = _selectedStoresService.GetSelectedStoresList(model, stores);
-                    var categoryId = model.CategoryId;
-
+                    var categoryId = model.CategoryId;                  
                     var newArticle = Mapper.ViewModelToModelMapping.ActicleViewModelToArticle(model);
                  
                     _articelService.Add(newArticle);
@@ -114,7 +113,11 @@ namespace AnnonsonMVC.Controllers
         {
             var article = _articelService.Find(id, "ArticleCategory.Category", "StoreArticle.Store");
             var test = article.ArticleCategory;
-            var model = Mapper.ModelToViewModelMapping.ArticleToArticleViewModel(article);
+            var model = Mapper.ModelToViewModelMapping.ArticleDetailViewModel(article);
+
+            var companies = _companyService.GetAll();
+            var company = companies.FirstOrDefault(x => x.CompanyId == model.CompanyId);
+            model.Company = company;
 
             ViewBag.categoryNames = model.ArticleCategory.Select(x => x.Category.Name);
             ViewBag.storeNames = model.StoreArticle.Select(x => x.Store.Name);
@@ -213,13 +216,16 @@ namespace AnnonsonMVC.Controllers
 // Validera datum
 // Funkar inte riktigt än.. osäker här på varför det inte fungerar
 
+// -----Tillägg-----
+
+// DetailViewmodel
+// 15min
+
 // --------Refactoring-----------
 
 // Titta över namngivningen på allt igen(gå igenom hela flödet) Idag
 // Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt. Idag
 // Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details) Sista grejen.
-// Domain Idag
-// Data Idag
 // MVC backend delen Idag
 // MVC frontend delen
 // 1 dag ungefär
