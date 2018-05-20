@@ -1,4 +1,5 @@
-﻿using Data.Appsettings;
+﻿using AnnonsonMVC.ViewModels;
+using Data.Appsettings;
 using Domain.Entites;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,15 +15,31 @@ namespace AnnonsonMVC.Utilities
     public class ImageService
     {
         private readonly AppSettings _appSettings;
-        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public ImageService(IOptions<AppSettings> appSettings, IHostingEnvironment hostingEnvironment)
+        public ImageService(IOptions<AppSettings> appSettings)
         {
             _appSettings = appSettings.Value;
-            _hostingEnvironment = hostingEnvironment;
         }
 
-        public string SaveImageToPath(Article newArticle, string imageDirectoryPath, IFormFile imageFile)
+        public string CreateDirectoryForArticle(Article newArticle)
+        {
+            newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
+            string year = DateTime.Now.ToString("yyyy");
+            string month = DateTime.Now.ToString("MM");
+            string day = DateTime.Now.ToString("dd");
+
+            var todaysDate = year + @"\" + month + @"\" + day;
+            var imageDirectoryPath = Path.Combine(_appSettings.MediaFolder + todaysDate).Trim();
+
+            if (!Directory.Exists(imageDirectoryPath))
+            {
+                Directory.CreateDirectory(imageDirectoryPath);
+            }
+
+            return imageDirectoryPath;
+        }
+
+        public string SaveImageToDirectory(Article newArticle, string imageDirectoryPath, IFormFile imageFile)
         {
             var saveImagePath = Path.Combine(imageDirectoryPath, newArticle.ImageFileName).Replace(@"\\", @"\");
 
@@ -45,26 +62,26 @@ namespace AnnonsonMVC.Utilities
 
             if (resizeImage.Width >= 2048)
             {
-                MakeImageSquareAndFillBlancs(2048, 2048, resizeImage, saveImagePath, imageDirectoryPath);
+                CreateNewImageAndFillOutBlankSpaces(2048, 2048, resizeImage, saveImagePath, imageDirectoryPath);
             }
             if (resizeImage.Width >= 1024)
             {
-                MakeImageSquareAndFillBlancs(1024, 1024, resizeImage, saveImagePath, imageDirectoryPath);
+                CreateNewImageAndFillOutBlankSpaces(1024, 1024, resizeImage, saveImagePath, imageDirectoryPath);
                 article.ImageWidths += "1024, ";
             }
             if (resizeImage.Width >= 512)
             {
-                MakeImageSquareAndFillBlancs(512, 512, resizeImage, saveImagePath, imageDirectoryPath);
+                CreateNewImageAndFillOutBlankSpaces(512, 512, resizeImage, saveImagePath, imageDirectoryPath);
                 article.ImageWidths += "512, ";
             }
             if (resizeImage.Width >= 256)
             {
-                MakeImageSquareAndFillBlancs(256, 256, resizeImage, saveImagePath, imageDirectoryPath);
+                CreateNewImageAndFillOutBlankSpaces(256, 256, resizeImage, saveImagePath, imageDirectoryPath);
                 article.ImageWidths += "256, ";
             }
             if (resizeImage.Width >= 128)
             {
-                MakeImageSquareAndFillBlancs(128, 128, resizeImage, saveImagePath, imageDirectoryPath);
+                CreateNewImageAndFillOutBlankSpaces(128, 128, resizeImage, saveImagePath, imageDirectoryPath);
                 article.ImageWidths += "128";
             }
             resizeImage.Dispose();
@@ -74,7 +91,7 @@ namespace AnnonsonMVC.Utilities
 
         }
 
-        public Image MakeImageSquareAndFillBlancs(int canvasWidth, int canvasHeight, Image resizeImage, string saveImagePath, string imageDirectoryPath)
+        public Image CreateNewImageAndFillOutBlankSpaces(int canvasWidth, int canvasHeight, Image resizeImage, string saveImagePath, string imageDirectoryPath)
         {
             var originalImage = new Bitmap(saveImagePath);
 
@@ -111,24 +128,6 @@ namespace AnnonsonMVC.Utilities
             }
             originalImage.Dispose();
             return newImageSize;
-        }
-
-        public string CreateImageDirectory(Article newArticle)
-        {
-            newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
-            string year = DateTime.Now.ToString("yyyy");
-            string month = DateTime.Now.ToString("MM");
-            string day = DateTime.Now.ToString("dd");
-
-            var todaysDate = year + @"\" + month + @"\" + day;
-            var imageDirectoryPath = Path.Combine(_appSettings.MediaFolder + todaysDate).Trim();
-
-            if (!Directory.Exists(imageDirectoryPath))
-            {
-                Directory.CreateDirectory(imageDirectoryPath);
-            }
-
-            return imageDirectoryPath;
         }
 
         public void TryToDeleteOriginalImage(string imagepath)

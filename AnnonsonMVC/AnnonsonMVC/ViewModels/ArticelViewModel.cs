@@ -1,5 +1,4 @@
-﻿using AnnonsonMVC.Validations;
-using Domain.Entites;
+﻿using Domain.Entites;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;

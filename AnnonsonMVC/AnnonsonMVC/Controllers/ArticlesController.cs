@@ -91,10 +91,10 @@ namespace AnnonsonMVC.Controllers
                         });
                     }
                     
-                    var imageDirectoryPath = _imageService.CreateImageDirectory(newArticle);
+                    var imageDirectoryPath = _imageService.CreateDirectoryForArticle(newArticle);
 
                     var imageFile = model.ImageFile;
-                    var saveImageToPath = _imageService.SaveImageToPath(newArticle, imageDirectoryPath, imageFile);
+                    var saveImageToPath = _imageService.SaveImageToDirectory(newArticle, imageDirectoryPath, imageFile);
 
                     newArticle.ImageWidths = _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath, imageDirectoryPath);
 
@@ -106,7 +106,7 @@ namespace AnnonsonMVC.Controllers
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Company");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Category");
             ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Store");
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Details(int id)
@@ -156,23 +156,23 @@ namespace AnnonsonMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(ArticleEditViewModel model)
         {
-            if (ModelState.IsValid)
+            var article = _articelService.Find(model.ArticleId, "ArticleCategory.Category", "StoreArticle.Store");
+
+            if (model.ImageFile == null)
             {
-                var article = _articelService.Find(model.ArticleId, "ArticleCategory.Category", "StoreArticle.Store");
+                model.ImageFileFormat = article.ImageFileFormat;
+                model.ImageFileName = article.ImageFileName;
+                model.ImagePath = article.ImagePath;
+                model.ImageWidths = article.ImageWidths;
+            }
+            else
+            {
+                _imageService.DeleteArticleImages(article.ImagePath, article.ImageFileName);
+            }
 
-                if (model.ImageFile == null)//Image service?
-                {
-                    model.ImageFileFormat = article.ImageFileFormat;
-                    model.ImageFileName = article.ImageFileName;
-                    model.ImagePath = article.ImagePath;
-                    model.ImageWidths = article.ImageWidths;
-                }
-                else
-                {
-                    _imageService.DeleteArticleImages(article.ImagePath, article.ImageFileName);
-                }
-
-                foreach (var storeId in model.StoreIds) //Bygga bort detta till servicar?
+            if (ModelState.IsValid)
+            {               
+                foreach (var storeId in model.StoreIds)
                 {
                     model.StoreArticle.Add(new StoreArticle
                     {
@@ -180,7 +180,7 @@ namespace AnnonsonMVC.Controllers
                         ArticleId = model.ArticleId
                     });
                 }             
-                    model.ArticleCategory.Add(new ArticleCategory // Bygga bort?
+                    model.ArticleCategory.Add(new ArticleCategory
                     {
                         ArticleId = model.ArticleId,
                         CategoryId = model.CategoryId
@@ -193,50 +193,53 @@ namespace AnnonsonMVC.Controllers
 
                 if (model.ImageFile != null)
                 {    
-                    var imageDirectoryPath = _imageService.CreateImageDirectory(article);
+                    var imageDirectoryPath = _imageService.CreateDirectoryForArticle(article);
 
                     var imageFile = model.ImageFile;
-                    var saveImageToPath = _imageService.SaveImageToPath(article, imageDirectoryPath, imageFile);
+                    var saveImageToPath = _imageService.SaveImageToDirectory(article, imageDirectoryPath, imageFile);
 
                     article.ImageWidths = _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath, imageDirectoryPath);
 
 
                     _imageService.TryToDeleteOriginalImage(saveImageToPath);
                 }
+                try
+                {
+                    _articelService.Update(article);
+                }
+                catch (Exception)
+                {
 
-                _articelService.Update(article);
+                    throw;
+                }
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction("Index");
+
+            var stores = model.StoreArticle.Select(x => x.StoreId).ToArray();
+            model.StoreIds = stores;
+            ViewBag.mediaUrl = _appSettings.MediaUrl;
+            ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
+            ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name", stores);
+            ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
+
+            return View(model);
         }
     }
 }
-
-//  ------Funktioner-------
-
-// Validera datum
-// Funkar inte riktigt än.. osäker här på varför det inte fungerar
-
-// -----Tillägg-----
-
-// DetailViewmodel
-// 15min
-
 // --------Refactoring-----------
 
-// Titta över namngivningen på allt igen(gå igenom hela flödet) Idag
-// Rensa kommentarer ta bort servicar och dylikt som jag inte använder längre finns lite sånt. Idag
+// MVC backend delen Måndag
+// MVC frontend delen 
 // Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details) Sista grejen.
-// MVC backend delen Idag
-// MVC frontend delen
-// 1 dag ungefär
+// Halv dag ungefär
 
 //      --------Styling---------
-// Stylingen skall påminna om den som redan finns på hemsidan får titta på den och se hur det ser ut.
-// Styla Details sidan.
-// Styla Edit sidan.
-// Styla Create sidan.
-// Annotation för Pris skrivs i engelska just nu...
-//Osäker här gissar på 2-3 dagar
+
+// Styla Details sidan. Måndag
+// Styla Edit sidan. Kanske Måndag
+// Styla Create sidan. Tisdag
+// Annotation för Pris skrivs i engelska just nu... Osäkerhet här.
+// Osäker här gissar på 2-3 dagar
 
 
 

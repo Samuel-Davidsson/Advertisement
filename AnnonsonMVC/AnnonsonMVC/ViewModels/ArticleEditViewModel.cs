@@ -38,7 +38,6 @@ namespace AnnonsonMVC.ViewModels
 
         [Required(ErrorMessage = "Artikeln måste ha ett pris.")]
         [Display(Name = "Pris")]
-        [RegularExpression("([0-9])", ErrorMessage = "Skall bara innehåller nummer.")]
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 

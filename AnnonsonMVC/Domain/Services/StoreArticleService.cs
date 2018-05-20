@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Services
 {
-    public class StoreArticleService: IStoreArticleService
+    public class StoreArticleService : IStoreArticleService
     {
         private readonly IRepository<StoreArticle> _repository;
 

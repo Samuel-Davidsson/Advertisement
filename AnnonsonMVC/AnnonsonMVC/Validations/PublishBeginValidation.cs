@@ -8,14 +8,19 @@ namespace AnnonsonMVC.Validations
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            ArticelViewModel articelViewModel = (ArticelViewModel)validationContext.ObjectInstance;
+            //ArticelViewModel articelViewModel = (ArticelViewModel)validationContext.ObjectInstance;
             ArticleEditViewModel articleEditViewModel = (ArticleEditViewModel)validationContext.ObjectInstance;
 
             if (articleEditViewModel.PublishBegin > articleEditViewModel.PublishEnd)
             {
-                return new ValidationResult("Ditt startdatum måste vara mindre än ditt slutdatum");
+                return new ValidationResult("Ditt startdatum måste vara mindre än ditt slutdatum.");
+            }
+            if (articleEditViewModel.PublishBegin < DateTime.Today)
+            {
+                return new ValidationResult("Startdatumet har redan passerat.");
             }
             return ValidationResult.Success;
+            
         }
         }
     }
