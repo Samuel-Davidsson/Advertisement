@@ -19,11 +19,10 @@ namespace AnnonsonMVC.Validations
             {
                 return new ValidationResult("Startdatumet har redan passerat.");
             }
-            return ValidationResult.Success;
-            
+            return ValidationResult.Success;            
         }
-        }
-    }
+   }
+}
 
 
 

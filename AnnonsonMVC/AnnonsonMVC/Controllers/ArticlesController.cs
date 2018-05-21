@@ -225,25 +225,41 @@ namespace AnnonsonMVC.Controllers
     }
 }
 
-// --------Refactoring-----------
+// ----------Refactoring--------------
 
 // MVC backend delen Måndag
 // MVC frontend delen 
 // Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details) Sista grejen.
 // 1 dag ungefär
 
-//      --------Styling---------
+// ------------Styling---------------
 
 // Styla Edit sidan. Idag
 // Styla Create sidan. Idag
-// Annotation för Pris skrivs i engelska just nu... Osäkerhet här.. hur det skall lösas.
-// Datum på create och edit är åt "fel håll" titta på det.
-// Felmedelande när bilden är för dålig.
+
+// Felmeddelande när bilden är för dålig.
 // Validering för Create när det gäller datum.
 // Osäker här gissar på 1 dag
 
 // Testa hur det blir när man försöker ta bort bilder som inte finns.
 
+// Upptäckt problem den tar inte och sparar i create heller när jag skriver in decimaler.
+// Annotation för , contra . det går förhoppningsvis att lösa med detta.
+// You can override the methods of the jQuery validation plugin.
+// Insert this code in a new javascript code file and make sure you reference it as last.
+// Only if it’s referenced after the jQuery validation plugin, it will override the code in the plugin.
+
+
+//    $.validator.methods.range = function(value, element, param)
+//{
+//    var globalizedValue = value.replace(",", ".");
+//    return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+//} 
+
+//$.validator.methods.number = function(value, element)
+//{
+//    return this.optional(element) || /^ -? (?:\d +|\d{ 1,3} (?:[\s\.,]\d{ 3})+)(?:[\.,]\d +)?$/.test(value);
+//}
 
 
 

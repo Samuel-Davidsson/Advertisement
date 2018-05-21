@@ -1214,7 +1214,7 @@ $.extend( $.validator, {
 		// http://jqueryvalidation.org/digits-method/
 		digits: function( value, element ) {
 			return this.optional( element ) || /^\d+$/.test( value );
-		},
+        },
 
 		// http://jqueryvalidation.org/creditcard-method/
 		// based on http://en.wikipedia.org/wiki/Luhn_algorithm
@@ -1393,6 +1393,6 @@ if ( $.ajaxPrefilter ) {
 		}
 		return ajax.apply(this, arguments);
 	};
-}
-
+    }
 }));
+
