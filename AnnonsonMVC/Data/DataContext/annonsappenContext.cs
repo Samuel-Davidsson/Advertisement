@@ -55,8 +55,8 @@ namespace Data.DataContext
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;");
-              //optionsBuilder.UseSqlServer(@"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;");
+                //optionsBuilder.UseSqlServer(@"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(@"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;");
             }
         }
         public AnnonsappenContext(DbContextOptions<AnnonsappenContext> options)
