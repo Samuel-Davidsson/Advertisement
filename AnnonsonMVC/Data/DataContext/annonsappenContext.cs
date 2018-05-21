@@ -65,7 +65,6 @@ namespace Data.DataContext
         }
         public AnnonsappenContext()
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -3,184 +3,114 @@
 @{
     ViewData["Title"] = "Detaljer";
 }
-
-<h2>Artikel</h2>
-<div class="row">
-    <div class="col-md-9">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Detaljer</h3>
-            </div>
-            <div class="panel-body">
-                <div class="form form-horizontal" role="form">
-                    <div>
-                        <dl>
-                            <dd>
-                                <img src="@Url.Content(ViewBag.mediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-256." + Model.ImageFileFormat)" class="imagepreview" />
-                            </dd>
-                        </dl>
-                        <dl class="media-right">
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Name)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Name)
-                            </dd>
-                            <dt>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Description)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Description)
-                            </dd>
-                            <dt>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Price)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Price)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.PriceText)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.PriceText)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.PriceUnit)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.PriceUnit)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.PublishBegin)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.PublishBegin)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.PublishEnd)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.PublishEnd)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.StoreArticle)
-                            </dt>
-                            <dd>
-                                @foreach (var stores in ViewBag.storeNames)
-                                {
-                                    <div>@stores</div>
-                                }
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.ArticleCategory)
-                            </dt>
-                            <dd>
-                                @foreach (var categories in ViewBag.categoryNames)
-                                {
-                                    <div>@categories</div>
-                                }
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.CompanyId)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Company.Name)
-                            </dd>
-                        </dl>
+<body class="bodyColor">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Artikel Detaljer</h3>
                     </div>
+                    <div class="panel-body">
+                        <div>
+                            <dl>
+                                <dd>
+                                    <img src="@Url.Content(ViewBag.mediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-512." + Model.ImageFileFormat)" class="imagePreview" />
+                                </dd>
+                            </dl>
+                            <dl class="media-right">
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Name)
+                                </dd>
+                                <dt>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Description)
+                                </dd>
+                                <dt>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Price)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Price)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.PriceText)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.PriceText)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.PriceUnit)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.PriceUnit)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.PublishBegin)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.PublishBegin)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.PublishEnd)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.PublishEnd)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.StoreArticle)
+                                </dt>
+                                <dd>
+                                    @foreach (var stores in ViewBag.storeNames)
+                                    {
+                                        <div>@stores</div>
+                                    }
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.ArticleCategory)
+                                </dt>
+                                <dd>
+                                    @foreach (var categories in ViewBag.categoryNames)
+                                    {
+                                        <div>@categories</div>
+                                    }
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.CompanyId)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Company.Name)
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-9 col-sm-offset-3">
+                            @*<Button ID="btnSave" runat="server" Text="Spara" CssClass="btn btn-primary" />*@
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-sm-9 col-sm-offset-3">
-                        <Button ID="btnSave" runat="server" Text="Spara" CssClass="btn btn-primary" />
-                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    @*<h4>Artikel</h4>
-    <hr />
+</body>
+<style>
+    .panel-title {
+        font-weight: lighter;
+        font-size: 20px;
+    }     
+    .imagePreview{
+        max-height: 300px;
+        max-width: 300px;    
+    }
 
-    <dl>
-        <dd>
-            <img src="@Url.Content(ViewBag.mediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-256." + Model.ImageFileFormat)" class="imagepreview" />
-        </dd>
-    </dl>
-    <dl class="media-right">
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PriceText)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PriceText)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PriceUnit)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PriceUnit)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PublishBegin)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PublishBegin)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PublishEnd)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PublishEnd)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.StoreArticle)
-        </dt>
-        <dd>
-            @foreach (var stores in ViewBag.storeNames)
-            {
-                    <div>@stores</div>
-            }
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ArticleCategory)
-        </dt>
-        <dd>
-            @foreach (var categories in ViewBag.categoryNames)
-            {
-                    <div>@categories</div>               
-            }
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CompanyId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Company.Name)
-        </dd>
-    </dl>
-</div>*@
-
+    .bodyColor{
+        background-color: lightgray;
+    }
+</style>

@@ -5,11 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Data.DataContext;
 using Domain.Services;
-using Domain.Interfaces;
 using Domain.Entites;
 using Data.Repositories;
 using AnnonsonMVC.Utilities;
 using Data.Appsettings;
+using Domain.Interfaces;
 
 namespace AnnonsonMVC
 {

@@ -240,6 +240,7 @@ namespace AnnonsonMVC.Controllers
 // Styla Create sidan. Tisdag
 // Annotation för Pris skrivs i engelska just nu... Osäkerhet här.
 // Osäker här gissar på 2-3 dagar
+// Verkar som att Artikel headern har själva färgen som jag är ute efter saknar nog en div eller dylikt.
 
 
 
