@@ -8,7 +8,7 @@ namespace AnnonsonMVC.Utilities
 {
     public class SelectedStoresService
     {
-        public List<int> GetSelectedStoresList(ArticelViewModel model, IEnumerable<Store> stores)
+        public List<int> GetSelectedStoresList(ArticleCreateViewModel model, IEnumerable<Store> stores)
         {
             var selectedStores = stores.Select(x => new SelectListItem { Value = x.StoreId.ToString(), Text = x.Name }).ToList();
             model.Stores = selectedStores;

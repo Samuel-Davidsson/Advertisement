@@ -21,7 +21,7 @@ namespace AnnonsonMVC.Utilities
             _appSettings = appSettings.Value;
         }
 
-        public string CreateDirectoryForArticle(Article newArticle)
+        public string CreateDirectoryForImage(Article newArticle)
         {
             newArticle.ImageFileName = "aid" + newArticle.ArticleId + "-" + Guid.NewGuid();
             string year = DateTime.Now.ToString("yyyy");

@@ -47,7 +47,7 @@ namespace AnnonsonMVC.Controllers
 
         public IActionResult Create()
         {
-            var articleViewModel = new ArticelViewModel
+            var articleCreateViewModel = new ArticleCreateViewModel
             {
                 PublishBegin = DateTime.Today,
                 PublishEnd = DateTime.Today
@@ -55,12 +55,12 @@ namespace AnnonsonMVC.Controllers
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
             ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name");
-            return View(articleViewModel);
+            return View(articleCreateViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ArticelViewModel model)
+        public IActionResult Create(ArticleCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace AnnonsonMVC.Controllers
                         });
                     }
                     
-                    var imageDirectoryPath = _imageService.CreateDirectoryForArticle(newArticle);
+                    var imageDirectoryPath = _imageService.CreateDirectoryForImage(newArticle);
 
                     var imageFile = model.ImageFile;
                     var saveImageToPath = _imageService.SaveImageToDirectory(newArticle, imageDirectoryPath, imageFile);
@@ -193,13 +193,12 @@ namespace AnnonsonMVC.Controllers
 
                 if (model.ImageFile != null)
                 {    
-                    var imageDirectoryPath = _imageService.CreateDirectoryForArticle(article);
+                    var imageDirectoryPath = _imageService.CreateDirectoryForImage(article);
 
                     var imageFile = model.ImageFile;
                     var saveImageToPath = _imageService.SaveImageToDirectory(article, imageDirectoryPath, imageFile);
 
                     article.ImageWidths = _imageService.CreateResizeImagesToImageDirectory(imageFile, saveImageToPath, imageDirectoryPath);
-
 
                     _imageService.TryToDeleteOriginalImage(saveImageToPath);
                 }
@@ -209,7 +208,6 @@ namespace AnnonsonMVC.Controllers
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
                 return RedirectToAction(nameof(Index));
@@ -226,21 +224,27 @@ namespace AnnonsonMVC.Controllers
         }
     }
 }
+
 // --------Refactoring-----------
 
 // MVC backend delen Måndag
 // MVC frontend delen 
 // Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details) Sista grejen.
-// Halv dag ungefär
+// 1 dag ungefär
 
 //      --------Styling---------
 
-// Styla Details sidan. Måndag
-// Styla Edit sidan. Kanske Måndag
-// Styla Create sidan. Tisdag
-// Annotation för Pris skrivs i engelska just nu... Osäkerhet här.
-// Osäker här gissar på 2-3 dagar
-// Verkar som att Artikel headern har själva färgen som jag är ute efter saknar nog en div eller dylikt.
+// Styla Edit sidan. Idag
+// Styla Create sidan. Idag
+// Annotation för Pris skrivs i engelska just nu... Osäkerhet här.. hur det skall lösas.
+// Datum på create och edit är åt "fel håll" titta på det.
+// Felmedelande när bilden är för dålig.
+// Validering för Create när det gäller datum.
+// Osäker här gissar på 1 dag
+
+// Testa hur det blir när man försöker ta bort bilder som inte finns.
+
+
 
 
 

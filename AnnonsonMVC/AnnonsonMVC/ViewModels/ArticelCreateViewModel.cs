@@ -8,9 +8,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AnnonsonMVC.ViewModels
 {
-    public class ArticelViewModel
+    public class ArticleCreateViewModel
     {
-        public ArticelViewModel()
+        public ArticleCreateViewModel()
         {
             ArticleCategory = new Collection<ArticleCategory>();
             StoreArticle = new Collection<StoreArticle>();
@@ -37,7 +37,6 @@ namespace AnnonsonMVC.ViewModels
 
         [Required(ErrorMessage = "Artikeln måste ha ett pris.")]
         [Display(Name = "Pris")]
-        [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
         [Required(ErrorMessage = "Artikeln måste ha en pristext.")]
@@ -56,7 +55,7 @@ namespace AnnonsonMVC.ViewModels
         public string ImageFileFormat { get; set; }
         public string ImageWidths { get; set; }
 
-        [Required(ErrorMessage ="Artikeln måste ha ett startdatum.")]
+        [Required(ErrorMessage = "Artikeln måste ha ett startdatum.")]
         [Display(Name = "Startdatum")]
         //[PublishBeginValidation]
         [DataType(DataType.Date)]
