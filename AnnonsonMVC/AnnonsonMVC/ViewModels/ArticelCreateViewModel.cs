@@ -1,4 +1,5 @@
-﻿using Domain.Entites;
+﻿using AnnonsonMVC.Validations;
+using Domain.Entites;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -58,14 +59,13 @@ namespace AnnonsonMVC.ViewModels
 
         [Required(ErrorMessage = "Artikeln måste ha ett startdatum.")]
         [Display(Name = "Startdatum")]
-        //[PublishBeginValidation]
+        [PublishBeginValidationForCreate]
         [DataType(DataType.Date)]
         public DateTime PublishBegin { get; set; }
 
         [Required(ErrorMessage = "Artikeln måste ha ett slutdatum.")]
         [Display(Name = "Slutdatum")]
         [DataType(DataType.Date)]
-        //[PublishBeginValidation]
         public DateTime PublishEnd { get; set; }
 
         [Required(ErrorMessage = "Artikeln måste ha en bild.")]

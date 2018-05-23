@@ -234,18 +234,19 @@ namespace AnnonsonMVC.Controllers
 
 // ------------Styling---------------
 
-// Styla Edit sidan. Idag
 // Styla Create sidan. Idag
 
-// Felmeddelande när bilden är för dålig.
-// Validering för Create när det gäller datum.
+// Felmeddelande när bilden är för dålig, och inte syns Roger har gjort denna.
+
 // Osäker här gissar på 1 dag
 
 // Testa hur det blir när man försöker ta bort bilder som inte finns.
 
-// Upptäckt problem den tar inte och sparar i create heller när jag skriver in decimaler.
-// Annotation för , contra . det går förhoppningsvis att lösa med detta.
-// You can override the methods of the jQuery validation plugin.
+
+// Problem med decimaler går att skapa med . börjar dock med , vilket ger ett felmeddelande på engelska vilket inte är snyggt.
+// Därimot i Edit så kan jag INTE spara decimaler med . eller , alltså bara heltal.
+// Vet inte exakt vad det beror på men jqueryvalidation är en sak men sen måste det vara nåt annat också osäker på vad här.
+
 // Insert this code in a new javascript code file and make sure you reference it as last.
 // Only if it’s referenced after the jQuery validation plugin, it will override the code in the plugin.
 

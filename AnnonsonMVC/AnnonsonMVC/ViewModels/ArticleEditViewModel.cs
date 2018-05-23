@@ -60,7 +60,7 @@ namespace AnnonsonMVC.ViewModels
         [Required(ErrorMessage = "Artikeln måste ha ett startdatum.")]
         [Display(Name = "Startdatum")]
         [DataType(DataType.Date)]
-        [PublishBeginValidation]
+        [PublishBeginValidationForEdit]
         public DateTime PublishBegin { get; set; }
 
         [Required(ErrorMessage = "Artikeln måste ha ett slutdatum.")]
@@ -73,9 +73,9 @@ namespace AnnonsonMVC.ViewModels
         public Company Company { get; set; }
         [Display(Name = "Företag")]
         public int CompanyId { get; set; }
-        public List<SelectListItem> Stores { get; set; }
         [Required(ErrorMessage = "Artikeln måste tillhöra en eller flera butiker.")]
         public int[] StoreIds { get; set; }
+        public List<SelectListItem> Stores { get; set; }
 
         [Display(Name = "Kategori")]
         public ICollection<ArticleCategory> ArticleCategory { get; set; } = new List<ArticleCategory>();
