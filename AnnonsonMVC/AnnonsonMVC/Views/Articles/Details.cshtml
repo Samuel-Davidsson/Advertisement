@@ -91,7 +91,8 @@
                     </div>
                 <div class="panel-footer">
                     <div class="row">
-                        <div class="col-sm-9 col-sm-offset-3">
+                        <div class="col-sm-9 col-sm-offset-0">
+                            <input type="button" style="float: left" onclick="window.location.href = '@Url.Action("Index")';" value="Tillbaka" class="btn btn-primary" />
                         </div>
                     </div>
                 </div>
@@ -100,15 +101,14 @@
         </div>
 </body>
 <style>
-    .panel-title {
+    .panel-footer {
         font-weight: lighter;
-        font-size: 20px;
+        height: 50px;
     }     
     .imagePreview{
         max-height: 300px;
         max-width: 300px;    
     }
-
     .bodyColor{
         background-color: lightgray;
     }

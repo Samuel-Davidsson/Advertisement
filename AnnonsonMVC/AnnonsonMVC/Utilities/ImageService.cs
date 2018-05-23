@@ -114,7 +114,7 @@ namespace AnnonsonMVC.Utilities
             int posX = Convert.ToInt32((canvasWidth - (resizeImage.Width * ratio)) / 2);
             int posY = Convert.ToInt32((canvasHeight - (resizeImage.Height * ratio)) / 2);
 
-            graphic.Clear(Color.White);
+            graphic.Clear(Color.LightGray);
             graphic.DrawImage(originalImage, posX, posY, newWidth, newHeight);
            
             ImageCodecInfo[] info = ImageCodecInfo.GetImageEncoders();

@@ -71,6 +71,7 @@ namespace AnnonsonMVC.ViewModels
         public IFormFile ImageFile { get; set; }
 
         public Company Company { get; set; }
+        [Display(Name = "Företag")]
         public int CompanyId { get; set; }
         public List<SelectListItem> Stores { get; set; }
         [Required(ErrorMessage = "Artikeln måste tillhöra en eller flera butiker.")]
