@@ -22,6 +22,7 @@
     <Folder Include="wwwroot\Uploads\" />
     <Folder Include="wwwroot\Uploads\" />
     <Folder Include="wwwroot\Uploads\2018\04\25\" />
+    <Folder Include="wwwroot\Uploads\2018\05\23\" />
   </ItemGroup>
 
   <ItemGroup>

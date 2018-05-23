@@ -9,7 +9,7 @@
         <div class="col-md-9">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3>Ändra Artikel</h3>
+                    <h3>Ändra Annons</h3>
                 </div>
                 <div class="panel-body">
                     <form asp-action="Edit" enctype="multipart/form-data">
@@ -17,7 +17,7 @@
                         <input type="hidden" asp-for="ArticleId" />
                         <div class="form-group">
                             <div>
-                                <img src="@Url.Content(ViewBag.mediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-512." + Model.ImageFileFormat)" id="output" class="imagePreview" />
+                                <img src="@Url.Content(ViewBag.mediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-512." + Model.ImageFileFormat)" id="output" class="imagePreview"/>
                                 <input asp-for="ImageFile" accept="image/*" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
                             </div>
                         </div>
@@ -70,8 +70,6 @@
                                       data-val-maxlength-max="5000"> 
                                 </textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
                         </div>
                         <div class="panel-footer">
                             <div class="col-sm-20 col-sm-offset-0">

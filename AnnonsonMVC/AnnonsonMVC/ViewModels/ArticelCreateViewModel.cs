@@ -25,28 +25,28 @@ namespace AnnonsonMVC.ViewModels
         [Required]
         public int CategoryId { get; set; }
 
-        [Required(ErrorMessage = "Artikeln måste ha en rubrik.")]
+        [Required(ErrorMessage = "Annonsen måste ha en rubrik.")]
         [Display(Name = "Rubrik")]
         [DataType(DataType.Text)]
         [StringLength(250, MinimumLength = 2)]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Artikeln måste ha en beskrivning.")]
+        [Required(ErrorMessage = "Annonsen måste ha en beskrivning.")]
         [Display(Name = "Beskrivning")]
         [DataType(DataType.Text)]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Artikeln måste ha ett pris.")]
+        [Required(ErrorMessage = "Annonsen måste ha ett pris.")]
         [Display(Name = "Pris")]
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
-        [Required(ErrorMessage = "Artikeln måste ha en pristext.")]
+        [Required(ErrorMessage = "Annonsen måste ha en pristext.")]
         [Display(Name = "Pristext")]
         [StringLength(50, MinimumLength = 1)]
         public string PriceText { get; set; }
 
-        [Required(ErrorMessage = "Artikeln måste ha en prisenhet.")]
+        [Required(ErrorMessage = "Annonsen måste ha en prisenhet.")]
         [Display(Name = "Prisenhet")]
         [StringLength(50, MinimumLength = 1)]
         public string PriceUnit { get; set; }
@@ -57,24 +57,24 @@ namespace AnnonsonMVC.ViewModels
         public string ImageFileFormat { get; set; }
         public string ImageWidths { get; set; }
 
-        [Required(ErrorMessage = "Artikeln måste ha ett startdatum.")]
+        [Required(ErrorMessage = "Annonsen måste ha ett startdatum.")]
         [Display(Name = "Startdatum")]
         [PublishBeginValidationForCreate]
         [DataType(DataType.Date)]
         public DateTime PublishBegin { get; set; }
 
-        [Required(ErrorMessage = "Artikeln måste ha ett slutdatum.")]
+        [Required(ErrorMessage = "Annonsen måste ha ett slutdatum.")]
         [Display(Name = "Slutdatum")]
         [DataType(DataType.Date)]
         public DateTime PublishEnd { get; set; }
 
-        [Required(ErrorMessage = "Artikeln måste ha en bild.")]
+        [Required(ErrorMessage = "Annonsen måste ha en bild.")]
         public IFormFile ImageFile { get; set; }
 
         public Company Company { get; set; }
         public int CompanyId { get; set; }
         public List<SelectListItem> Stores { get; set; }
-        [Required(ErrorMessage ="Artikeln måste tillhöra en eller flera butiker.")]
+        [Required(ErrorMessage = "Annonsen måste tillhöra en eller flera butiker.")]
         public int[] StoreIds { get; set; }
 
         [Display(Name = "Kategori")]

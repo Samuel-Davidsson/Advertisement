@@ -2,91 +2,92 @@
 @{
     ViewData["Title"] = "Create";
 }
-<h2>Skapa Annons</h2>
-<hr />
-<div class="row">
-    <div class="col-md-20">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="col-md-10">
-                <div class="form-group">
-                    <div>
-                        <input asp-for="ImageFile" accept="image/*" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
-                        <span asp-validation-for="ImageFile" class="text-danger"></span>
-                        <img id="output" class="ImagePreview" />
-                    </div>
+<body class="bodyColor">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Skapa Annons</h3>
+                </div>
+                <div class="panel-body">
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <div>
+                                <input asp-for="ImageFile" accept="image/*" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
+                                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                                <img id="output" class="ImagePreview" />
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label">Rubrik</label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Price" class="control-label">Pris</label>
+                                <input asp-for="Price" asp-is-invariant="true" class="form-control" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="PriceUnit" class="control-label">Prisenhet</label>
+                                <input asp-for="PriceUnit" class="form-control" />
+                                <span asp-validation-for="PriceUnit" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="PriceText" class="control-label">Prisbeskrivning</label>
+                                <input asp-for="PriceText" class="form-control" />
+                                <span asp-validation-for="PriceText" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Description" class="control-label">Beskrivning</label>
+                                <textarea asp-for="Description"
+                                          data-val-required="Annonsen måste ha en beskrivning."
+                                          data-val-maxlength-max="5000"> 
+                                            </textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label asp-for="PublishBegin" class="control-label">Start datum</label>
+                                <input asp-for="PublishBegin" class="form-control" />
+                                <span asp-validation-for="PublishBegin" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="PublishEnd" class="control-label">Slut datum</label>
+                                <input asp-for="PublishEnd" class="form-control" />
+                                <span asp-validation-for="PublishEnd" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="CategoryId" class="control-label">Kategori</label>
+                                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Company.CompanyId" class="control-label">Företag</label>
+                                <select asp-for="Company.CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Stores" class="control-label">Butiker</label>
+                                <select asp-for="StoreIds" multiple="multiple" id="storelist" asp-items="@ViewBag.StoreId"></select>
+                                <span asp-validation-for="StoreIds" class="text-danger"></span>
+                            </div>
+                        </div>
+                            <div class="col-md-10">
+                                <input type="submit" value="Skapa" style="float: right;" class="btn btn-success" />
+                                <input type="button" style="float: left;" onclick="window.location.href = '@Url.Action("Index")';" value="Tillbaka" class="btn btn-primary" />
+                            </div>
+                    </form>
                 </div>
             </div>
-            <div class="col-md-5">
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label">Rubrik</label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Price" class="control-label">Pris</label>
-                    <input asp-for="Price" asp-is-invariant="true" class="form-control" />
-                    <span asp-validation-for="Price" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="PriceUnit" class="control-label">Prisenhet</label>
-                    <input asp-for="PriceUnit" class="form-control" />
-                    <span asp-validation-for="PriceUnit" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="PriceText" class="control-label">Prísbeskrivning</label>
-                    <input asp-for="PriceText" class="form-control" />
-                    <span asp-validation-for="PriceText" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Description" class="control-label">Beskrivning</label>
-                    <textarea asp-for="Description" rows="5" cols="62"
-                              data-val-required="Annonsen måste ha en beskrivning."
-                              data-val-maxlength-max="5000"> 
-                    </textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="col-md-5">
-                <div class="form-group">
-                    <label asp-for="PublishBegin" class="control-label">Start datum</label>
-                    <input asp-for="PublishBegin" class="form-control" />
-                    <span asp-validation-for="PublishBegin" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="PublishEnd" class="control-label">Slut datum</label>
-                    <input asp-for="PublishEnd" class="form-control" />
-                    <span asp-validation-for="PublishEnd" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="CategoryId" class="control-label">Kategori</label>
-                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Company.CompanyId" class="control-label">Företag</label>
-                    <select asp-for="Company.CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Stores" class="control-label">Butiker</label>
-                    <select asp-for="StoreIds" multiple="multiple" id="storelist" asp-items="@ViewBag.StoreId"></select>
-                    <span asp-validation-for="StoreIds" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-10">
-                <div class="form-group">
-                    <input type="submit" value="Create" style="float: right" class="btn btn-default" />
-                    <input type="button" style="float: left" onclick="window.location.href = '@Url.Action("Index")';" value="Tillbaka" class="btn btn-primary" />
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
+</body>
 
 @section Scripts {
 
@@ -97,12 +98,30 @@
         }
         textarea {
             resize: none;
+            height: 108px;
+            width: 350px;
+        }
+        #storelist {
+            height: 108px;
+            width: 350px;
+        }
+        .bodyColor {
+            background-color: lightgray;
+        }
+        .panel-footer {
+            font-weight: lighter;
+            font-size: 20px;
+            height: 50px;
+            color: green;
+        }
+        .footer {           
+            left: 0px;
+            bottom: 0px;
+            width: 100%;
+            color:aqua;
+            margin: auto;
         }
 
-        #storelist {
-            height: 110px;
-            width: 455px;
-        }
     </style>
     <script>
         var loadFile = function (event) {

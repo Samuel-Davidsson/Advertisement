@@ -227,20 +227,34 @@ namespace AnnonsonMVC.Controllers
 
 // ----------Refactoring--------------
 
-// MVC backend delen Måndag
-// MVC frontend delen 
-// Inte glömma att flytta styles och script från vyerna, till css och js filerna.(Create & Details) Sista grejen.
+// MVC backend delen Idag.
+// MVC frontend delen Idag.
 // 1 dag ungefär
 
 // ------------Styling---------------
 
-// Styla Create sidan. Idag
-
 // Felmeddelande när bilden är för dålig, och inte syns Roger har gjort denna.
 
-// Osäker här gissar på 1 dag
 
-// Testa hur det blir när man försöker ta bort bilder som inte finns.
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Tankar kring Skapa sidan..går inte att använda panel-footer pga av splitten jag gör eller det går säkert men hittar
+// inte hur.
+
+
+
+
 
 
 // Problem med decimaler går att skapa med . börjar dock med , vilket ger ett felmeddelande på engelska vilket inte är snyggt.
