@@ -10,6 +10,7 @@ using Data.Repositories;
 using AnnonsonMVC.Utilities;
 using Data.Appsettings;
 using Domain.Interfaces;
+using System.Globalization;
 
 namespace AnnonsonMVC
 {
@@ -43,8 +44,8 @@ namespace AnnonsonMVC
 
             var appSettings = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettings);
-            //var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
-            var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
+            var connection = @"Server=DESKTOP-M702LBS;Database=annonsappen;Trusted_Connection=True;";
+            //var connection = @"Server=SAMUEL;Database=annonsappen;Trusted_Connection=True;";
             services.AddDbContext<AnnonsappenContext>(options => options.UseSqlServer(connection));
             services.AddMvc();
         }
@@ -61,6 +62,11 @@ namespace AnnonsonMVC
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            var cultureInfo = new CultureInfo("en-US");
+            //cultureInfo.NumberFormat.CurrencySymbol = "€";
+
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
             app.UseStaticFiles();
 

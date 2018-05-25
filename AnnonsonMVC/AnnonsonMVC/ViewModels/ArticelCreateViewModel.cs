@@ -38,7 +38,6 @@ namespace AnnonsonMVC.ViewModels
 
         [Required(ErrorMessage = "Annonsen måste ha ett pris.")]
         [Display(Name = "Pris")]
-        [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
         [Required(ErrorMessage = "Annonsen måste ha en pristext.")]

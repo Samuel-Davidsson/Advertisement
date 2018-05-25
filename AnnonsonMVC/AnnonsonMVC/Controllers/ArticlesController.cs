@@ -47,7 +47,7 @@ namespace AnnonsonMVC.Controllers
 
         public IActionResult Create()
         {
-            var articleCreateViewModel = new ArticleCreateViewModel
+            var model = new ArticleCreateViewModel
             {
                 PublishBegin = DateTime.Today,
                 PublishEnd = DateTime.Today
@@ -55,7 +55,7 @@ namespace AnnonsonMVC.Controllers
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
             ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name");
-            return View(articleCreateViewModel);
+            return View(model);
         }
 
         [HttpPost]
@@ -252,29 +252,6 @@ namespace AnnonsonMVC.Controllers
 // Tankar kring Skapa sidan..går inte att använda panel-footer pga av splitten jag gör eller det går säkert men hittar
 // inte hur.
 
-
-
-
-
-
-// Problem med decimaler går att skapa med . börjar dock med , vilket ger ett felmeddelande på engelska vilket inte är snyggt.
-// Därimot i Edit så kan jag INTE spara decimaler med . eller , alltså bara heltal.
-// Vet inte exakt vad det beror på men jqueryvalidation är en sak men sen måste det vara nåt annat också osäker på vad här.
-
-// Insert this code in a new javascript code file and make sure you reference it as last.
-// Only if it’s referenced after the jQuery validation plugin, it will override the code in the plugin.
-
-
-//    $.validator.methods.range = function(value, element, param)
-//{
-//    var globalizedValue = value.replace(",", ".");
-//    return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
-//} 
-
-//$.validator.methods.number = function(value, element)
-//{
-//    return this.optional(element) || /^ -? (?:\d +|\d{ 1,3} (?:[\s\.,]\d{ 3})+)(?:[\.,]\d +)?$/.test(value);
-//}
 
 
 
