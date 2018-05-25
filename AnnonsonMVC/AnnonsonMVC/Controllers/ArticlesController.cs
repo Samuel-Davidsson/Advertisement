@@ -24,10 +24,10 @@ namespace AnnonsonMVC.Controllers
         private readonly AddOrEditCategoryArticle _addOrEditCategoryArticle;
         private readonly AppSettings _appSettings;
 
-        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService, 
-            IStoreArticleService storeArticleService, ImageService imageService, 
-            SelectedStoresService selectedStoresService, AddOrEditStoreArticle addOrEditStoreArticle, AddOrEditCategoryArticle addOrEditCategoryArticle, 
-            IOptions<AppSettings> appSettings,IArticleCategoryService articleCategoryService)
+        public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, 
+            ICompanyService companyService, IStoreArticleService storeArticleService, ImageService imageService, 
+            SelectedStoresService selectedStoresService, AddOrEditStoreArticle addOrEditStoreArticle, 
+            AddOrEditCategoryArticle addOrEditCategoryArticle, IOptions<AppSettings> appSettings,IArticleCategoryService articleCategoryService)
         {
             _articelService = articleService;
             _categoryService = categoryService;
@@ -151,7 +151,7 @@ namespace AnnonsonMVC.Controllers
         {
             var article = _articelService.Find(model.ArticleId, "ArticleCategory.Category", "StoreArticle.Store");
 
-            if (model.ImageFile == null) // Flytta till ImageService döpa till nåt
+            if (model.ImageFile == null) // Flytta till ImageService kanske.
             {
                 model.ImageFileFormat = article.ImageFileFormat;
                 model.ImageFileName = article.ImageFileName;
@@ -208,12 +208,11 @@ namespace AnnonsonMVC.Controllers
     }
 }
 
-// ----------Refactoring--------------
+// -----------Refactoring--------------
 
-// MVC backend delen Idag.(Kanske).
 // MVC frontend delen.
 // Framförallt flytta på CSS och Scripten till css och js mapparna.
-// Halv dag ungefär.
+
 
 
 
