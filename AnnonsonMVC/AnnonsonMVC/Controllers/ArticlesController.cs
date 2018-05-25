@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AnnonsonMVC.ViewModels;
 using Domain.Interfaces;
-using Domain.Entites;
 using AnnonsonMVC.Utilities;
 using Data.Appsettings;
 using Microsoft.Extensions.Options;
@@ -21,11 +20,14 @@ namespace AnnonsonMVC.Controllers
         private readonly IArticleCategoryService _articleCategoryService;
         private readonly ImageService _imageService;
         private readonly SelectedStoresService _selectedStoresService;
+        private readonly AddOrEditStoreArticle _addOrEditStoreArticle;
+        private readonly AddOrEditCategoryArticle _addOrEditCategoryArticle;
         private readonly AppSettings _appSettings;
 
         public ArticlesController(IArticleService articleService, ICategoryService categoryService, IStoreService storeService, ICompanyService companyService, 
             IStoreArticleService storeArticleService, ImageService imageService, 
-            SelectedStoresService selectedStoresService, IOptions<AppSettings> appSettings, IArticleCategoryService articleCategoryService)
+            SelectedStoresService selectedStoresService, AddOrEditStoreArticle addOrEditStoreArticle, AddOrEditCategoryArticle addOrEditCategoryArticle, 
+            IOptions<AppSettings> appSettings,IArticleCategoryService articleCategoryService)
         {
             _articelService = articleService;
             _categoryService = categoryService;
@@ -35,6 +37,8 @@ namespace AnnonsonMVC.Controllers
             _articleCategoryService = articleCategoryService;
             _imageService = imageService;
             _selectedStoresService = selectedStoresService;
+            _addOrEditStoreArticle = addOrEditStoreArticle;
+            _addOrEditCategoryArticle = addOrEditCategoryArticle;
             _appSettings = appSettings.Value;
         }
 
@@ -71,26 +75,15 @@ namespace AnnonsonMVC.Controllers
                     model.UserId = 3;
 
                     var selectedStoreListIds = _selectedStoresService.GetSelectedStoresList(model, stores);
-                    var categoryId = model.CategoryId;                  
+                    var categoryId = model.CategoryId;          
                     var newArticle = Mapper.ViewModelToModelMapping.ActicleViewModelToArticle(model);
                  
                     _articelService.Add(newArticle);
-
-                    newArticle.ArticleCategory.Add(new ArticleCategory
-                    {
-                        ArticleId = newArticle.ArticleId,                        
-                        CategoryId = categoryId,                 
-                    });
-                  
-                    foreach (var storeId in selectedStoreListIds)
-                    {
-                        newArticle.StoreArticle.Add(new StoreArticle
-                        {
-                            ArticleId = newArticle.ArticleId,
-                            StoreId = storeId
-                        });
-                    }
                     
+                    _addOrEditCategoryArticle.CreateCategoryArticle(newArticle, categoryId);
+
+                    _addOrEditStoreArticle.CreateStoreArticles(newArticle, selectedStoreListIds);
+                  
                     var imageDirectoryPath = _imageService.CreateDirectoryForImage(newArticle);
 
                     var imageFile = model.ImageFile;
@@ -158,7 +151,7 @@ namespace AnnonsonMVC.Controllers
         {
             var article = _articelService.Find(model.ArticleId, "ArticleCategory.Category", "StoreArticle.Store");
 
-            if (model.ImageFile == null)
+            if (model.ImageFile == null) // Flytta till ImageService döpa till nåt
             {
                 model.ImageFileFormat = article.ImageFileFormat;
                 model.ImageFileName = article.ImageFileName;
@@ -171,21 +164,11 @@ namespace AnnonsonMVC.Controllers
             }
 
             if (ModelState.IsValid)
-            {               
-                foreach (var storeId in model.StoreIds)
-                {
-                    model.StoreArticle.Add(new StoreArticle
-                    {
-                        StoreId = storeId,
-                        ArticleId = model.ArticleId
-                    });
-                }             
-                    model.ArticleCategory.Add(new ArticleCategory
-                    {
-                        ArticleId = model.ArticleId,
-                        CategoryId = model.CategoryId
-                    });
+            {
+                _addOrEditStoreArticle.EditStoreArticles(model);
 
+                _addOrEditCategoryArticle.EditCategoryArticle(model);
+                    
                 model.Slug = _articelService.GenerateSlug(model.Name);
                 model.UserId = article.UserId;
 
@@ -208,7 +191,7 @@ namespace AnnonsonMVC.Controllers
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw; // Göra nåt här.
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -227,30 +210,18 @@ namespace AnnonsonMVC.Controllers
 
 // ----------Refactoring--------------
 
-// MVC backend delen Idag.
-// MVC frontend delen Idag.
-// 1 dag ungefär
-
-// ------------Styling---------------
-
-// Felmeddelande när bilden är för dålig, och inte syns Roger har gjort denna.
+// MVC backend delen Idag.(Kanske).
+// MVC frontend delen.
+// Framförallt flytta på CSS och Scripten till css och js mapparna.
+// Halv dag ungefär.
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-// Tankar kring Skapa sidan..går inte att använda panel-footer pga av splitten jag gör eller det går säkert men hittar
-// inte hur.
+//   ------------Tankar--------------
+// Strukturen kring Utilities och servicar som är där vart skall dom ligga egentligen?
+// Tankar kring Skapa sidan..går inte att använda panel-footer pga av splitten jag gör eller det går säkert men hittar inte hur.
 
 
 

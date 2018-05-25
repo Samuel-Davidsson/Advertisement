@@ -35,6 +35,8 @@ namespace AnnonsonMVC
             services.AddScoped<IArticleCategoryService, ArticleCategoryService>();
             services.AddScoped<ImageService>();
             services.AddScoped<SelectedStoresService>();
+            services.AddScoped<AddOrEditStoreArticle>();
+            services.AddScoped<AddOrEditCategoryArticle>();
             services.AddScoped<IRepository<Article>, Repository<Article>>();
             services.AddScoped<IRepository<Category>, Repository<Category>>();
             services.AddScoped<IRepository<Store>, Repository<Store>>();
@@ -63,7 +65,6 @@ namespace AnnonsonMVC
                 app.UseExceptionHandler("/Home/Error");
             }
             var cultureInfo = new CultureInfo("en-US");
-            //cultureInfo.NumberFormat.CurrencySymbol = "€";
 
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
