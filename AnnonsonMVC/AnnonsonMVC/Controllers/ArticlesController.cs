@@ -151,7 +151,7 @@ namespace AnnonsonMVC.Controllers
         {
             var article = _articelService.Find(model.ArticleId, "ArticleCategory.Category", "StoreArticle.Store");
 
-            if (model.ImageFile == null) // Flytta till ImageService kanske.
+            if (model.ImageFile == null)
             {
                 model.ImageFileFormat = article.ImageFileFormat;
                 model.ImageFileName = article.ImageFileName;
@@ -191,7 +191,7 @@ namespace AnnonsonMVC.Controllers
                 }
                 catch (Exception)
                 {
-                    throw; // Göra nåt här.
+                    Console.WriteLine("Gick inte att uppdatera annonsen.");
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -208,19 +208,12 @@ namespace AnnonsonMVC.Controllers
     }
 }
 
-// -----------Refactoring--------------
-
-// MVC frontend delen.
-// Framförallt flytta på CSS och Scripten till css och js mapparna.
-
-
-
-
 
 
 //   ------------Tankar--------------
+
 // Strukturen kring Utilities och servicar som är där vart skall dom ligga egentligen?
-// Tankar kring Skapa sidan..går inte att använda panel-footer pga av splitten jag gör eller det går säkert men hittar inte hur.
+
 
 
 

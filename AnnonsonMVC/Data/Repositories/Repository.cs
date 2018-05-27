@@ -58,6 +58,4 @@ namespace Data.Repositories
             _context.SaveChanges();
         }
     }
-
- 
 }

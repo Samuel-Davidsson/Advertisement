@@ -82,5 +82,5 @@ namespace AnnonsonMVC.ViewModels
         [Display(Name = "Butiker")]
         public ICollection<StoreArticle> StoreArticle { get; set; } = new List<StoreArticle>();
     }
-    }
+ }
 

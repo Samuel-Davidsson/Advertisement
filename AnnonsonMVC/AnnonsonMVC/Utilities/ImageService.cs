@@ -1,7 +1,5 @@
-﻿using AnnonsonMVC.ViewModels;
-using Data.Appsettings;
+﻿using Data.Appsettings;
 using Domain.Entites;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
@@ -87,8 +85,6 @@ namespace AnnonsonMVC.Utilities
             resizeImage.Dispose();
             imageStream.Dispose();
             return article.ImageWidths;
-
-
         }
 
         public Image CreateNewImageAndFillOutBlankSpaces(int canvasWidth, int canvasHeight, Image resizeImage, string saveImagePath, string imageDirectoryPath)
@@ -150,7 +146,8 @@ namespace AnnonsonMVC.Utilities
             {
                 File.Delete(file);
             }
-        }          
+        }        
     }
-}
+ }
+
 
