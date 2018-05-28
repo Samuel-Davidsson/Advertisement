@@ -17,8 +17,8 @@
                         <input type="hidden" asp-for="ArticleId" />
                         <div class="form-group">
                             <div>
-                                <img src="@Url.Content(ViewBag.mediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-512." + Model.ImageFileFormat)" id="output" class="imagePreview"/>
-                                <input asp-for="ImageFile" accept="image/*" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
+                                <input asp-for="ImageFile" accept="image/*" id="ImageFile" onchange="loadFile(event)" />
+                                <img src="@Url.Content(ViewBag.mediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-512." + Model.ImageFileFormat)" id="output" class="ImagePreview" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -65,7 +65,7 @@
                         </div>
                         <label asp-for="Description" class="control-label">Beskrivning</label>
                         <div class="form-group">
-                            <textarea asp-for="Description" rows="5" cols="113"
+                            <textarea class="descriptiontextedit" asp-for="Description"
                                       data-val-required="Annonsen måste ha en beskrivning."
                                       data-val-maxlength-max="5000"> 
                                 </textarea>

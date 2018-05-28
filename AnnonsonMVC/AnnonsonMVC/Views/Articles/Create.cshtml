@@ -15,7 +15,7 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
                             <div>
-                                <input asp-for="ImageFile" accept="image/*" id="ImageFile" name="ImageFile" onchange="loadFile(event)" />
+                                <input asp-for="ImageFile" accept="image/*" id="ImageFile" onchange="loadFile(event)" />
                                 <span asp-validation-for="ImageFile" class="text-danger"></span>
                                 <img id="output" class="ImagePreview" />
                             </div>
@@ -48,7 +48,7 @@
                                 <textarea id="descriptiontext" asp-for="Description"
                                           data-val-required="Annonsen måste ha en beskrivning."
                                           data-val-maxlength-max="5000"> 
-                                            </textarea>
+                                </textarea>
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
                         </div>

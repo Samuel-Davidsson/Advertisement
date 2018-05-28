@@ -9,86 +9,86 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3>Annons Detaljer</h3>
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <dl>
+                            <dd>
+                                <img src="@Url.Content(ViewBag.mediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-512." + Model.ImageFileFormat)" class="ImagePreview" />
+                            </dd>
+                        </dl>
+                        <dl class="media-right">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Name)
+                            </dd>
+                            <dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Description)
+                            </dd>
+                            <dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Price)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Price)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.PriceText)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.PriceText)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.PriceUnit)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.PriceUnit)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.PublishBegin)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.PublishBegin)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.PublishEnd)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.PublishEnd)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.StoreArticle)
+                            </dt>
+                            <dd>
+                                @foreach (var stores in ViewBag.storeNames)
+                                {
+                                    <div>@stores</div>
+                                }
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.ArticleCategory)
+                            </dt>
+                            <dd>
+                                @foreach (var categories in ViewBag.categoryNames)
+                                {
+                                    <div>@categories</div>
+                                }
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CompanyId)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Company.Name)
+                            </dd>
+                        </dl>
                     </div>
-                    <div class="panel-body">
-                        <div>
-                            <dl>
-                                <dd>
-                                    <img src="@Url.Content(ViewBag.mediaUrl + Model.ImagePath.Replace(@"\", "/") + @"/" + Model.ImageFileName.Replace(@"\", "/") + "-512." + Model.ImageFileFormat)" class="imagePreview" />
-                                </dd>
-                            </dl>
-                            <dl class="media-right">
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Name)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.Name)
-                                </dd>
-                                <dt>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Description)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.Description)
-                                </dd>
-                                <dt>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Price)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.Price)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.PriceText)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.PriceText)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.PriceUnit)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.PriceUnit)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.PublishBegin)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.PublishBegin)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.PublishEnd)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.PublishEnd)
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.StoreArticle)
-                                </dt>
-                                <dd>
-                                    @foreach (var stores in ViewBag.storeNames)
-                                    {
-                                        <div>@stores</div>
-                                    }
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.ArticleCategory)
-                                </dt>
-                                <dd>
-                                    @foreach (var categories in ViewBag.categoryNames)
-                                    {
-                                        <div>@categories</div>
-                                    }
-                                </dd>
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.CompanyId)
-                                </dt>
-                                <dd>
-                                    @Html.DisplayFor(model => model.Company.Name)
-                                </dd>
-                            </dl>
-                        </div>
-                    </div>
+                </div>
                 <div class="panel-footer">
                     <div class="row">
                         <div class="col-sm-9 col-sm-offset-0">
@@ -96,7 +96,12 @@
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
         </div>
+    </div>
 </body>
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/SelectListScript.js"></script>
+}
