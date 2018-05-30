@@ -105,13 +105,17 @@ namespace AnnonsonMVC.Controllers
         public IActionResult Details(int id)
         {
             var article = _articelService.Find(id, "ArticleCategory.Category", "StoreArticle.Store");
-            var test = article.ArticleCategory;
             var model = Mapper.ModelToViewModelMapping.ArticleDetailViewModel(article);
 
             var companies = _companyService.GetAll();
             var company = companies.FirstOrDefault(x => x.CompanyId == model.CompanyId);
             model.Company = company;
 
+            if (model.Price == -1)
+            {
+               //Set Price to "-"
+            }
+            
             ViewBag.categoryNames = model.ArticleCategory.Select(x => x.Category.Name);
             ViewBag.storeNames = model.StoreArticle.Select(x => x.Store.Name);
             var categoryName = model.ArticleCategory.Select(x => x.Category.Name);
