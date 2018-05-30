@@ -36,7 +36,14 @@
                                 @Html.DisplayNameFor(model => model.Price)
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.Price)
+                                @if (Model.Price == -1)
+                                {
+                                    @ViewBag.Price
+                                }
+                                @if (Model.Price > -1)
+                                {
+                                    @Html.DisplayFor(model => model.Price)
+                                }
                             </dd>
                             <dt>
                                 @Html.DisplayNameFor(model => model.PriceText)

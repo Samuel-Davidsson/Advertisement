@@ -111,15 +111,11 @@ namespace AnnonsonMVC.Controllers
             var company = companies.FirstOrDefault(x => x.CompanyId == model.CompanyId);
             model.Company = company;
 
-            if (model.Price == -1)
-            {
-               //Set Price to "-"
-            }
-            
             ViewBag.categoryNames = model.ArticleCategory.Select(x => x.Category.Name);
             ViewBag.storeNames = model.StoreArticle.Select(x => x.Store.Name);
             var categoryName = model.ArticleCategory.Select(x => x.Category.Name);
 
+            ViewBag.Price = "-";
             ViewBag.mediaUrl = _appSettings.MediaUrl;
             if (article == null)
             {
@@ -142,6 +138,8 @@ namespace AnnonsonMVC.Controllers
             var stores = model.StoreArticle.Select(x => x.StoreId).ToArray();
             model.StoreIds = stores;
             ViewBag.mediaUrl = _appSettings.MediaUrl;
+            ViewBag.Price = "-";
+
             ViewData["CategoryId"] = new SelectList(_categoryService.GetAll(), "CategoryId", "Name");
             ViewData["StoreId"] = new SelectList(_storeService.GetAll(), "StoreId", "Name", stores);
             ViewData["CompanyId"] = new SelectList(_companyService.GetAll(), "CompanyId", "Name");
